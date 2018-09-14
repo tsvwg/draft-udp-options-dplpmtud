@@ -178,18 +178,89 @@
       target="RFC2119"></xref>.</t>
     </section>
 
-
     <section anchor="middlebox-pathologies" title="Middlebox Pathologies">
+	<t> Middleboxes and network interfaces can compute UDP Checksum
+	incorrectly in presence of UDP Options based on the assumption that IP
+	Payload Length and UDP Length coincide (assumption that was reasonable
+	before UDP Options). </t>
 
-        <t> XXX how network devices break XXX</t>
+	<t> They use IP Payload Length (obtained as IP Total Length -  IP Header
+	Length) to fill UDP pseudo-header Length and also computes the checksum
+	over the all IP Payload bytes.  </t>
 
+	<t> This can lead on one side to UDP Options packet sent with incorrect
+	UDP Checksum and on the other side to UDP Options packets with correct
+	Checksum discarded by end-hosts or by middleboxes along the path.  </t>
+
+	<t> ref fig shows UDP Checksum computation based on UDP Length and
+	based on IP Payload Length and the fields which differ between the two
+	calculation methods.  </t>
+
+        <t><figure anchor="fig-udpsumcalc" title="Checksum calculations">
+            <artwork align="center"><![CDATA[
+
+Sum based on UDP Len   Sum basd on IP len       Delta between two
+
++--------+--------+    +--------+--------+    +--------+--------+
+|     Source      |    |     Source      |    |                 |
+|     Address     |    |     Address     |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+|   Destination   |    |   Destination   |    |                 |
+|     Address     |    |     Address     |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+|  zero  |  PTCL  |    |  zero  |  PTCL  |    |        |        |
++--------+--------+    +--------+--------+    +--------+--------+
+|   UDP Length    |    |IP Payload Length|    | Options Length  |
++--------+--------+    +--------+--------+    +--------+--------+
+                                              
++--------+--------+    +--------+--------+    +--------+--------+
+|   Source Port   |    |   Source Port   |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+|    Dest Port    |    |    Dest Port    |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+|  UDP  Checksum  |    |  UDP  Checksum  |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+|   UDP Length    |    |   UDP Length    |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+                                              
++--------+--------+    +--------+--------+    +--------+--------+
+|                 |    |                 |    |                 |
+|                 |    |                 |    |                 |
+|   UDP Payload   |    |   UDP Payload   |    |                 |
+|                 |    |                 |    |                 |
+|                 |    |                 |    |                 |
++--------+--------+    +--------+--------+    +--------+--------+
+                                              
+                       +--------+--------+    +--------+--------+
+                       |                 |    |                 |
+                       |   UDP Options   |    |   UDP Options   |
+                       |                 |    |                 |
+                       +--------+--------+    +--------+--------+
+            ]]></artwork>
+	</figure></t>
     </section>
 
     <section anchor="UDPOPT-CCO" title="Checksum Compensation Option">
-        <t>
-       The CCO is added to the option space to allow for devices incorrectly 
-       calculating the udp checksum. The CCO has the following format.
-        </t>
+	<t> The purpose of CCO is to increase UDP Options compatibility with
+	middleboxes and other existing network equipment, while at the same
+	time providing error detection on UDP Options area in the same way UDP
+	Checksum provides it on UDP Header and UDP Payload.  </t>
+
+	<t>CCO provides a way for UDP Option packets to be compatible with both
+	checksum computations making UDP Checksum computed on the whole IP
+	Payload coincide with the one correctly computed on the sole UDP
+	Length. </t>
+
+	<t> The Checksum Compensation Option (CCO) is the 2 bytes one's
+	complement of the one's complement sum of all 2 bytes words in the UDP
+	Options and a 2 bytes pseudo-header containing the length of UDP
+	Options. UDP Options area is divided into 2 bytes words based on the
+	their alignment with the first byte of UDP packet (and not the first
+	byte of UDP Options). This means that the first and the last byte of
+	UDP Options may be not preceded or followed by another byte: in these
+	cases the unpaired byte must padded respectively on the left and on the
+	right with zero to form a 2 bytes word.  </t>
+
             <figure anchor="fig-echores" title="UDP ECHORES Option Format">
                 <artwork align="center"><![CDATA[
         +---------+--------+------------+
@@ -198,6 +269,43 @@
           1 byte    1 byte    2 bytes       
                 ]]></artwork>
             </figure>
+
+    	<section title="Calculating CCO">
+	    <t> XXX add calculationtext XXX</t>
+
+	    <t> XXX set cco checksum field to length of the options space, do
+	    internet checksum on field. store cksum in cco cksum field XXX</t>
+	</section>
+
+    	<section title="Validating CCO">
+	    <t> XXX add validating text XXX</t>
+	    
+	    <t> XXX do internet cksum on option space, subtract length of
+	    options space. cco passes if res == 0 XXX</t>
+	</section>
+
+    	<section title="Interaction with other UDP Options">
+	<t>Interaction with other UDP Options <list style="hanging">
+
+	    <t hangText="AE:"> Similarly to what happens with OCS, AE can be
+	    computed as if the AE hash and CCO value are zero. CCO value can be
+	    computed as if the CCO value is zero and after the AE hash has been
+	    computed.  </t>
+
+	    <t hangText="ACS:"> CCO has no interference with ACS since ACS is
+	    computed only on UDP Payload bytes (no Header, no Options). By the
+	    way CCO value must be computed after ACS has already been computed.
+	    </t>
+
+	    <t hangText="LITE:"> CCO covers the entire UDP Option area,
+	    including LITE option as formatted after swapping (or relocation)
+	    for transmission (or, equivalently, before the swap/relocation
+	    after reception). CCO is computed after LITE swapping/relocation in
+	    order to guarantee the checksum compensation of the packet actually
+	    sent.  </t>
+	</list></t>
+	</section>
+
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
