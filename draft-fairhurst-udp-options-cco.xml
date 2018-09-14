@@ -142,14 +142,33 @@
      the search engine. -->
 
     <abstract>
-      <t>This document describes a robust method for calculating checksums for use with UDP Options
-      </t>
+      <t>This document describes a robust method for calculating checksums for
+      use with UDP Options.</t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t>UDP Options adds support for transpot options to UDP.</t>
+      <t> UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> adds
+      support for transport options to UDP <xref target="RFC0768"></xref>. When
+      UDP is carried in IP there are two lengths describing the UDP datagram,
+      the IP transport carries a payload length and the UDP header carries the
+      length of the UDP datagram.  Most of the IP payload length is equal to
+      UDP length, UDP Options creates a surplus area by adding increasing the
+      IP payload length while not varying the UDP length. Transport Options are
+      then added in this surplus area in the form of a TLV encoded list.</t>
+
+      <t> UDP datagrams with options create a new situation in the network,
+      many network devices have assumed that IP payload length is equal to UDP
+      length and have used this value when calculating UDP checksums. This
+      leads to many network devices incorrectly calculating the UDP checksum
+      when forwarding packets leading to UDP datagrams with Options being
+      dropped by these devices.  </t>
+
+      <t> This document describes the pathologies of network devices which
+      incorrectly calculate the UDP checksum and proposed a new UDP Option to
+      compensate for incorrect UDP checksum calculation.
+      </t>
     </section>
 
     <section title="Terminology">
@@ -157,6 +176,13 @@
       "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
       document are to be interpreted as described in <xref
       target="RFC2119"></xref>.</t>
+    </section>
+
+
+    <section anchor="middlebox-pathologies" title="Middlebox Pathologies">
+
+        <t> XXX how network devices break XXX</t>
+
     </section>
 
     <section anchor="UDPOPT-CCO" title="Checksum Compensation Option">
