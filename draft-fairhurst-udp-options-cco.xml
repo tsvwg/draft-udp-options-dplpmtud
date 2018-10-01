@@ -143,7 +143,13 @@
 
     <abstract>
       <t>This document describes a robust method for calculating checksums for
-      use with UDP Options.</t>
+      use with UDP Options.  The new method proposes an alternative checksum
+      calculation for coverage of the option space. This is based on the IP
+      checksum calculation, but uses an updated pseudoheader. The new method
+      only checks the option portion of a UDP packet, but creates a checksum
+      that compensates for the range of IPv4 and UDP chekcsum validation
+      methods that have been deployed, in this way the new method enhances the
+      proability of NAPT traversal for packets that carry UDP-Options.  </t>
     </abstract>
   </front>
 
@@ -151,22 +157,24 @@
     <section title="Introduction">
       <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> adds
       support for transport options in UDP <xref target="RFC0768"></xref>. When
-      UDP is carried in IP two lengths describing the UDP datagram, the IP
+      UDP is carried in IP two length fields describe the UDP datagram, the IP
       transport carries a payload length and the UDP header carries the length
-      of the UDP datagram.  Most of the time today IP payload length is equal
-      to the UDP length, UDP Options creates a surplus area by adding increasing
-      the IP payload length while not varying the UDP length. Transport Options
-      are then added in this surplus area in the form of a TLV encoded
-      list.</t>
+      of the UDP datagram. In most datagrams currently forwarded by network
+      devices the IP payload length is equal to the UDP length, UDP Options
+      <xref target="I-D.ietf-tsvwg-udp-options"></xref> creates a surplus area
+      by increasing the IP payload length while not varying the UDP length.
+      Transport Options are then added in this surplus area in the form of a
+      TLV encoded list.</t>
 
-      <t>UDP datagrams with surplus data are a new in the network, many
-      network devices assume that IP payload length is equal to UDP length and
-      have used this value when calculating UDP checksums. This leads to many
-      network devices incorrectly calculating the UDP checksum when forwarding
-      packets leading to UDP datagrams with Options being dropped by these
-      devices.</t>
+      <t> The current specification for UDP permits sending datagrams with
+      surplus data, but are not commonly observed, and many network devices
+      assume that IP payload length is equal to UDP length and have used this
+      value when calculating UDP checksums. This leads to the case where some
+      middlebox devices (e.g. Firewalls, NAPT) and some endpoint
+      implementations check or modify the the UDP checksum in a way that leads
+      to discard of UDP datagrams that carry UDP options.</t>
 
-      <t>This document describes common pathologies of network devices which
+      <t>This document describes common pathologies of network devices that 
       incorrectly calculate the UDP checksum and proposes a new UDP Option to
       compensate for incorrect UDP checksum calculation.
       </t>
@@ -180,21 +188,22 @@
     </section>
 
     <section anchor="middlebox-pathologies" title="Middlebox Pathologies">
-	<t> Middleboxes and network interfaces can compute UDP Checksum
-	incorrectly in presence of UDP Options based on the assumption that IP
-	Payload Length and UDP Length coincide (an assumption that was
-	reasonable before UDP Options). </t>
+	<t> Middleboxes and network interfaces can compute the UDP Checksum
+	incorrectly in the presence of UDP Options based on the assumption that
+	IP Payload Length and UDP Length coincide (an assumption that was
+	equivalent before UDP Options). </t>
 
-	<t> They middleboxes use the IP Payload Length (obtained as IP Total
-	Length -  IP Header Length) to fill UDP pseudo-header Length and also
-	computes the checksum over the all IP Payload bytes.  </t>
+	<t> These middleboxes use the IP Payload Length (obtained as IP Total
+	Length -  IP Header Length) to fill UDP pseudo-header Length field and
+	also compute the checksum over the all IP Payload bytes.  </t>
 
-	<t> This can lead to UDP Options packets with correct checksum to be
-	discarded by end-hosts or by middleboxes along the path.  </t>
+	<t> This can lead to UDP Options packets that carry a correctly
+	calculated checksum to be discarded by end-hosts or by middleboxes
+	along the path.  </t>
 
-	<t><xref target="fig-udpsumcalc"></xref>shows UDP Checksum computation
-	based on UDP Length and based on IP Payload Length and the fields which
-	differ between the two calculation methods.  </t>
+	<t><xref target="fig-udpsumcalc"></xref> shows UDP Checksum computation
+	based on UDP Length and based on IP Payload Length and the fields that
+	are different for the two calculation methods.  </t>
 
         <t><figure anchor="fig-udpsumcalc" title="Checksum calculations">
             <artwork align="center"><![CDATA[
@@ -241,22 +250,29 @@ Sum based on UDP Len   Sum basd on IP len       Delta between two
     </section>
 
     <section anchor="UDPOPT-CCO" title="Checksum Compensation Option">
-	<t> The purpose of CCO is to increase UDP Options compatibility with
-	middleboxes and other existing network equipment, while at the same
-	time providing error detection on UDP Options area in the same way UDP
-	Checksum provides it on UDP Header and UDP Payload.  </t>
 
-	<t>CCO provides a way for UDP Option packets to be compatible with both
-	checksum computations making UDP Checksum computed on the whole IP
-	Payload coincide with the one correctly computed on the sole UDP
-	Length. </t>
+	<t>This section introduces the Checksum Compensation Option (CCO),
+	which suggests a new way to calculate the checksum for the option
+	field.</t>
+
+	<t> The design of the CCO seeks to increase UDP Options compatibility
+	with middleboxes and other existing network equipment, while at the
+	same time providing error detection on UDP Options area in the same way
+	that the UDP Checksum provides an integrity check for the UDP Header
+	and UDP Payload.  </t>
+
+	<t>CCO provides a checksum for UDP Option packets that is compatible
+	with both variants of the checksum computation making the final value
+	of the UDP Checksum computed on the whole IP Payload coincide with the
+	the value that would be correctly computed soley on the UDP Length.
+	</t>
 
 	<t> The Checksum Compensation Option (CCO) is the 2 byte one's
 	complement of the one's complement sum of all 2 byte words in the UDP
-	Options. UDP Options area is divided into 2 byte words based on the
+	Options. The UDP Options area is divided into 2 byte words based on the
 	their alignment with the first byte of UDP packet (and not the first
 	byte of UDP Options). This means that the first and the last byte of
-	UDP Options may be not preceded or followed by another byte: in these
+	UDP Options can not preceded or be followed by another byte: in these
 	cases the unpaired byte must padded respectively on the left and on the
 	right with zero to form a 2 byte word.  </t>
 
@@ -281,6 +297,9 @@ Sum based on UDP Len   Sum basd on IP len       Delta between two
 	    
 	    <t> XXX do internet cksum on option space, subtract length of
 	    options space. cco passes if res == 0 XXX</t>
+
+	    <t> XXX GF also state the possibility of reusing existing checksum
+	    routines XXX </t>
 	</section>
 
     	<section title="Interaction with other UDP Options">
@@ -291,17 +310,17 @@ Sum based on UDP Len   Sum basd on IP len       Delta between two
 	    computed as if the CCO value is zero and after the AE hash has been
 	    computed.  </t>
 
-	    <t hangText="ACS:"> CCO has no interference with ACS since ACS is
-	    computed only on UDP Payload bytes (no Header, no Options). The
-	    CCO value must be computed after ACS has already been computed.
+	    <t hangText="ACS:"> The CCO has no interference with ACS since an ACS
+	    is computed only on UDP Payload bytes (no Header, no Options). The
+	    CCO value must be computed after the ACS has already been computed.
 	    </t>
 
-	    <t hangText="LITE:"> CCO covers the entire UDP Option area,
-	    including LITE option as formatted after swapping (or relocation)
-	    for transmission (or, equivalently, before the swap/relocation
-	    after reception). CCO is computed after LITE swapping/relocation in
-	    order to guarantee the checksum compensation of the packet actually
-	    sent.</t>
+	    <t hangText="LITE:"> The CCO covers the entire UDP Option area,
+	    including any LITE option as formatted after swapping (or
+	    relocation) for transmission (or, equivalently, before the
+	    swap/relocation after reception). The CCO is computed after LITE
+	    swapping/relocation to guarantee the checksum compensation
+	    of the packet actually sent.</t>
 	</list></t>
 	</section>
     </section>
@@ -313,13 +332,16 @@ Sum based on UDP Len   Sum basd on IP len       Delta between two
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-        <t> Request an option from the options registry.This memo includes no request to IANA.
+        <t> This memo includes no requests to IANA
         </t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
-
-      <t>XXX None yet XXX</t>
+      <t> The security considerations for are described in <xref
+      target="I-D.ietf-tsvwg-udp-options"></xref>.  The proposed new method
+      does not change the integrity protection offered by the UDP options
+      method.
+      </t>
     </section>
   </middle>
 
