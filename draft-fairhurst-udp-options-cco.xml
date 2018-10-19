@@ -6,6 +6,8 @@
     There has to be one entity for each item to be referenced.
     An alternate method (rfc include) is described in the references. -->
 <!ENTITY RFC768 SYSTEM "https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.0768.xml">
+<!ENTITY RFC793 SYSTEM "https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.0793.xml">
+<!ENTITY RFC1071 SYSTEM "https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1071.xml">
 <!ENTITY RFC2119 SYSTEM "https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY I-D.ietf-tsvwg-udp-options SYSTEM "https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-udp-options-01.xml">
 ]>
@@ -35,7 +37,7 @@
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
 <rfc category="std"
-     docName="draft-fairhurst-udp-options-cco-00tobe.txt"
+     docName="draft-fairhurst-udp-options-cco-00.txt"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -147,7 +149,7 @@
       calculation for coverage of the option space. This is based on the IP
       checksum calculation, but uses an updated pseudoheader. The new method
       only checks the option portion of a UDP packet, but creates a checksum
-      that compensates for the range of IPv4 and UDP chekcsum validation
+      that compensates for the range of IP and UDP chekcsum validation
       methods that have been deployed, in this way the new method enhances the
       proability of NAPT traversal for packets that carry UDP-Options.  </t>
     </abstract>
@@ -171,7 +173,7 @@
       assume that IP payload length is equal to UDP length and have used this
       value when calculating UDP checksums. This leads to the case where some
       middlebox devices (e.g. Firewalls, NAPT) and some endpoint
-      implementations check or modify the the UDP checksum in a way that leads
+      implementations check or modify the UDP checksum in a way that leads
       to discard of UDP datagrams that carry UDP options.</t>
 
       <t>This document describes common pathologies of network devices that 
@@ -268,38 +270,200 @@ Sum based on UDP Len   Sum basd on IP len       Delta between two
 	</t>
 
 	<t> The Checksum Compensation Option (CCO) is the 2 byte one's
-	complement of the one's complement sum of all 2 byte words in the UDP
-	Options. The UDP Options area is divided into 2 byte words based on the
+	complement sum of the one's complement sum of all 2 byte words in the
+	UDP Options. <xref target="fig-ccoopt"></xref> describes the format of
+	the CCO.   The UDP Options area is divided into 2 byte words based on
 	their alignment with the first byte of UDP packet (and not the first
 	byte of UDP Options). This means that the first and the last byte of
 	UDP Options can not preceded or be followed by another byte: in these
 	cases the unpaired byte must padded respectively on the left and on the
-	right with zero to form a 2 byte word.  </t>
+	right with zero to form a 2 byte word.</t>
 
-            <figure anchor="fig-echores" title="UDP ECHORES Option Format">
+        <figure anchor="fig-ccoopt" title="UDP CCO Option Format">
                 <artwork align="center"><![CDATA[
         +---------+--------+------------+
         | Kind=xx | Len=4  |  Checksum  |
         +---------+--------+------------+
           1 byte    1 byte    2 bytes       
                 ]]></artwork>
-            </figure>
+        </figure>
 
-    	<section title="Calculating CCO">
-	    <t> XXX add calculationtext XXX</t>
+	<t><xref target="RFC0793"></xref> specifies:
+	   "The checksum field is the 16 bit one's complement of the one's
+	    complement sum of all 16 bit words in the header and text.  If a
+	    segment contains an odd number of header and text octets to be
+	    checksummed, the last octet is padded on the right with zeros to
+	    form a 16 bit word for checksum purposes.  The pad is not
+	    transmitted as part of the segment.  While computing the checksum,
+	    the checksum field itself is replaced with zeros."
+	This method is equivalent to that specified for UDP <xref
+	target="RFC0768"></xref>.</t>
 
-	    <t> XXX set cco checksum field to length of the options space, do
-	    internet checksum on field. store cksum in cco cksum field XXX</t>
+	<t> The checksum also covers a 2 byte pseudo header conceptually
+	prefixed to the UDP Options area.  This pseudo header contains the
+	length of UDP Options area. (The length also forms a part of the TCP
+	and UDP pseudo field <xref target="RFC0793"></xref>).</t>
+
+	<t><xref target="fig-ccobytes"></xref> shows the bytes on which CCO is
+	computed and how, when present, the unpaired byte at the start and/or at
+	end of Options area are included in the sum.</t>
+
+        <t><figure anchor="fig-ccobytes" title="UDP ECHORES Option Format">
+                <artwork align="center"><![CDATA[
+       +--------+--------+
+       | Options  Length |
+       +--------+--------+
+       +--------+--------+
+       |                 |
+       |                 |
+       |   UDP Options   |
+       |                 | 
+       |                 |
+       +--------+--------+
+
+       +--------+--------+
+       | Options  Length | 
+       +--------+--------+
+       +--------+--------+ 
+       |  0x00  |        |
+       +--------+ - - - -| 
+       |                 |
+       |   UDP Options   |
+       |                 |
+       |- - - - +--------+
+       |        |  0x00  |
+       +--------+--------+
+        ]]></artwork>
+        </figure></t>
+
+	<t>When this CCO checksum and the UDP Options field are covered by the
+	UDP checksum calculation <xref target="RFC0768"></xref>, the resulting
+	UDP checksum value is numerically the same as when the UDP checksum
+	calculation is calculated over only the UDP Payload. That is, the
+	result retuned by both checksum computations <xref
+	target="fig-udpsumcalc"></xref> coincide.</t>
+
+    	<section title="Calculating the CCO">
+		<t> The CCO can be present at any position within the Options
+		space, the checksum field of the CCO MUST be aligned on a 2
+		byte boundary. This condition can be achieved by placing a NOP
+		Option before the CCO in the case the number of bytes preceding
+		the CCO (UDP Payload + UDP Options placed before CCO) is odd
+		(see <xref target="fig-optlayout"></xref>).
+		</t>
+
+        <t><figure anchor="fig-optlayout" title="Option Space layout">
+                <artwork align="center"><![CDATA[
++--------+--------+
+|    UDP Header   |
+|       ...       |
++--------+--------+
+|   UDP Payload   |
+|    and other    |
+|   UDP Options   |
+|       ...       |
+|        +--------+
+|        |  NOP   |
++--------+--------+
+|  CCO   | CCOLen |
++--------+--------+
+|    CCO  value   |
++--------+--------+
+|Other UDP Options|
+|       ...       |
++--------+--------+
+                ]]></artwork>
+        </figure></t>
+
+		<t>When calculated in this way, the CCO value is initialized to
+		zero and the checksum is calculated over the UDP Options and
+		the pseudo-header: the one's complement of the result is then
+		stored in the CCO field.  </t>
+
+		<t> An alternative implementation could be to initialise the
+		CCO field with the size of the UDP Options area (instead of
+		initialising the CCO value to zero and combining with a pseudo
+		header). This produces the same result, but allows the checksum
+		to be performed using solely the UDP Options area.</t>
 	</section>
 
     	<section title="Validating CCO">
-	    <t> XXX add validating text XXX</t>
-	    
-	    <t> XXX do internet cksum on option space, subtract length of
-	    options space. cco passes if res == 0 XXX</t>
+	    <t>When a UDP packet containing CCO is received the Internet
+	    Checksum should be computed on the UDP Options area (2 byte aligned
+	    as described in <xref target="cco-examples"></xref>) and the
+	    pseudo-header (the length of the received UDP Options), and the
+	    Options is valid if the one's complement of the result is zero.</t>
+  
+	    <t>If the option checksum fails, all options MUST be ignored and
+	    any trailing surplus data (and Lite data, if used) silently
+	    discarded.  UDP data that is validated by a correct UDP checksum
+	    MUST be delivered to the application layer, even if the UDP option
+	    checksum fails.</t>
+	</section>
 
-	    <t> XXX GF also state the possibility of reusing existing checksum
-	    routines XXX </t>
+	<section anchor="cco-examples" title="CCO Calculation Examples">
+		<t> This section provides examples of calculating the Checksum
+		Compensation Option, similar to those presented in <xref
+		target="RFC1071"></xref>.  </t>
+
+		<t>XXX IANA NOTE: The type of the CCO option has yet too be
+		assigned, and may change. XXX</t>
+
+		<t>These examples use 204 (0xCC) as the type for the CCO
+		option</t>
+
+		<t> In the first example the UDP Payload length is even and a
+		MSS Option has been  already placed in UDP Options area. CCO
+		value is initialized with UDP Options Length (0x0008).</t>
+
+        <t><figure anchor="fig-ccoaligned" title="Checksum calculations">
+            <artwork align="center"><![CDATA[
+UDP Length:               Even 
+Preceding UDP Options:    MSS (kind 5, len 4, val 0x5c0) 
+Following UDP Options:    None
+
+NOP Padding before CCO:   No 
+Total UDP Options Length: 8    
+
+UDP Options bytes 0/1:    0504 
+UDP Options bytes 2/3:    05c0 
+UDP Options bytes 4/5:    cc04 
+UDP Options bytes 6/7:    0008 
+                          ---- 
+Sum:                      d6d0
+
+CCO:                      292f
+                ]]></artwork>
+        </figure></t>
+
+		<t>In the second example the UDP Payload length is odd and a
+		MSS Option has been already placed in UDP Options area.  The
+		available space for CCO starts at an odd byte (NOP padding
+		before CCO) and also UDP options space starts at odd byte (left
+		zero padding of first byte).  CCO value is initialized with UDP
+		Options Length (0x0009).</t>
+
+        <t><figure anchor="fig-ccounalgined" title="Checksum calculations">
+            <artwork align="center"><![CDATA[
+UDP Length:               Odd 
+Preceding UDP Options:    MSS (kind 5, len 4, val 0x5c0) 
+Following UDP Options:    None
+
+NOP Padding before CCO:   Yes 
+Total UDP Options Length: 9
+
+UDP Options bytes   0:    0005 
+UDP Options bytes 1/2:    0405 
+UDP Options bytes 3/4:    c001 
+UDP Options bytes 5/6:    cc04 
+UDP Options bytes 7/8:    0009 
+                          ----
+Sum:                      9019
+
+CCO:                      6fe6
+                ]]></artwork>
+        </figure></t>
+
 	</section>
 
     	<section title="Interaction with other UDP Options">
@@ -352,6 +516,10 @@ Sum based on UDP Len   Sum basd on IP len       Delta between two
       <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
 
       &RFC768;
+
+      &RFC793;
+
+      &RFC1071;
 
       &RFC2119;
 
