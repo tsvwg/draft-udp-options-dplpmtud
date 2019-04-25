@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!-- This template is for creating an Internet Draft using xml2rfc,
-    which is available here: http://xml.resource.org. -->
+ which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!-- One method to get references from the online citation libraries.
-    There has to be one entity for each item to be referenced.
-    An alternate method (rfc include) is described in the references. -->
+There has to be one entity for each item to be referenced.
+An alternate method (rfc include) is described in the references. -->
 <!ENTITY RFC768 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.0768.xml">
 <!ENTITY RFC2119 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC4821 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4821.xml">
 <!ENTITY RFC8085 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8085.xml">
 <!ENTITY RFC8174 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
+<!ENTITY RFC8304 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8304.xml">
+
 <!ENTITY I-D.ietf-tsvwg-udp-options SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-udp-options-07.xml">
 <!ENTITY I-D.ietf-tsvwg-datagram-plpmtud SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-datagram-plpmtud-07.xml">
-<!ENTITY RFC8304 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8304.xml">
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-<!-- used by XSLT processors -->
 <!-- For a complete list and description of processing instructions (PIs),
     please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-fairhurst-udp-options-dplpmtud-00.txt"
+<rfc category="std" docName="draft-fairhurst-udp-options-dplpmtud-00"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -103,7 +103,7 @@
       </address>
     </author>
 
-    <date day="24" month="April" year="2019" />
+    <date day="25" month="April" year="2019" />
 
     <!-- Meta-data Declarations -->
 
@@ -132,7 +132,7 @@
       minimal transport service on top of IP and is frequently used as a
       substrate for other protocols. Applications using UDP frequently have to
       implement basic transport services such as Path Maximum Transmission
-      Unit Discover (PMTUD) themselves. Section 3.5 of UDP Guidelines (<xref
+      Unit Discovery (PMTUD) themselves. Section 3.5 of UDP Guidelines (<xref
       target="RFC8085"></xref>) recommends that applications implement some
       form of Path MTU Discovery to avoid the generation of IP fragments:</t>
 
@@ -141,29 +141,32 @@
       (PMTUD)".</t>
 
       <t>The UDP API <xref target="RFC8304"></xref> offers calls for
-      applications to receive ICMP PTB messages and to control the size of
-      messages sent, but does not offer any automatic mechanisms for an
-      application to discover the maximum packet size supported by a path.
-      Applications and upper layer protocols are left to implement robust
-      PMTUD mechanisms of their own.</t>
+      applications to receive ICMP Packet Too Big (PTB) messages and to
+      control the size of messages that are sent, but does not offer any
+      automatic mechanisms for an application to discover the maximum packet
+      size supported by a path. Applications and upper layer protocols are
+      left to implement robust PMTUD mechanisms of their own.</t>
 
       <t>Packetization Layer PMTUD (PLPMTUD) <xref target="RFC4821"></xref>
-      describes a method for a Packetization Layer to search for the largest
-      MTU supported on a path in the absence of ICMP PTB messages. Datagram
-      PLPMTUD <xref target="I-D.ietf-tsvwg-datagram-plpmtud"></xref> describes
-      PMTUD probing and search algorithms for Datagram transports in the
-      absence of ICMP PTB messages allowing the Packetization Layer to offer a
-      probing mechanism which works in the presence of lost probes. However
+      describes a method for a Packetization Layer (such as UDP with options)
+      to search for the largest MTU supported on a path in the absence of ICMP
+      PTB messages. Datagram PLPMTUD <xref
+      target="I-D.ietf-tsvwg-datagram-plpmtud"></xref> describes PMTUD probing
+      and search algorithms for datagram transports that does not solely rely
+      on ICMP PTB messages. This allows the Packetization Layer to offer a
+      probing mechanism which works in the presence of lost probes. However,
       UDP is unable itself to offer the required probing mechanisms to
       implement DPLPMTUD without some additional transport services. This
       document specifies the additional functionality required to perform
-      DPLPMTUD with UDP Options as a service to upper-layer protocols. </t>
+      DPLPMTUD with UDP Options as a service to upper-layer protocols.</t>
 
-      <t>The authors solicit comments from the TSV working group. This follows
-      the structure used to describe DPLPMTUD for other transports. The
-      working group could decide to incorporate the text in the current
-      contribution into subsequent versions of the UDP Options
-      Specification.</t>
+      <t>The authors solicit comments from the TSV working group. The working
+      group could decide to incorporate the text in the current contribution
+      into subsequent versions of the UDP Options Specification.</t>
+
+      <t>The structure of the present document follows the structure used to
+      describe DPLPMTUD for other transports <xref
+      target="I-D.ietf-tsvwg-datagram-plpmtud"></xref>. </t>
     </section>
 
     <section title="Terminology">
@@ -176,15 +179,15 @@
 
     <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD for UDP Options">
       <t>UDP Options<xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
-      the additional functionality that can be used to implement DPLPMTUD
-      within the UDP transport service. Implementing DPLPMTUD using UDP
-      Options avoids the need for each upper layer protocol or application to
+      additional functionality that can be used to implement DPLPMTUD within
+      the UDP transport service. Implementing DPLPMTUD using UDP Options
+      avoids the need for each upper layer protocol or application to
       implement the DPLPMTUD method.</t>
 
       <t>Section 5.6 of<xref target="I-D.ietf-tsvwg-udp-options"></xref>
       defines the Maximum Segment Size (MSS) option, which allows the local
       sender to indicate the EMTU_R to the peer. The value received in this
-      option can be used to initialise MAX_PMTU.</t>
+      option can be used to initialise MAX_PMTU used by DPLPMTUD.</t>
 
       <t>The DPLPMTUD method <xref target="I-D.ietf-tsvwg-datagram-plpmtud">
       </xref> relies upon the sender Packetization Layer to be able to
@@ -233,41 +236,40 @@
       any packet loss.</t>
 
       <section title="Sending Packet Probes using Control Information">
-        <t>The recommended approach to implementing DPLPMTUD sends a a Probe
+        <t>The recommended approach to implementing DPLPMTUD sends a Probe
         Packet that contains only control information together with any
-        padding, which is needed to be inflated to the size required for the
-        probe packet.</t>
-
-        <t>These probe packets do not carry an application-supplied data
-        block, they do not typically require retransmission, although they do
-        still consume network capacity and incur endpoint processing (see
-        Section 4.1 of <xref
+        padding that is needed to be inflated to the size required for the
+        probe packet. These probe packets do not carry an application-supplied
+        data block and therefore they do not typically require retransmission,
+        although they do still consume network capacity and incur endpoint
+        processing (see Section 4.1 of <xref
         target="I-D.ietf-tsvwg-datagram-plpmtud"></xref>).</t>
       </section>
 
       <section title="Sending Packet Probes using Application Data ">
-        <t>Another possibility is to utilise data packets (see Section 4.1 of
-        <xref target="I-D.ietf-tsvwg-datagram-plpmtud"></xref>). A probe
-        packet then contains a data block supplied by an application that is
-        combined with padding to inflate the length of the datagram to the
-        size required for the probe and additionally contains a Timestamp
+        <t>Another possibility is to utilise data packets for Probe Packets
+        (Section 4.1 of <xref target="I-D.ietf-tsvwg-datagram-plpmtud"></xref>
+        discusses the merits and demerits of this approach). A probe packet
+        then contains a data block supplied by an application that is combined
+        with padding to inflate the length of the datagram to the size
+        required for the probe and additionally contains a Timestamp
         Option.</t>
 
         <t>Reception of a valid Timestamp Option that was echoed by the remote
-        endpoint can be used to infer connectivity. This can provide useful
-        feedback even over paths with asymmetric capacity and/or that carry
-        UDP Option flows that have very asymmetric datagram rates, because an
-        echo of the most recent timestamp still indicates reception of at
-        least one packet of the transmitted size. This is sufficient to
+        endpoint can also be used to infer connectivity. This can provide
+        useful feedback even over paths with asymmetric capacity and/or that
+        carry UDP Option flows that have very asymmetric datagram rates,
+        because an echo of the most recent Timestamp still indicates reception
+        of at least one packet of the transmitted size. This is sufficient to
         confirm there is no black hole.</t>
 
         <t>If the application/transport needs protection from the loss of this
-        probe packet, the application/ transport could perform transport-layer
+        Probe Packet, the application/ transport could perform transport-layer
         retransmission/repair of the data block (e.g., by retransmission after
         loss is detected or by duplicating the data block in a datagram
         without the padding) <xref target="RFC8085"></xref>.</t>
 
-        <t>When sending a probe to increase the PLPMTU, a timestamp might be
+        <t>When sending a probe to increase the PLPMTU, a Timestamp might be
         unable to unambiguously identify that a specific probe packet has been
         received. Timestamp mechanisms cannot be used to confirm the reception
         of individual probe messages and cannot be used to stimulate a
@@ -277,7 +279,7 @@
       <section title="Validating the Path with UDP Options">
         <t>The UDP sender validates the responses to a Packet Probe <xref
         target="I-D.ietf-tsvwg-datagram-plpmtud"></xref> using the UDP port
-        information in combination with the token and/or timestamp value
+        information in combination with the token and/or Timestamp value
         contained in the UDP Option.</t>
       </section>
 
@@ -291,12 +293,12 @@
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>Gorry Fairhurst and Tom Jones are supported by the University of
-      Aberdeen.</t>
+      <t>Gorry Fairhurst and Tom Jones are supported by funding provided by
+      the University of Aberdeen.</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This memo includes no requests to IANA</t>
+      <t>This memo includes no requests to IANA.</t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -304,65 +306,6 @@
       target="I-D.ietf-tsvwg-udp-options"></xref>. The proposed new method
       does not change the integrity protection offered by the UDP options
       method.</t>
-    </section>
-
-    <section title="Annexe">
-      <t>XXX RFC Editor remove this section before publication. XXX</t>
-
-      <t>This annexe contains a provisional description of the UDP Options
-      that will be specified in <xref
-      target="I-D.ietf-tsvwg-udp-options"></xref>. The information is provided
-      for information only to enable understanding of the algorithm and will
-      be superseded by the UDP Options specification.</t>
-
-      <section anchor="UDPOPT-ECHOREQ" title="UDP Probe Request Option">
-        <t>RFC Editor remove this section before publication</t>
-
-        <t>The Probe Request Option allows a sending endpoint to solicit a
-        response from a destination endpoint.</t>
-
-        <t>The Probe Request Option carries a four byte token set by the
-        sender. This token can be set to a value that is likely to be known
-        only to the sender (and is sent along the end-to-end path). The
-        initial value of the token SHOULD be assigned to a randomised value,
-        as described in section 5.1 of <xref target="RFC8085"></xref>) to
-        enhance protection from off-path attacks.</t>
-
-        <t>The sender needs to then check the value returned in the UDP Probe
-        Response Option. The value of the Token field, uniquely identifies a
-        probe within the maximum segment lifetime.</t>
-
-        <figure anchor="fig-echoreq" title="UDP Probe REQ Option Format">
-          <artwork align="center"><![CDATA[
-                  +----------+--------+-----------------+
-                  | Kind=TBD | Len=6  |     Token       |
-                  +----------+--------+-----------------+
-                  1 byte    1 byte       4 bytes
-              ]]></artwork>
-        </figure>
-      </section>
-
-      <section anchor="UDPOPT-ECHORES" title="UDP Probe Response Option">
-        <t>The Probe Response Option is generated in response to reception of
-        a previously received Probe Request Option. This response is generated
-        by the UDP Option processing.</t>
-
-        <t>The Probe Response Option carries a four byte token field. The
-        Token field associates the response with the Token value carried in
-        the most recently-received Echo Request. The rate of generation of UDP
-        packets carrying a Probe Response Option is expected to be less than
-        once per RTT and SHOULD be rate-limited (see <xref
-        target="Security"></xref>).</t>
-
-        <figure anchor="fig-echores" title="UDP Probe RES Option Format">
-          <artwork align="center"><![CDATA[
-          +----------+--------+-----------------+
-          | Kind=TBD | Len=6  |     Token       |
-          +----------+--------+-----------------+
-            1 byte    1 byte       4 bytes
-  ]]></artwork>
-        </figure>
-      </section>
     </section>
   </middle>
 
@@ -392,8 +335,73 @@
     </references>
 
     <section title="Revision Notes">
-      <t>Note to RFC-Editor: please remove this entire section prior to
-      publication.</t>
+      <t>XXX Note to RFC-Editor: please remove this entire section prior to
+      publication. XXX</t>
+
+      <t>Individual draft-00.</t>
+
+      <t><list style="symbols">
+          <t>This version contains a description for consideration and comment
+          by the TSVWG.</t>
+        </list></t>
+    </section>
+
+    <section title="Informative Description of new UDP Options">
+      <t>XXX Note to RFC-Editor: please remove this entire section prior to
+      publication (including subsections) before publication. XXX</t>
+
+      <t>This annexe contains a provisional description of the UDP Options
+      that will be specified in <xref
+      target="I-D.ietf-tsvwg-udp-options"></xref>. The information is provided
+      for information only, to enable understanding of the algorithm and will
+      be superseded by text in the UDP Options specification.</t>
+
+      <section anchor="UDPOPT-ECHOREQ" title="UDP Probe Request Option">
+        <t>The Probe Request Option allows a sending endpoint to solicit a
+        response from a destination endpoint.</t>
+
+        <t>The Probe Request Option carries a four byte token set by the
+        sender. This token can be set to a value that is likely to be known
+        only to the sender (and is sent along the end-to-end path). The
+        initial value of the token SHOULD be assigned to a randomised value,
+        as described in section 5.1 of <xref target="RFC8085"></xref>) to
+        enhance protection from off-path attacks.</t>
+
+        <t>The sender needs to then check the value returned in the UDP Probe
+        Response Option. The value of the Token field, uniquely identifies a
+        probe within the maximum segment lifetime.</t>
+
+        <figure anchor="fig-echoreq" title="UDP Probe REQ Option Format">
+          <artwork align="center"><![CDATA[
+           +----------+--------+-----------------+
+           | Kind=TBD | Len=6  |     Token       |
+           +----------+--------+-----------------+
+             1 byte    1 byte       4 bytes
+              ]]></artwork>
+        </figure>
+      </section>
+
+      <section anchor="UDPOPT-ECHORES" title="UDP Probe Response Option">
+        <t>The Probe Response Option is generated in response to reception of
+        a previously received Probe Request Option. This response is generated
+        by the UDP Option processing.</t>
+
+        <t>The Probe Response Option carries a four byte Token field. The
+        Token field associates the response with the token value carried in
+        the most recently-received Echo Request. The rate of generation of UDP
+        packets carrying a Probe Response Option is expected to be less than
+        once per RTT and SHOULD be rate-limited (see <xref
+        target="Security"></xref>).</t>
+
+        <figure anchor="fig-echores" title="UDP Probe RES Option Format">
+          <artwork align="center"><![CDATA[
+          +----------+--------+-----------------+
+          | Kind=TBD | Len=6  |     Token       |
+          +----------+--------+-----------------+
+            1 byte    1 byte       4 bytes
+  ]]></artwork>
+        </figure>
+      </section>
     </section>
   </back>
 </rfc>
