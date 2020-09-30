@@ -1,6 +1,6 @@
 # Checksum Compensation Option for UDP Options
 
-## draft-fairhurst-udp-options-cco
+## draft-fairhurst-udp-options-dplpmtud
 This repository is used to work on a method to conpensate for middle boxes mis
 calculating checksums when processing UDP Options.
 The `.xml` source file can be processed by
