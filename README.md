@@ -1,8 +1,12 @@
 # DPLPMTUD for UDP Options
 
 ## draft-fairhurst-udp-options-dplpmtud
-This repository is used to work on a method to conpensate for middle boxes mis
-calculating checksums when processing UDP Options.
+This repositiory contains an IETF work in progress document that covers the
+implementation of RFC8899 (DPLPMTUD) for UDP Options.
+
+The authors encourage comments and suggestion here via github issues and via
+email.
+
 The `.xml` source file can be processed by
 [xml2rfc](http://xml2rfc.tools.ietf.org).  You can access the current
 unsubmitted version rendered as
