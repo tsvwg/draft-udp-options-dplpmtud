@@ -220,7 +220,7 @@ An alternate method (rfc include) is described in the references. -->
         (see Section 4.1 of <xref target="RFC8899"></xref>). </t>
 
         <t>A PL needs to determine whether the current path supports datagrams
-        used as Probe Packets. DPLPMTUD SHOULD send (or add) a UDP Option
+        used as Probe Packets. DPLPMTUD SHOULD add a UDP Option
         (e.g., Timestamps, ECHO Request/Response) to a Packet Probe to elicit a
         positive confirmation that the path has delivered the Probe Packet of
         the corresponding size. From time to time, such probes can also be
@@ -229,7 +229,7 @@ An alternate method (rfc include) is described in the references. -->
 
         <t>A PL also needs to determine that the current path supports the
         size of datagram that the application is currently sending when in the
-        DPLPMTUD search_done state i.e., to detect black-holing of data
+        DPLPMTUD SEARCH_COMPLETE state i.e., to detect black-holing of data
         (see Section 4.2 of <xref target="RFC8899"></xref>). UDP Options can
         provide this by eliciting a positive confirmation that the path has
         delivered a Datagram of the corresponding size.</t>
@@ -471,6 +471,8 @@ An alternate method (rfc include) is described in the references. -->
         </list>Working group draft-00</t>
       <t><list style="symbols">
           <t>First Working Group Version</t>
+
+          <t>RFC8899 call search_done SEARCH_COMPLETE, fix</t>
         </list></t>
     </section>
   </back>
