@@ -42,7 +42,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-00"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-01"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -127,7 +127,7 @@ An alternate method (rfc include) is described in the references. -->
       as a robust method for Path Maximum Transmission Unit Discovery. This is
       a robust method for Path MTU Discovery (PMTUD) that uses the UDP Options
       Packetization Layer (PL). It allows a datagram application that uses
-      this PL, to discover the largest size of datagram that can be sent
+      this PL to discover the largest size of datagram that can be sent
       across a network path.</t>
     </abstract>
   </front>
@@ -144,7 +144,7 @@ An alternate method (rfc include) is described in the references. -->
       information provided by the IP layer or implement Path MTU Discovery
       (PMTUD)".</t>
 
-      <t>The UDP API <xref target="RFC8304"></xref> offer calls for
+      <t>The UDP API <xref target="RFC8304"></xref> offers calls for
       applications to receive ICMP Packet Too Big (PTB) messages and to
       control the maxmium size of datagrams that are sent, but does not offer
       any automated mechanisms for an application to discover the maximum
@@ -157,13 +157,14 @@ An alternate method (rfc include) is described in the references. -->
       supported on a path. Datagram PLPMTUD (DPLPMTUD) <xref
       target="RFC8899"></xref> specifies this support for datagram transports.
       PLPMTUD and DPLPMTUD use a probing mechanism that does not solely rely
-      on ICMP PTB messages and works in the presence of lost probes.</t>
+      on ICMP PTB messages and works on paths that drop ICMP PTB messages.</t>
 
-      <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref>
-      supplies functionality that can be used to implement DPLPMTUD within the
-      UDP transport service. This document specifies this additional
-      functionality. Implementing DPLPMTUD using UDP Options avoids the need
-      for each upper layer protocol or application to implement the DPLPMTUD
+      <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
+      functionality that can be used to implement DPLPMTUD within the UDP
+      transport service. This document specifies this how an implementation of
+      UDP Options can use this additional functionality to offer PMTUD using
+      DPLPMTUD. Implementing DPLPMTUD using UDP Options avoids the need for
+      each upper layer protocol or application to implement the DPLPMTUD
       method. This provides a standard method for applications to discover the
       current maximum packet size for a path and to detect when this
       changes.</t>
@@ -176,9 +177,8 @@ An alternate method (rfc include) is described in the references. -->
       target="RFC2119"></xref> <xref target="RFC8174"></xref> when, and only
       when, they appear in all capitals, as shown here.</t>
 
-      <t>The structure of the present document follows the structure used to
-      describe DPLPMTUD for other transports <xref
-      target="RFC8899"></xref>.</t>
+      <t>This document follows the structure used to describe DPLPMTUD for
+      other transports <xref target="RFC8899"></xref>.</t>
     </section>
 
     <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD for UDP Options">
@@ -196,14 +196,15 @@ An alternate method (rfc include) is described in the references. -->
         confirmation of connectivity of the path, using a suitable confirmed
         UDP Option (i.e., Timestamps, ECHO Request/Response) to .</t>
 	
-	<t>Two uses for DPLPMTUD with UDP-Options are identified:
+	<t>There are two ways an upper packetization layer can perform DPLPMTUD:
 	<ul>
-	<li> One use-case is when the upper layer protocol does not 
+	<li>The upper layer protocol does not 
 	perform PMTU discovery, and delegates this responsibility to UDP Options. 
 	In this case, UDP Options processing is responsible for sending 
 	probe packets to determine a PLPMTU. The method recommended in this 
-	speification does not carry payload data in these probe packets. 
+	specification does not carry payload data in these probe packets. 
 	The discovered PLPMTU can be used either:
+		<ul>
 		<li> to set the maximum datagram size for the current path 
 		(based on the discovered largest IP packet that can be 
 		received across the path). </li>	
@@ -213,12 +214,12 @@ An alternate method (rfc include) is described in the references. -->
 		is then less than the discovered largest IP packet that can 
 		be received across the path. </li>
 		</ul>
-	<li> A second use-case is when the upper packetization layer (PL) 
-	protocol performs PLPMTU or
-	PMTU discovery. This PL then constructs probe messages and 
-	determines a safe PMTU for the datagram that it sends. 
-	The contents of any probe packets is determined by the PL. 
-	A design needs to avoid performing (PL)PMTU discovery at multiple levels. </li>
+	</li>
+	<li>The upper packetization layer (PL) protocol performs PLPMTU or PMTU
+	discovery. This PL then constructs probe messages and determines a safe
+	PMTU for the datagram that it sends.  The contents of any probe packets
+	is determined by the PL.  A design needs to avoid performing (PL)PMTU
+	discovery at multiple levels. </li>
 	</ul>
 	</t>     
       </section>
@@ -232,18 +233,18 @@ An alternate method (rfc include) is described in the references. -->
         set by network layer mechanisms (such as PMTUD <xref
         target="RFC1063"></xref><xref target="RFC8201"></xref>).</t>
 
-        <t>DPLPMTUD needs to be able to generate probe packets that are not
-        delivered to the upper layer protocol as a part of the end-to-end
-        transport data (i.e. ensure any added padding data is not delivered to
-        the upper layer protocol at the receiver). UDP Options provide the
-        necessary additional support required to do this within the transport
-        layer.</t>
-
         <t>There are various designs described in DPLPMTUD to send a Packet
         Probe to test the size of packet supported by a path (see Section 4.1
-        of <xref target="RFC8899"></xref>). This prevents "Probing using
-        padding data" or "Probing using application data and padding data"
-        (see Section 4.1 of <xref target="RFC8899"></xref>). </t>
+        of <xref target="RFC8899"></xref>).</t>
+
+	<t>DPLPMTUD needs to be able to generate probe packets that are not
+	delivered to the upper layer protocol as a part of the end-to-end
+	transport data (i.e. ensure any added padding data is not delivered to
+	the upper layer protocol at the receiver). UDP Options provide the
+	necessary additional support required to do this within the transport
+	layer.  This prevents "Probing using padding data" or "Probing using
+	application data and padding data" (see Section 4.1 of <xref
+	target="RFC8899"></xref>).</t>
 
         <t>A PL needs to determine whether the current path supports datagrams
         used as Probe Packets. DPLPMTUD SHOULD add a UDP Option
@@ -265,11 +266,12 @@ An alternate method (rfc include) is described in the references. -->
 	initialise a search to increase the PLPMTU.</t>
 
         <section title="Sending Packet Probes using the Echo Request Option Request Option">
-          <t>The RECOMMENDED method sends a Probe Packet with the Echo Request
-          Option (RES) together with any padding needed to inflate the
-          required size. The reception of this option generates an Echo
-          Response Option that confirms reception of each received Probe
-          Packet.</t>
+	  <t>The RECOMMENDED method sends a Probe Packet consisting of an
+	  empty UDP datagram, UDP Options area with the Echo Request Option
+	  (RES), any other required options concluded with an EOL Option
+	  followed by any padding needed to inflate the required size. The
+	  reception of this option generates an Echo Response Option that
+	  confirms reception of each received Probe Packet.</t>
 
           <t>Probe Packets consume network capacity and incur endpoint
           processing (see Section 4.1 of <xref target="RFC8899"></xref>).
@@ -341,7 +343,7 @@ An alternate method (rfc include) is described in the references. -->
         <t>This function can be implemented within UDP Options, by generating
         a Probe Packet of size PLPMTU to confirm the path. This Probe Packet
         MUST elicit a response from the remote PL and could use either the
-        ECHO Response Option or the TimeStamp option (see Section 5.9 <xref
+        ECHO Response Option or the Timestamp option (see Section 5.9 <xref
         target="I-D.ietf-tsvwg-udp-options"></xref>).</t>
 
 	<t>The recommended approach is to use Probe Packets that carry no
@@ -508,9 +510,15 @@ An alternate method (rfc include) is described in the references. -->
 	  <t>-00 First Working Group Version</t>
 
           <t>RFC8899 call search_done SEARCH_COMPLETE, fix</t>
+       </list>Working group draft -01</t>
+       <t><list style="symbols">
 	  
-	  <t>-01 Working Group Version</t>
           <t>Update to reflect new fragmentation design in UDP Options.</t>
+          <t>Add a description of uses of DPLPMTUD with UDP Options.</t>
+          <t>Add a description on how to form Probe packets with padding.</t>
+          <t>Say that MSS options should be used to initialise the search algorithm.</t>
+          <t>Say that the recommended approach is to not use user data for probes.</t>
+	  <t>Attempts to clarify and improve wording throughout.</t>
 
         </list></t>
     </section>
