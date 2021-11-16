@@ -195,6 +195,32 @@ An alternate method (rfc include) is described in the references. -->
         sender implementing this specification SHOULD elicit a positive
         confirmation of connectivity of the path, using a suitable confirmed
         UDP Option (i.e., Timestamps, ECHO Request/Response) to .</t>
+	
+	<t>Two uses for DPLPMTUD with UDP-Options are identified:
+	<ul>
+	<li> One use-case is when the upper layer protocol does not 
+	perform PMTU discovery, and delegates this responsibility to UDP Options. 
+	In this case, UDP Options processing is responsible for sending 
+	probe packets to determine a PLPMTU. The method recommended in this 
+	speification does not carry payload data in these probe packets. 
+	The discovered PLPMTU can be used either:
+		<li> to set the maximum datagram size for the current path 
+		(based on the discovered largest IP packet that can be 
+		received across the path). </li>	
+		<li> to set the maximum fragment size when a sender uses the 
+		Fragmentation Option to divide a datagram into 
+		multiple UDP fragments for transmission. Each UDP fragment 
+		is then less than the discovered largest IP packet that can 
+		be received across the path. </li>
+		</ul>
+	<li> A second use-case is when the upper packetization layer (PL) 
+	protocol performs PLPMTU or
+	PMTU discovery. This PL then constructs probe messages and 
+	determines a safe PMTU for the datagram that it sends. 
+	The contents of any probe packets is determined by the PL. 
+	A design needs to avoid performing (PL)PMTU discovery at multiple levels. </li>
+	</ul>
+	</t>     
       </section>
 
       <section title="Sending UDP-Options Probe Packets">
@@ -233,6 +259,10 @@ An alternate method (rfc include) is described in the references. -->
         (see Section 4.2 of <xref target="RFC8899"></xref>). UDP Options can
         provide this by eliciting a positive confirmation that the path has
         delivered a Datagram of the corresponding size.</t>
+	      
+	<t>When the remote endpoint advertises a UDP Maximum Segment Size 
+	(MSS) option, this value can be used by DPLPMTUD as a hint to 
+	initialise a search to increase the PLPMTU.</t>
 
         <section title="Sending Packet Probes using the Echo Request Option Request Option">
           <t>The RECOMMENDED method sends a Probe Packet with the Echo Request
@@ -301,7 +331,7 @@ An alternate method (rfc include) is described in the references. -->
       </section>
 
       <section title="Validating the Path with UDP Options">
-        <t>A PL also needs to validate that the path continues to support the
+        <t>A PL needs to validate that the path continues to support the
         PLPMTU discovered in a previous search for a suitable PLPMTU value
         (see Section 6.1.4 of <xref target="RFC8899"></xref>). This
         confirmation MAY be provided by an upper layer protocol confirming
@@ -314,11 +344,15 @@ An alternate method (rfc include) is described in the references. -->
         ECHO Response Option or the TimeStamp option (see Section 5.9 <xref
         target="I-D.ietf-tsvwg-udp-options"></xref>).</t>
 
-	<t>A sender MAY choose to include application data in Probe Packets
+	<t>The recommended approach is to use Probe Packets that carry no
+	user data in the payload. 
+	A sender could choose to include application data in Probe Packets
 	(see Section 4.1 of <xref target="RFC8899"></xref> for discussion of
 	the merits and demerits of this approach). For example, this might
 	reduce the need to send an additional datagram when confirming that the
-	current path supports datagrams of size PLPMTU.</t>
+	current path supports datagrams of size PLPMTU, or could utilise
+	a control message format defined by the PL that does not need to
+	be delivered reliably.</t>
 
         <section title="Sending Packet Probes using Timestamps">
           <t>Reception of a valid Timestamp Option echoed by the remote
@@ -470,9 +504,14 @@ An alternate method (rfc include) is described in the references. -->
           <t>Removed paragraph on suspending ICMP PTB suspension.</t>
         </list>Working group draft-00</t>
       <t><list style="symbols">
-          <t>First Working Group Version</t>
+      
+	  <t>-00 First Working Group Version</t>
 
           <t>RFC8899 call search_done SEARCH_COMPLETE, fix</t>
+	  
+	  <t>-01 Working Group Version</t>
+          <t>Update to reflect new fragmentation design in UDP Options.</t>
+
         </list></t>
     </section>
   </back>
