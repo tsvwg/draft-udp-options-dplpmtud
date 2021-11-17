@@ -269,7 +269,7 @@ An alternate method (rfc include) is described in the references. -->
 	  <t>The RECOMMENDED method sends a Probe Packet consisting of an
 	  empty UDP datagram, UDP Options area with the Echo Request Option
 	  (RES), any other required options concluded with an EOL Option
-	  followed by any padding needed to inflate the required size. The
+	  followed by any padding needed to inflate to the required size. The
 	  reception of this option generates an Echo Response Option that
 	  confirms reception of each received Probe Packet.</t>
 
@@ -296,7 +296,7 @@ An alternate method (rfc include) is described in the references. -->
           between acknowledgements for initial Probe Packets and
           acknowledgements confirming receipt of subsequent Probe Packets
           (e.g., travelling along alternate paths with a larger round trip
-          time). This needs each Probe Packet needs to be uniquely
+          time). This needs each Probe Packet to be uniquely
           identifiable by the UDP Options sender within the Maximum Segment
           Lifetime (MSL). The UDP Options sender therefore MUST NOT recycle
           token values until they have expired or have been acknowledged. A
@@ -313,7 +313,7 @@ An alternate method (rfc include) is described in the references. -->
 
         <section title="Sending Packet Probes that include Application Data">
           <t>The RECOMMENDED approach to generating a Probe Packet is to send
-          a probe formed of a UDP Options datagram contains only control
+          a probe formed of a UDP Options datagram containing only control
           information, padded to the size required for the probe. This allows
           "Probing using padding data", and avoids having to retransmit
           application data when a probe fails.</t>
