@@ -280,9 +280,6 @@ An alternate method (rfc include) is described in the references. -->
           i.e., when probing to grow the PLPMTU or to confirm the current
           PLPMTU.</t>
 
-          <t>Implementations MAY track multiple requests and respond
-          acknowledging them with a single packet.</t>
-
           <t>The UDP Options used in this method are described in section 6 of
           <xref target="I-D.ietf-tsvwg-udp-options"></xref>:</t>
 
@@ -311,9 +308,7 @@ An alternate method (rfc include) is described in the references. -->
           as described in section 5.1 of <xref target="RFC8085"></xref>).</t>
 
           <t>The procedure to handle the loss of a datagram is the
-          responsibility of the sender of the request. Implementations MAY
-          track multiple requests and respond to them with a single packet
-          carrying the Echo Response Option (REQ).</t>
+          responsibility of the sender of the request. </t>
         </section>
 
         <section title="Sending Packet Probes that include Application Data">
@@ -367,15 +362,16 @@ An alternate method (rfc include) is described in the references. -->
           This is sufficient to confirm there is no black hole (see Section
           2.1 of <xref target="RFC2923"></xref>).</t>
 
-          <t>When sending a probe to increase the PLPMTU, such a Timestamp
-          might be unable to unambiguously identify that a specific Probe
-          Packet has been received <xref target="KP87"></xref>. Timestamp
-          mechanisms therefore cannot be used to confirm the reception of
-          individual probe messages and cannot be used to stimulate a response
-          from the remote peer.</t>
+          <t>
+          Probe Packets used to search for a larger PLPMTU MUST include the
+          Echo Request Option. A probe that seeks to confirm the current
+          PLPMTU, could solict a response by including a Timestamp option.
+          However to increase the PLPMTU, the receiver needs to unambiguously
+          confirm the reception of individual probes, and Timestamp mechanisms
+          do not identify a specific Probe has been received <xref
+          target="KP87"></xref>.
+          </t>
 
-          <t>Note: Probe Packets used to search for a larger PLPMTU MUST
-          include the Echo Request Option.</t>
         </section>
       </section>
 
@@ -519,6 +515,7 @@ An alternate method (rfc include) is described in the references. -->
           <t>Say that MSS options should be used to initialise the search algorithm.</t>
           <t>Say that the recommended approach is to not use user data for probes.</t>
 	  <t>Attempts to clarify and improve wording throughout.</t>
+	  <t>Remove text saying you can respond to multiple probes in a single packet.</t>
 
         </list></t>
     </section>
