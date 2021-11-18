@@ -181,14 +181,56 @@ An alternate method (rfc include) is described in the references. -->
       other transports <xref target="RFC8899"></xref>.</t>
     </section> <!-- terms -->
 
-<section title="Sending UDP-Options Probe Packets">
+<section title="DPLPMTUD for UDP Options">
+	<t>There are two ways an upper PL can perform DPLPMTUD:
+	<list style="symbols">	
 	<t>
-	DPLPMTUD relies upon the ability of a UDP Options sender to generate a probe
+	The UDP Options sender implementing DPLPMTUD uses the method specified in <xref
+      target="RFC8899"></xref> and the upper PL or application does not 
+	perform PMTU discovery.
+	In this case, UDP Options processing is responsible for sending 
+	probes to determine a PLPMTU, as described in this document. 
+	This discovered PLPMTU can be used by UDP Options to either:
+	 <list style="symbols">
+
+		<t> set the maximum datagram size for the current path 
+		(based on the discovered largest IP packet that can be 
+		received across the path). </t>	
+		<t> set the maximum fragment size when a sender uses the 
+		UDP Fragmentation Option to divide a datagram into 
+		multiple UDP fragments for transmission. Each UDP fragment 
+		is then less than the discovered largest IP packet that can 
+		be received across the path. </t>
+	</list></t>
+		
+	<t>An upper PL or application performs DPLPMTUD (e.g.,
+	QUIC <xref target="RFC9000"></xref>). This upper PL 
+	then uses probes to determine a safe
+	PLPMTU for the datagrams that it sends. The contents of any probe 
+	is determined by the upper PL.  Such a design needs to avoid performing
+	discovery at multiple levels, so, when when configurable,
+	this upper PL SHOULD disable DPLPMTUD by UDP Options
+	<xref target="RFC8899"></xref>). </t>
+	</list>
+	</t>
+	<t>
+	This section describe packet formats and procedures for DPLPMTUD using UDP Options.	
+	</t>
+    <section title="Sending UDP-Options Probe Packets">
+	<t>DPLPMTUD relies upon the ability of a UDP Options sender to generate a probe
         with a specific size, up to the maximum for the size supported by the local interface. 
 	The size of a DPLPMTUD probe packet
 	MUST NOT be constrained by the maximum PMTU
         set by network layer mechanisms (such as PMTUD <xref
         target="RFC1063"></xref><xref target="RFC8201"></xref> or the IP Cache).</t>
+	    
+	 <t>Probe packets consume network capacity and incur endpoint
+          processing (see Section 4.1 of <xref target="RFC8899"></xref>).
+          Implementations ought to send a probe with a Request Probe
+          Option only when required by their local DPLPMTUD state machine,
+          i.e., when confirming the base PMTU for the path,
+	  probing to increase the PLPMTU or to confirm the current
+          PLPMTU.</t>
 
     <section title=" Packet Probes using the Echo Request Option Request Option">
 	  <t>This section describes a format of probe consisting of an
@@ -198,14 +240,6 @@ An alternate method (rfc include) is described in the references. -->
 	  followed by any padding needed to inflate to the required probe size. The
 	  reception of this option generates an Echo Response Option that
 	  confirms reception of a specific received probe.</t>
-
-          <t>Probe packets consume network capacity and incur endpoint
-          processing (see Section 4.1 of <xref target="RFC8899"></xref>).
-          Implementations ought to send a probe with a Request Probe
-          Option only when required by their local DPLPMTUD state machine,
-          i.e., when confirming the base PMTU for the path,
-	  probing to increase the PLPMTU or to confirm the current
-          PLPMTU.</t>
 
           <t>The UDP Options used in this method are described in section 6 of
           <xref target="I-D.ietf-tsvwg-udp-options"></xref>:</t>
@@ -239,41 +273,8 @@ An alternate method (rfc include) is described in the references. -->
           as described in section 5.1 of <xref target="RFC8085"></xref>).</t>
 
     </section> 	<!-- Format Chapter -->
-    <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD for UDP Options">
-
-       <t>There are two ways an upper PL can perform DPLPMTUD:
-	<list style="symbols">	
-	<t>
-	The UDP Options sender implementing DPLPMTUD uses the method specified in <xref
-      target="RFC8899"></xref> and the upper PL or application does not 
-	perform PMTU discovery.
-	In this case, UDP Options processing is responsible for sending 
-	probes to determine a PLPMTU, as described in this document. 
-	This discovered PLPMTU can be used by UDP Options to either:
-	 <list style="symbols">
-
-		<t> set the maximum datagram size for the current path 
-		(based on the discovered largest IP packet that can be 
-		received across the path). </t>	
-		<t> set the maximum fragment size when a sender uses the 
-		UDP Fragmentation Option to divide a datagram into 
-		multiple UDP fragments for transmission. Each UDP fragment 
-		is then less than the discovered largest IP packet that can 
-		be received across the path. </t>
-	</list></t>
-		
-	<t>An upper PL or application performs DPLPMTUD (e.g.,
-	QUIC <xref target="RFC9000"></xref>). This upper PL 
-	then uses probes to determine a safe
-	PLPMTU for the datagrams that it sends. The contents of any probe 
-	is determined by the upper PL.  Such a design needs to avoid performing
-	discovery at multiple levels, so, when when configurable,
-	the upper PL SHOULD disable DPLPMTUD by UDP Options
-	<xref target="RFC8899"></xref>). </t>
-	</list>
-	</t>
+    <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Procedures for UDP Options">
 	 
-    <section anchor="plpmtudtypes" title="Types of DPLPMTUD Probe">
 	  <t> DPLPMTUD utilizes three types of probes. These are described in the following sections:</t>
 	<list style="symbols">
 		<t>A probe to confirm the path can support the base PLPMTU.</t>
@@ -337,7 +338,6 @@ An alternate method (rfc include) is described in the references. -->
 	application data, as described in a previous section.</t>
 		
       </section>
-      </section> <!-- types of probe -->
 	    
    <section title="Sending Packet Probes that include Application Data">
           <t>The method can be designed to only use probes that are
@@ -346,6 +346,8 @@ An alternate method (rfc include) is described in the references. -->
           "Probing using padding data", and avoids having to retransmit
           application data when a probe fails. This type of probe must
 	  be used when searching to increase the PLPMTU.
+	These probes do not form a part of the end-to-end
+	transport data and a receiver does not deliver these to the upper layer protocol.
 	  A simple implementation of the method might be designed
 	  to only use this format for all probes.</t>
 	  <t>
