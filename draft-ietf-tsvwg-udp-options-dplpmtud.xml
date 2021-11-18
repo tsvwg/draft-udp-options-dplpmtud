@@ -216,6 +216,7 @@ An alternate method (rfc include) is described in the references. -->
 	<t>
 	This section describe packet formats and procedures for DPLPMTUD using UDP Options.	
 	</t>
+</section>
     <section title="Sending UDP-Options Probe Packets">
 	<t>DPLPMTUD relies upon the ability of a UDP Options sender to generate a probe
         with a specific size, up to the maximum for the size supported by the local interface. 
