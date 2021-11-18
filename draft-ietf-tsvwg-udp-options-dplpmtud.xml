@@ -177,8 +177,6 @@ An alternate method (rfc include) is described in the references. -->
       target="RFC2119"></xref> <xref target="RFC8174"></xref> when, and only
       when, they appear in all capitals, as shown here.</t>
 
-      <t>This document follows the structure used to describe DPLPMTUD for
-      other transports <xref target="RFC8899"></xref>.</t>
     </section> <!-- terms -->
 
 <section title="DPLPMTUD for UDP Options">
