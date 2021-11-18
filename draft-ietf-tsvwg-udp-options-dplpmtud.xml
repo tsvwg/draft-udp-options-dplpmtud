@@ -242,7 +242,7 @@ An alternate method (rfc include) is described in the references. -->
     <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD for UDP Options">
 
        <t>There are two ways an upper PL can perform DPLPMTUD:
-	<list>	
+	<list style="symbols">	
 	<t>
 	The UDP Options sender implementing DPLPMTUD uses the method specified in <xref
       target="RFC8899"></xref> and the upper PL or application does not 
