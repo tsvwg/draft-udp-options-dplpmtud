@@ -8,15 +8,14 @@ An alternate method (rfc include) is described in the references. -->
 <!ENTITY RFC768 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.0768.xml">
 <!ENTITY RFC1063 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1063.xml">
 <!ENTITY RFC2119 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC2923 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2923.xml">
 <!ENTITY RFC4821 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4821.xml">
 <!ENTITY RFC8085 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8085.xml">
 <!ENTITY RFC8174 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC8201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8201.xml">
 <!ENTITY RFC8304 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8304.xml">
 <!ENTITY RFC8899 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8899.xml">
+<!ENTITY RFC9000 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9000.xml">
 <!ENTITY I-D.ietf-tsvwg-udp-options SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-udp-options-13.xml">
-<!-- RFC8899  replaces reference.I-D.draft-ietf-tsvwg-datagram-plpmtud-15.xml"-->
 ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- For a complete list and description of processing instructions (PIs),
@@ -191,7 +190,7 @@ An alternate method (rfc include) is described in the references. -->
         set by network layer mechanisms (such as PMTUD <xref
         target="RFC1063"></xref><xref target="RFC8201"></xref> or the IP Cache).</t>
 
-    Section title=" Packet Probes using the Echo Request Option Request Option">
+    <section title=" Packet Probes using the Echo Request Option Request Option">
 	  <t>This section describes a format of probe consisting of an
 	  empty UDP datagram, UDP Options area and Padding. 
 	  The UDP Options area contains the Echo Request Option
@@ -239,11 +238,11 @@ An alternate method (rfc include) is described in the references. -->
           to a randomised value to enhance protection from off-path attacks,
           as described in section 5.1 of <xref target="RFC8085"></xref>).</t>
 
-      </section> 
     </section> 	<!-- Format Chapter -->
     <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD for UDP Options">
-	    
+
        <t>There are two ways an upper PL can perform DPLPMTUD:
+	<list>	
 	<t>
 	The UDP Options sender implementing DPLPMTUD uses the method specified in <xref
       target="RFC8899"></xref> and the upper PL or application does not 
@@ -261,7 +260,7 @@ An alternate method (rfc include) is described in the references. -->
 		multiple UDP fragments for transmission. Each UDP fragment 
 		is then less than the discovered largest IP packet that can 
 		be received across the path. </t>
-	</list>
+	</list></t>
 		
 	<t>An upper PL or application performs DPLPMTUD (e.g.,
 	QUIC <xref target="RFC9000"></xref>). This upper PL 
@@ -271,8 +270,10 @@ An alternate method (rfc include) is described in the references. -->
 	discovery at multiple levels, so, when when configurable,
 	the upper PL SHOULD disable DPLPMTUD by UDP Options
 	<xref target="RFC8899"></xref>). </t>
-	  
-    <section anchor= Types of DPLPMTUD Probe">
+	</list>
+	</t>
+	 
+    <section anchor="plpmtudtypes" title="Types of DPLPMTUD Probe">
 	  <t> DPLPMTUD utilizes three types of probes. These are described in the following sections:</t>
 	<list style="symbols">
 		<t>A probe to confirm the path can support the base PLPMTU.</t>
@@ -421,13 +422,13 @@ An alternate method (rfc include) is described in the references. -->
 
       &RFC8899;
 
+      &RFC9000;
+
       &I-D.ietf-tsvwg-udp-options;
     </references>
 
     <references title="Informative References">
       &RFC1063;
-
-      &RFC2923;
 
       &RFC4821;
 
@@ -437,18 +438,6 @@ An alternate method (rfc include) is described in the references. -->
 
       &RFC8304;
 
-      <reference anchor="KP87">
-        <front>
-          <title>Improving Round-Trip Time Estimates in Reliable Transport
-          Protocols</title>
-
-          <author initials="P" surname="Karn"></author>
-
-          <author initials="C" surname="Partridge"></author>
-
-          <date year="1987" />
-        </front>
-      </reference>
     </references>
 
     <section title="Revision Notes">
