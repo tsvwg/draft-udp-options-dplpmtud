@@ -384,7 +384,7 @@ An alternate method (rfc include) is described in the references. -->
 	current path supports datagrams of size PLPMTU and could be designed to utilise
 	a control message format defined by the PL that does not need to
 	be delivered reliably. In this use, the UDP RES and REQ Options need to be
-	included by the application and the values of tokens need to be coordinated
+	included by the sending upper layer and the values of tokens need to be coordinated
 	with values used for other DPLPMTUD probe packets. 
 	These probes do form a part of the end-to-end
 	transport data and a receiver does deliver the RES and REQ Options to the 
