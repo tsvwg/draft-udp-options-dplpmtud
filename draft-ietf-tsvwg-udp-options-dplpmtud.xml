@@ -537,9 +537,9 @@ An alternate method (rfc include) is described in the references. -->
           <t>More consistent description of DPLPMTUD with UDP Options.</t>
           <t>Clarify token is intended per 5-tuple, not interface.</t>
           <t>BASE_PLPMTU related to RFC8899.</t>
-          <t>Proves with user data can carry application control data.</t>
+          <t>Probes with user data can carry application control data.</t>
 	  <t>Added that application data uses RES/REQ tokens from the app.</t>
-	  <t>QUIC was intended as an informational reference to an example of RFC8899</t>
+	  <t>QUIC was intended as an informational reference to an example of RFC8899.</t>
         </list></t>
     </section>
   </back>
