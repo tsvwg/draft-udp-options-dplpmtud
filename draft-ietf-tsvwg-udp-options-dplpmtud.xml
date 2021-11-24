@@ -161,7 +161,7 @@ An alternate method (rfc include) is described in the references. -->
 	    
       <t>
 	This document specifies how UDP Options 
-	<xref target="I-D.ietf-tsvwg-udp-options"></xref> can be used as PL
+	<xref target="I-D.ietf-tsvwg-udp-options"></xref> can be used as a PL
 	to implement DPLPMTUD (see Section 6.1 of <xref target="RFC8899"></xref>).
 	      
 	      In summary, UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
@@ -193,7 +193,7 @@ An alternate method (rfc include) is described in the references. -->
 	probes to determine a PLPMTU, as described in this document. 
 	"An application SHOULD avoid using
    	DPLPMTUD when the underlying transport system provides this
-   	capability", see s=Section 6.1 of <xref target="RFC8899"></xref>).  
+   	capability" (Section 6.1 of <xref target="RFC8899"></xref>).  
 	This discovered PLPMTU can be used by UDP Options to either:
 	 <list style="symbols">
 
@@ -233,7 +233,7 @@ An alternate method (rfc include) is described in the references. -->
 	    
 	 <t>Probe packets consume network capacity and incur endpoint
           processing (see Section 4.1 of <xref target="RFC8899"></xref>).
-          Implementations ought to send a probe with an Echo Request (REQ)
+          Implementations ought to send a probe with an REQ
           Option only when required by their local DPLPMTUD state machine,
           i.e., when confirming the base PMTU for the path,
 	  probing to increase the PLPMTU or to confirm the current
@@ -241,15 +241,15 @@ An alternate method (rfc include) is described in the references. -->
 
     <section title=" Packet Probes using the Echo Request and Response Options">
 	   <t>A UDP Options node that supports DPLPMTUD MUST 
-	  support sending and receiving of the Echo Request (REQ) Option and
-	  the Echo Response (RES) Options. When not supported,
+	  support sending and receiving of the REQ Option and
+	  the RES Option. When not supported,
 	  DPLPMTUD will be unable to confirm the Path or to discover the PMTU.</t>
 	    
 	  <t>This section describes a format of probe consisting of an
 		  empty UDP datagram, UDP Options area and Padding.</t>
 	  <t>
 	  A Probe Packet includes the UDP Options area containing 
-          an RES Option
+          a RES Option
 	  and any other required options concluded with an EOL Option
 	  followed by any padding needed to inflate to the required probe size.</t>
 	   
@@ -290,9 +290,8 @@ An alternate method (rfc include) is described in the references. -->
           to a randomised value to enhance protection from off-path attacks,
           as described in Section 5.1 of <xref target="RFC8085"></xref>).</t>
 
-    </section> 	<!-- Format Chapter -->
-    <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Procedures for UDP Options">
-	 
+    </section> 	<!-- Format Chapter -->	    
+	<section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Procedures for UDP Options">
 	  <t> DPLPMTUD utilises three types of probes. These are described in the following sections:</t>
 	<list style="symbols">
 		<t>A probe to confirm the path can support the BASE_PLPMTU see Section 5.1.4 of <xref
@@ -352,7 +351,7 @@ An alternate method (rfc include) is described in the references. -->
 	</t>	
 	      
 	<t>This function can be implemented within UDP Options, by generating
-        a probe of size PLPMTU, which MUST include a UDP RES Option to elicit a
+        a probe of size PLPMTU, which MUST include a RES Option to elicit a
         positive confirmation whether the path has delivered the probe.
 	This confirmation probe MAY use "Probing using padding data" or "Probing using
 	application data and padding data" (see Section 4.1 of <xref
@@ -365,12 +364,12 @@ An alternate method (rfc include) is described in the references. -->
           <t>The method can be designed to only use probes that are
           formed of a UDP datagram that includes applications data
 	  (which could be applications control
-          information), padded to the required size and include a UDP RES Option.
+          information), padded to the required size and include a RES Option.
 	  This implements
           "Probing using padding data", and avoids having to retransmit
           application data when a probe fails. This type of probe must
 	  be used when searching to increase the PLPMTU.
-	In this use, the UDP RES and REQ Options do not form a part of the end-to-end
+	In this use, the RES and REQ Options do not form a part of the end-to-end
 	transport data and a receiver does not deliver them to the upper layer protocol.
 	  A simple implementation of the method might be designed
 	  to only use this format for all probes.</t>
@@ -383,15 +382,32 @@ An alternate method (rfc include) is described in the references. -->
 	reduces the need to send an additional datagram when confirming that the
 	current path supports datagrams of size PLPMTU and could be designed to utilise
 	a control message format defined by the PL that does not need to
-	be delivered reliably. In this use, the UDP RES and REQ Options need to be
+	be delivered reliably. In this use, the RES and REQ Options need to be
 	included by the sending upper layer and the values of tokens need to be coordinated
 	with values used for other DPLPMTUD probe packets. 
 	These probes do form a part of the end-to-end
 	transport data and a receiver does deliver the RES and REQ Options to the 
 	upper layer protocol.</t>
-
 	</section>
+		
+      <section title="Changes in the Path">
+	<t>A change in the path or the loss of probe packets can result in a change
+	of the PLPMTU. DPLPMTUD
+	<xref target="RFC8899"></xref> recommends that methods are robust to path changes
+	that could have occurred since the path characteristics were last
+	confirmed and to the possibility of inconsistent path information being
+	received. For example, a notification that a path could have changed could
+	trigger path validation to provide black hole protection 
+	Section 4.3 of <xref target="RFC8899"></xref>).</t>
 
+	<t>Section 3 of <xref target="RFC8899"></xref> requires any methods 
+	designed to share the PLPMTU
+	between PLs (such as updating the IP cache PMTU for an
+	interface/destination) to be robust to the wide variety of underlying
+	network forwarding behaviors.  For example, an implementation could avoid
+	sharing PMTU information that could potentially relate to packets sent
+	with the same address over a different interface.</t>
+	</section>
       </section> <!-- DPLPMTUD Chapter -->
 
       <section title="PTB Message Handling for this Method">
@@ -427,7 +443,7 @@ An alternate method (rfc include) is described in the references. -->
       method does not change the integrity protection offered by the UDP
       options method.</t>
 
-      <t>The specification recommends that the token in the REQ/RES message is
+      <t>The specification recommends that the token in the REQ Option is
       initialised to a randomised value to enhance protection from off-path
       attacks.</t>
 
@@ -538,7 +554,7 @@ An alternate method (rfc include) is described in the references. -->
           <t>Clarify token is intended per 5-tuple, not interface.</t>
           <t>BASE_PLPMTU related to RFC8899.</t>
           <t>Probes with user data can carry application control data.</t>
-	  <t>Added that application data uses RES/REQ tokens from the app.</t>
+	  <t>Added that application data uses RES and REQ tokens from the app.</t>
 	  <t>QUIC was intended as an informational reference to an example of RFC8899.</t>
         </list></t>
     </section>
