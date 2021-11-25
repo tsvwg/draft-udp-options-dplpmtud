@@ -41,7 +41,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-01"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-02"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -266,7 +266,7 @@ An alternate method (rfc include) is described in the references. -->
               Options receiver in response to reception of a previously
               received REQ Option. Each RES Option echoes a
               previously received four-byte token.</t>
-	      <t> Reception of a RES Option confirnms reception of a 
+	      <t> Reception of a RES Option confirms reception of a 
 		specific received probe by the remote UDP
 		Options receiver.</t> 
 	</list>
@@ -318,7 +318,7 @@ An alternate method (rfc include) is described in the references. -->
 
 	<section title="Sending Probe Packets to Increase the PLPMTU">
 
-	<t>From time to time, DPLPMTUD eneters the SEARCHING state
+	<t>From time to time, DPLPMTUD enters the SEARCHING state
 	<xref target="RFC8899"></xref> (e.g., after expiry of the PMTU_RAISE_TIMER)
 	to detect whether the current
 	path can support a larger PLPMTU. 
@@ -362,7 +362,7 @@ An alternate method (rfc include) is described in the references. -->
 	    
    <section title="Sending Packet Probes that include Application Data">
           <t>The method can be designed to only use probes that are
-          formed of a UDP datagram that includes applications data
+          formed of a UDP datagram that includes application data
 	  (which could be applications control
           information), padded to the required size and include a RES Option.
 	  This implements
