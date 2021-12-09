@@ -179,7 +179,10 @@ An alternate method (rfc include) is described in the references. -->
       document are to be interpreted as described in BCP 14 <xref
       target="RFC2119"></xref> <xref target="RFC8174"></xref> when, and only
       when, they appear in all capitals, as shown here.</t>
-
+<t>	    
+This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref target="RFC8899"></xref>	    
+	    </t>
+	    
     </section> <!-- terms -->
 
 <section title="DPLPMTUD for UDP Options">
@@ -350,7 +353,7 @@ An alternate method (rfc include) is described in the references. -->
 	</t>	
 	      
 	<t>This function can be implemented within UDP Options, by generating
-        a probe of size PLPMTU, which MUST include a RES Option to elicit a
+        a probe of size PLPMTU, which MUST include a REQ Option to elicit a
         positive confirmation whether the path has delivered the probe.
 	This confirmation probe MAY use "Probing using padding data" or "Probing using
 	application data and padding data" (see Section 4.1 of <xref
@@ -358,25 +361,26 @@ An alternate method (rfc include) is described in the references. -->
 	application data, as described in a previous section.</t>		
       </section>
 	    
-  <section title="Processing Probe Packets that do not include Application Data">        
+  <section title="Probe Packets that do not include Application Data">        
 	  <t>
 	  A simple implementation of the method might be designed
 	  to only probe packets formed of a UDP datagram that include no 
 	  application data. Each probe packet is padded to the required 
-	  probe size and including a RES Option. This implements
-          "Probing using padding data", and avoids having to retransmit
+	  probe size including the REQ Option. This implements
+          "Probing using padding data"(Section 4.1 of <xref target="RFC8899"></xref>),
+	  and avoids having to retransmit
           application data when a probe fails.
 	  In this use, the probe packets do not form a part of the end-to-end
 	  transport data and a receiver does not deliver them to the upper layer protocol.
 	  </t>
  </section>
 		
-<section title="Processing Probe Packets that include Application Data">
+<section title="Probe Packets that include Application Data">
 	  <t>
 	  An implmentation always uses the format in the previous section
 	  when DPLPMTUD searches to increase the PLPMTU.</t>
 	  <t>
-          An alternative format is permitted for a probe that confirm
+          An alternative format is permitted for a probe that confirms
 	  connectivity or that validates the path. 
           These probes are permitted to carry application data. 
 	  (The data is permitted because these probes perform blackhole detection
