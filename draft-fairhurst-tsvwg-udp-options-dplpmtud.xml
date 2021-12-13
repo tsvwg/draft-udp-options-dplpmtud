@@ -189,8 +189,8 @@ An alternate method (rfc include) is described in the references. -->
       <section title="Confirmation of Connectivity across a Path">
         <t>The DPLPMTUD method requires a PL to be able to confirm
         connectivity on the path (see Section 5.1.4 of <xref
-        target="RFC8899"></xref>), but UDP does not offer a mechanism for
-        this.</t>
+        target="RFC8899"></xref>), but UDP, as defined in <xref target="RFC0768"></xref>,
+	does not offer a mechanism for this.</t>
 
         <t>UDP Options can provide this required functionality. A UDP Options
         sender implementing this specification SHOULD elicit a positive
@@ -222,7 +222,7 @@ An alternate method (rfc include) is described in the references. -->
 
         <t>A PL needs to determine whether the current path supports datagrams
         used as Probe Packets. DPLPMTUD SHOULD send (or add) a UDP Option
-        (e.g., Timestamps, ECHO Request/Response) to a Packet Probe to elicit a
+        (e.g., Timestamps, ECHO Request/Response) to a Probe Packet to elicit a
         positive confirmation that the path has delivered the Probe Packet of
         the corresponding size. From time to time, such probes can also be
         used to determine whether the current path can support a larger size
