@@ -147,7 +147,7 @@ An alternate method (rfc include) is described in the references. -->
 
       <t>The UDP API <xref target="RFC8304"></xref> offer calls for
       applications to receive ICMP Packet Too Big (PTB) messages and to
-      control the maxmium size of datagrams that are sent, but does not offer
+      control the maximium size of datagrams that are sent, but does not offer
       any automated mechanisms for an application to discover the maximum
       packet size supported by a path. Applications and upper layer protocols
       implement mechanisms for path MTU discovery above the UDP API.</t>
