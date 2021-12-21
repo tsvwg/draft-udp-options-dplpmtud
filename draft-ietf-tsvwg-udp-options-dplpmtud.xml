@@ -459,7 +459,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
       attacks.</t>
 
       <t>The security considerations for using DPLPMTUD are described in <xref
-      target="RFC8899"></xref>. UpoThe proposed new method does not change the
+      target="RFC8899"></xref>. The proposed new method does not change the
       ICMP PTB message validation method described DPLPMTUD: A UDP Options
       sender that utilies ICMP PTB messages received to a probe packet MUST
       use the quoted packet to validate the UDP port information in
