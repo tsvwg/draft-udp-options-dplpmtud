@@ -466,9 +466,10 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	(e.g., incrementing the value) then a  misbehaving on-path node could then
 	determine the nonce for subsequent probes from 
 	that sender, even if these probes are not transiting via the misbehaving node. 
-	The implication is similar to that of other on-path attacks againt probe packets.
-	This attack could be mitigated by using a different pseudo-random
-	value for each probe. </t>
+	This would allow probe packets to be forged, with an impact similar to other on-path 
+	attacks againt probe packets.
+	This attack could be mitigated by using an upreditable
+	nonce value for each probe.</t>
 	      
   	<t>The proposed new method does not change the
       ICMP PTB message validation method described by DPLPMTUD: A UDP Options
