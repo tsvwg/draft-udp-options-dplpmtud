@@ -453,19 +453,30 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
       <xref target="I-D.ietf-tsvwg-udp-options"></xref>. The proposed new
       method does not change the integrity protection offered by the UDP
       options method.</t>
-
+	    
+	<t>The security considerations for using DPLPMTUD are described in <xref
+        target="RFC8899"></xref>. On path attackers could drop probe packets to seek to decrease the PMTU, or
+         to modify probe packets in an attempt to blackhole traffic.</t>
+	    
       <t>The specification recommends that the nonce value in the REQ Option is
       initialised to a randomised value. This is designed to enhance protection from off-path
-      attacks.</t>
-
-      <t>The security considerations for using DPLPMTUD are described in <xref
-      target="RFC8899"></xref>. The proposed new method does not change the
-      ICMP PTB message validation method described DPLPMTUD: A UDP Options
+      attacks. 
+	If subsequent probes use a nonce value that is easily derived from the initial value,
+	(e.g., incrementing the value) then a  misbehaving on-path node could then
+	determine the nonce for subsequent probes from 
+	that sender, even if these probes are not transiting via the misbehaving node. 
+	The implication is similar to that of other on-path attacks againt probe packets.
+	This attack could be mitigated by using a different pseudo-random
+	value for each probe. </t>
+	      
+  	<t>The proposed new method does not change the
+      ICMP PTB message validation method described by DPLPMTUD: A UDP Options
       sender that utilies ICMP PTB messages received to a probe packet MUST
       use the quoted packet to validate the UDP port information in
       combination with the nonce value contained in the UDP
       Option, before processing the packet using the DPLPMTUD method.
-      </t>
+      </t>   
+	    
     </section>
   </middle>
 
