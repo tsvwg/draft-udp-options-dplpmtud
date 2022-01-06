@@ -455,8 +455,9 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
       options method.</t>
 	    
 	<t>The security considerations for using DPLPMTUD are described in <xref
-        target="RFC8899"></xref>. On path attackers could drop probe packets to seek to decrease the PMTU, or
-         to modify probe packets in an attempt to blackhole traffic.</t>
+        target="RFC8899"></xref>. On path attackers could malicously drop 
+	or modify probe packets to seek to decrease the PMTU, or
+        to malicously modify probe packets in an attempt to blackhole traffic.</t>
 	    
       <t>The specification recommends that the nonce value in the REQ Option is
       initialised to a randomised value. This is designed to enhance protection from off-path
