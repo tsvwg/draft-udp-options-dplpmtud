@@ -207,7 +207,8 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 		UDP Fragmentation Option to divide a datagram into 
 		multiple UDP fragments for transmission. Each UDP fragment 
 		is then less than the discovered largest IP packet that can 
-		be received across the current path. </t>
+		be received across the current path.
+</t>
 		
 	</list></t>
 		
@@ -246,6 +247,9 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	  support sending and receiving of the REQ Option and
 	  the RES Option. When not supported,
 	  DPLPMTUD will be unable to confirm the Path or to discover the PMTU.</t>
+	
+	   <t>The UDP Fragmentation option is not used when sending
+		   DPLPMTUD probes to determine a PLPMTU.</t>
 	    
 	  <t>This section describes a format of probe consisting of an
 		  empty UDP datagram, UDP Options area and Padding.</t>
@@ -291,6 +295,9 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	 <t>The value of the four byte token field SHOULD be initialised
           to a randomised value to enhance protection from off-path attacks,
           as described in Section 5.1 of <xref target="RFC8085"></xref>).</t>
+	    
+	 <t>Each of the two option kinds appear at most once in each 
+	UDP Datagram.</t>
 
     </section> 	<!-- Format Chapter -->	    
 	<section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Procedures for UDP Options">
