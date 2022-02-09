@@ -105,7 +105,7 @@ An alternate method (rfc include) is described in the references. -->
       </address>
     </author>
 
-    <date year="2021" />
+    <date year="2022" />
 
     <!-- Meta-data Declarations -->
 
@@ -601,7 +601,10 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	       <t>Clarify token/nonce to use "token". </t>
 	  <t>Clarify any use of application data for blackhole detection.</t>
         </list></t>
-
+	 <t>Working group draft -04</t>
+       <t><list style="symbols">  
+          <t>Minor changes to reflect update to UDP Options base spec.</t>
+	  </list></t>
     </section>
   </back>
 </rfc>
