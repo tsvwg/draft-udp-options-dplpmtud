@@ -248,8 +248,13 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	  the RES Option. When not supported,
 	  DPLPMTUD will be unable to confirm the Path or to discover the PMTU.</t>
 	
-	   <t>The UDP Fragmentation option is not used when sending
-		   DPLPMTUD probes to determine a PLPMTU.</t>
+	   <t> <xref target="RFC8899"></xref> (Section 3, item 2) requires the network interface 
+		below the PL to provide a way to transmit a probe packet 
+		that is larger than the PLPMTU without network layer
+                endpoint fragmentation. This document adds to this:
+		UDP datagrams used as DPLPMTUD probes as described in this 
+		document MUST NOT be fragmented at the UDP layer. 
+	    </t>
 	    
 	  <t>This section describes a format of probe consisting of an
 		  empty UDP datagram, UDP Options area and Padding.</t>
@@ -296,8 +301,8 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
           to a randomised value to enhance protection from off-path attacks,
           as described in Section 5.1 of <xref target="RFC8085"></xref>).</t>
 	    
-	 <t>Each of the two option kinds appear at most once in each 
-	UDP Datagram.</t>
+	 <t>Like other UDP options, each of the two option kinds MUST NOT appear more than once in each 
+	UDP datagram.</t>
 
     </section> 	<!-- Format Chapter -->	    
 	<section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Procedures for UDP Options">
@@ -319,7 +324,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
         sender implementing this specification MUST elicit a positive
         confirmation of connectivity for the path, by sending a probe,
 	padded to size BASE_PLPMTU. This confirmation probe MUST
-	include a UDP Option that elicits a response from the remote endpoint
+	include a UDP option that elicits a response from the remote endpoint
 	(e.g., by including the RES and REQ Options) to confirm that
 	a packet of the size traversed the path. This also confirms that the
 	remote receiver supports use of the RES and REQ Options.</t>
