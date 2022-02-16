@@ -105,7 +105,7 @@ An alternate method (rfc include) is described in the references. -->
       </address>
     </author>
 
-    <date year="2021" />
+    <date year="2022" />
 
     <!-- Meta-data Declarations -->
 
@@ -207,7 +207,8 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 		UDP Fragmentation Option to divide a datagram into 
 		multiple UDP fragments for transmission. Each UDP fragment 
 		is then less than the discovered largest IP packet that can 
-		be received across the current path. </t>
+		be received across the current path.
+</t>
 		
 	</list></t>
 		
@@ -246,6 +247,14 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	  support sending and receiving of the REQ Option and
 	  the RES Option. When not supported,
 	  DPLPMTUD will be unable to confirm the Path or to discover the PMTU.</t>
+	
+	   <t> <xref target="RFC8899"></xref> (Section 3, item 2) requires the network interface 
+		below the PL to provide a way to transmit a probe packet 
+		that is larger than the PLPMTU without network layer
+                endpoint fragmentation. This document adds to this:
+		UDP datagrams used as DPLPMTUD probes as described in this 
+		document MUST NOT be fragmented at the UDP layer. 
+	    </t>
 	    
 	  <t>This section describes a format of probe consisting of an
 		  empty UDP datagram, UDP Options area and Padding.</t>
@@ -291,6 +300,9 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	 <t>The value of the four byte token field SHOULD be initialised
           to a randomised value to enhance protection from off-path attacks,
           as described in Section 5.1 of <xref target="RFC8085"></xref>).</t>
+	    
+	 <t>Like other UDP options, each of the two option kinds MUST NOT appear more than once in each 
+	UDP datagram.</t>
 
     </section> 	<!-- Format Chapter -->	    
 	<section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Procedures for UDP Options">
@@ -312,7 +324,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
         sender implementing this specification MUST elicit a positive
         confirmation of connectivity for the path, by sending a probe,
 	padded to size BASE_PLPMTU. This confirmation probe MUST
-	include a UDP Option that elicits a response from the remote endpoint
+	include a UDP option that elicits a response from the remote endpoint
 	(e.g., by including the RES and REQ Options) to confirm that
 	a packet of the size traversed the path. This also confirms that the
 	remote receiver supports use of the RES and REQ Options.</t>
@@ -589,7 +601,10 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	       <t>Clarify token/nonce to use "token". </t>
 	  <t>Clarify any use of application data for blackhole detection.</t>
         </list></t>
-
+	 <t>Working group draft -04</t>
+       <t><list style="symbols">  
+          <t>Minor changes to reflect update to UDP Options base spec.</t>
+	  </list></t>
     </section>
   </back>
 </rfc>
