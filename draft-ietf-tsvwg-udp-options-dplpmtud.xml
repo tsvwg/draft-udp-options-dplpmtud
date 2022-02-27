@@ -41,7 +41,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-02"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-03"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -186,43 +186,45 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
     </section> <!-- terms -->
 
 <section title="DPLPMTUD for UDP Options">
+
 	<t>There are two ways an upper PL can perform DPLPMTUD:
 	<list style="symbols">	
 	<t>
-	The UDP Options sender implementing DPLPMTUD uses the method specified in <xref
-      target="RFC8899"></xref> and the upper PL (or application) does not 
-	perform PMTU discovery.
-	In this case, UDP Options processing is responsible for sending 
-	probes to determine a PLPMTU, as described in this document. 
-	"An application SHOULD avoid using
-   	DPLPMTUD when the underlying transport system provides this
-   	capability" (Section 6.1 of <xref target="RFC8899"></xref>).  
-	This discovered PLPMTU can be used by UDP Options to either:
-	 <list style="symbols">
+	The UDP Options sender implementing DPLPMTUD uses the method specified
+	in <xref target="RFC8899"></xref> and the upper PL (or application)
+	does not perform PMTU discovery.  In this case, UDP Options processing
+	is responsible for sending probes to determine a PLPMTU, as described
+	in this document.  "An application SHOULD avoid using DPLPMTUD when the
+	underlying transport system provides this capability" (Section 6.1 of
+	<xref target="RFC8899"></xref>).  This discovered PLPMTU can be used by
+	UDP Options to either:
+		 <list style="symbols">
 
-		<t> set the maximum datagram size for the current path 
-		(based on the discovered largest IP packet that can be 
-		received across the current path).  </t>	
-		<t> set the maximum fragment size when a sender uses the 
-		UDP Fragmentation Option to divide a datagram into 
-		multiple UDP fragments for transmission. Each UDP fragment 
-		is then less than the discovered largest IP packet that can 
-		be received across the current path.
-</t>
+			<t> set the maximum datagram size for the current path 
+			(based on the discovered largest IP packet that can be 
+			received across the current path).  </t>	
+			<t> set the maximum fragment size when a sender uses the 
+			UDP Fragmentation Option to divide a datagram into 
+			multiple UDP fragments for transmission. Each UDP fragment 
+			is then less than the discovered largest IP packet that can 
+			be received across the current path.
+			</t>
+			
+		</list>
+	</t>
 		
-	</list></t>
-		
-	<t>An upper PL (or application) performs DPLPMTUD (e.g.,
-	QUIC <xref target="RFC9000"></xref>). This upper PL 
-	then uses probes to determine a safe
-	PLPMTU for the datagrams that it sends. 
-	The format and content of any probe 
-	is determined by the upper PL. Such a design should avoid performing
-	discovery at multiple levels, so, when configurable,
+	<t>An upper PL (or application) performs DPLPMTUD (e.g., QUIC <xref
+	target="RFC9000"></xref>). This upper PL then uses probes to determine
+	a safe PLPMTU for the datagrams that it sends.  The format and content
+	of any probe is determined by the upper PL. Such a design should avoid
+	performing discovery at multiple levels, so, when configurable, this
+	upper PL SHOULD disable DPLPMTUD by UDP Options.</t>
 	</list>
 	</t>
+
 	<t>
-	The packet formats and procedures for DPLPMTUD using UDP Options are described in this document.	
+	The packet formats and procedures for DPLPMTUD using UDP Options are
+	described in this document. 
 	</t>
 </section>
     <section title="Sending UDP-Options Probe Packets">
@@ -389,7 +391,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 		
 <section title="Probe Packets that include Application Data">
 	  <t>
-	  An implmentation always uses the format in the previous section
+	  An implementation always uses the format in the previous section
 	  when DPLPMTUD searches to increase the PLPMTU.</t>
 	  <t>
           An alternative format is permitted for a probe that confirms
@@ -467,9 +469,9 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
       options method.</t>
 	    
 	<t>The security considerations for using DPLPMTUD are described in <xref
-        target="RFC8899"></xref>. On path attackers could malicously drop 
+        target="RFC8899"></xref>. On path attackers could maliciously drop 
 	or modify probe packets to seek to decrease the PMTU, or
-        to malicously modify probe packets in an attempt to blackhole traffic.</t>
+        to maliciously modify probe packets in an attempt to blackhole traffic.</t>
 	    
       <t>The specification recommends that the nonce value in the REQ Option is
       initialised to a randomised value. This is designed to enhance protection from off-path
@@ -479,13 +481,13 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	determine the nonce for subsequent probes from 
 	that sender, even if these probes are not transiting via the misbehaving node. 
 	This would allow probe packets to be forged, with an impact similar to other on-path 
-	attacks againt probe packets.
-	This attack could be mitigated by using an upreditable
+	attacks against probe packets.
+	This attack could be mitigated by using an unpredictable 
 	nonce value for each probe.</t>
 	      
   	<t>The proposed new method does not change the
       ICMP PTB message validation method described by DPLPMTUD: A UDP Options
-      sender that utilies ICMP PTB messages received to a probe packet MUST
+      sender that utilities ICMP PTB messages received to a probe packet MUST
       use the quoted packet to validate the UDP port information in
       combination with the token contained in the UDP
       Option, before processing the packet using the DPLPMTUD method.
@@ -600,11 +602,9 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
           <t>Again more consistent description of DPLPMTUD with UDP Options.</t>
 	       <t>Clarify token/nonce to use "token". </t>
 	  <t>Clarify any use of application data for blackhole detection.</t>
-        </list></t>
-	 <t>Working group draft -04</t>
-       <t><list style="symbols">  
           <t>Minor changes to reflect update to UDP Options base spec.</t>
-	  </list></t>
+        </list></t>
     </section>
   </back>
+
 </rfc>
