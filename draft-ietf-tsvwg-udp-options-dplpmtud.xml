@@ -41,7 +41,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-03"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-04"
      ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -381,7 +381,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	  to only probe packets formed of a UDP datagram that include no 
 	  application data. Each probe packet is padded to the required 
 	  probe size including the REQ Option. This implements
-          "Probing using padding data"(Section 4.1 of <xref target="RFC8899"></xref>),
+          "Probing using padding data" (Section 4.1 of <xref target="RFC8899"></xref>),
 	  and avoids having to retransmit
           application data when a probe fails.
 	  In this use, the probe packets do not form a part of the end-to-end
@@ -603,6 +603,10 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	       <t>Clarify token/nonce to use "token". </t>
 	  <t>Clarify any use of application data for blackhole detection.</t>
           <t>Minor changes to reflect update to UDP Options base spec.</t>
+        </list></t>
+      <t>Workgin group draft-04.</t>
+      <t><list>
+      	<t>Update for WG Last Call</t>
         </list></t>
     </section>
   </back>
