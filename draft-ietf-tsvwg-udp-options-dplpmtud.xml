@@ -127,9 +127,9 @@ An alternate method (rfc include) is described in the references. -->
       method uses the UDP Options
       packetization layer. It allows a datagram application to discover the 
       largest size of datagram that can be sent
-      across a specific network path. It also provides away to allow the 
-      the application to periodically verify the crrent maximum
-      packet size and update this when required.</t>
+      across a specific network path. It also provides a way to allow the 
+      the application to periodically verify the current maximum
+      packet size supported by a path and to update this when required.</t>
     </abstract>
   </front>
 
@@ -161,8 +161,7 @@ An alternate method (rfc include) is described in the references. -->
       gain robustness by using a probing mechanism that does not solely rely on
       ICMP PTB messages and works on paths that drop ICMP PTB messages.</t>
 	    
-      <t>
-	This document specifies how UDP Options 
+      <t>This document specifies how UDP Options 
 	<xref target="I-D.ietf-tsvwg-udp-options"></xref> can be used as a PL
 	to implement DPLPMTUD (see Section 6.1 of <xref target="RFC8899"></xref>).
 	      
@@ -243,7 +242,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
           Implementations ought to send a probe with an REQ
           Option only when required by their local DPLPMTUD state machine,
           i.e., when confirming the base PMTU for the path,
-	  probing to increase the PLPMTU or to confirm the current
+	  probing to increase the PLPMTU, or to confirm the current
           PLPMTU.</t>
 
     <section title="Sending Probe Packets using the Echo Request and Response Options">
@@ -256,11 +255,11 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 		below the PL to provide a way to transmit a probe packet 
 		that is larger than the PLPMTU without network layer
                 endpoint fragmentation. This document adds to this:
-		UDP datagrams used as DPLPMTUD probes as described in this 
-		document MUST NOT be fragmented at the UDP layer. 
+		UDP datagrams used as DPLPMTUD probes, as described in this 
+		document, MUST NOT be fragmented at the UDP layer. 
 	    </t>
 	    
-	  <t>This section describes a format of probe consisting of an
+	  <t>This section describes a format of a probe consisting of an
 		  empty UDP datagram, UDP Options area and Padding.</t>
 	  <t>
 	  A Probe Packet includes the UDP Options area containing 
@@ -352,8 +351,8 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	needs to elicit a positive acknowledgment that the path has
         delivered a datagram of the specific probed size and, therefore, MUST include the
 	REQ Option.</t>
-	<t>
-	Received probes that do not carry application data
+	
+	<t>Received probes that do not carry application data
 	do not form a part of the end-to-end
 	transport data and are not delivered to the upper layer protocol.</t>
 	</section>
@@ -380,7 +379,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
   <section title="Probe Packets that do not include Application Data">        
 	  <t>
 	  A simple implementation of the method might be designed
-	  to only probe packets formed of a UDP datagram that include no 
+	  to only use probe packets in a UDP datagram that include no 
 	  application data. Each probe packet is padded to the required 
 	  probe size including the REQ Option. This implements
           "Probing using padding data" (Section 4.1 of <xref target="RFC8899"></xref>),
@@ -406,7 +405,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	the merits and demerits of including application data. For example, this
 	reduces the need to send additional datagrams. 
 	</t>	  
-	<t> The probe could utilise
+	<t>This type of probe could utilise
 	a control message format defined by the upper layer protocol that contains data that does not need to
 	be delivered reliably. The REQ Option needs to be
 	included when a sending upper layer protocol performs DPLPMTUD.The DPLPMTUD method tracks the transmission 
