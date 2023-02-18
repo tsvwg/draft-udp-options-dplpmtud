@@ -417,30 +417,41 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	with any values used for other DPLPMTUD probe packets to ensure that each probe packet can be idnetified by a unique token.</t>
 </section>
 		
-<section title="Examples describing Sending Responses to Probe Packets">
-<t>Reception of a REQ Option is a request to provide a response. A UDP Options receiver 
-therefore ought to respond with a UDP datagram with a RES Option to the original sender.</t>
-<t>Various designs can be differentiated:</t>
+<section title="Examples with different Receiver Behaviors">
+
+<t> A receiver that implements UDP Options ought to respond with a UDP datagram with a RES Option when requested by a sender.</t>
+<t>The following exampoles describe different receiver behaviors:</t>
 <list>
-<t> A sender that supports and uses DPLPMTUD, but a receiver that does not return a RES Option. The remote receiver might not process UDP options,
-might not send back Datagram with a RES Option for some other reason. In this case, DPLPMTUD is unable to discover the PLPMTU and
-will use the configured minimum message size.</t>
+<t>When a sender supports this specificatoon, but the remote receiver that does not return a RES Option, the method 
+is unable to discover the PLPMTU and will  result in using minimum configured PLPMTU (MIN_PLPMTU).
+Such a remote receiver might not process UDP options, or
+might not return a Datagram with a RES Option for some other reason (due to persisent packet loss, insufficent space
+to include the option, etc.)</t>
 
-<t> A receiver that implements DPLPMTUD, could be designed to only return a RES Option when it next has a UDP datagram to send to the sender.
-In this design, the reception of a REQ Option does not trigger a response. This method helps avoid opportunities to use the 
-method as a DoS attack. The design allows DPLPMTUD to operate when there is a flow of datagrams in both directions, 
-even when one direction only provides periodic feedback (e.g., one acknowledgment packet per RTT). It requires the PLPMTU to be sufficiently large to allow 
-adding the RES option to the feedback packets that are sent.
-However, a less frequent transmission rate in the return direction, prevents
-prompt delivery of the RES Option, and can resulting in probe packets failing to be acknowledged and hence a smaller PLPMTU than actually suppported by
-the path.</t>
+<t>When the sender and receiver support DPLPMTUD using the specication, 
+and the receiver design only return a RES Option with next has a UDP datagram to send to the requester.
+In this design, the reception of a REQ Option does not trigger a response. The design allows DPLPMTUD to operate when there is a flow of datagrams in both directions, 
+even when one direction only provides periodic feedback (e.g., one acknowledgment packet per RTT). Use requires the PLPMTU at the receiver
+to be sufficiently large that it allows adding the RES option to the feedback packets that are sent.
+the path. This simple method helps avoid opportunities to use the method as a DoS attack. </t>
 
-<t>A more complex design permits a receiver to generate a datagram (e.g. with zero payload data) solely to return a RES Option. 
-This allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets, resulting in a some additional traffic overhead. 
-This can ensure timely progress of DPLPMTUD. However, if an endpoint creates and sends a Datagram with a RES option solely as respond to received RES Option 
-(i.e. when no other Datagrams are queued for transmission), the endpoint MUST rate limit the responses that it generates (e.g. limiting each pair of ports to send 1 per RTT or 
-1 per second) for packets generately solely to carry a RES Option.
-This rate limit for packets generately solely to carry a RES Option mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>	
+<t>When the sender and receiver support DPLPMTUD using the specication, 
+a receiver could be designed to only return a RES Option when it next has a UDP datagram to send to the requester, but there is a low
+rate of transmission (or no datagrams are sent) in the return direction. 
+The lack of transmission opprunities prevents prompt delivery of the RES Option, 
+and can result in probe packets failing to be acknowledged in time. This will result in a smaller PLPMTU than actually suppported by
+the path, or using the minimum configured PLPMTU (MIN_PLPMTU).</t>
+
+
+<t>The design of a receiver could permit it to generate a datagram (e.g. with zero payload data)
+solely to return a RES Option (e.g., when no other Datagrams are queued for transmission). 
+This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
+It results in a some additional traffic overhead, but has the advantage thatb it
+can ensure timely progress of DPLPMTUD. 
+If a UDP Options endpoint creates and sends a Datagram with a RES option solely as respond to received RES Option,
+the respionder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or 
+1 per second).
+This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>	
 </list>
 </section>
 		
@@ -454,7 +465,8 @@ This rate limit for packets generately solely to carry a RES Option mitigates th
 	trigger path validation to provide black-hole protection 
 	Section 4.3 of <xref target="RFC8899"></xref>).</t>
 	      
-	<t>DPLPMTUD could also be triggered when the upper layer protocol observes a 
+	<t>An upper layer protocol could trigger DPLPMTUD to validate the path
+	when it observes a 
 	high packet loss rate (or a repeated protocol timeout).</t>
 
 	<t>Section 3 of <xref target="RFC8899"></xref> requires any methods 
@@ -488,7 +500,7 @@ This rate limit for packets generately solely to carry a RES Option mitigates th
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>Gorry Fairhurst and Tom Jones are supported by funding provided by
       the University of Aberdeen. The editors would like to thank Magnus Westerlund 
-      and Mohamed Boucadair for detailed comments and others who contributed to completing this document.</t>
+      and Mohamed Boucadair for their detailed comments and also other people who contributed to completing this document.</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -506,13 +518,13 @@ This rate limit for packets generately solely to carry a RES Option mitigates th
 	or modify probe packets to seek to decrease the PMTU, or
         to maliciously modify probe packets in an attempt to black-hole traffic.</t>
 	    
-      <t>The specification recommends that the nonce value in the REQ Option is
+      <t>The specification recommends that the token value in the REQ Option is
       initialised to a randomised value. This is designed to enhance protection from off-path
       attacks. 
 	If a subsequent probe packet uses a token value that is easily derived from the initial value,
 	(e.g., incrementing the value) then a misbehaving on-path observer could then
 	determine the token values used for subsequent probe packets from 
-	that sender, even if these probe pakcets are not transiting via the node. 
+	that sender, even if these probe pakcets are not transiting via the observer. 
 	This would allow probe packets to be forged, with an impact similar to other on-path 
 	attacks against probe packets.
 	This attack could be mitigated by using an unpredictable 
