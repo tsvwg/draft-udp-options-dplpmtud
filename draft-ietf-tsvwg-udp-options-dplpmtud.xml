@@ -398,7 +398,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
           An alternative format is permitted for a probe that confirms
 	  connectivity or that validates the path. 
           These probes are permitted to carry application data. 
-	  (The data is permitted because these probes perform blackhole detection
+	  (The data is permitted because these probes perform black-hole detection
 	  and will therefore usually have a higher probability of successful 
 	  transmission, similar to other packets sent by the upper layer protocol.)
 	   Section 4.1 of <xref target="RFC8899"></xref> provides a discussion of
@@ -450,7 +450,7 @@ This rate limit for packets generately solely to carry a RES Option mitigates th
 	that could have occurred since the path characteristics were last
 	confirmed and to the possibility of inconsistent path information being
 	received. For example, a notification that a path has changed could
-	trigger path validation to provide black hole protection 
+	trigger path validation to provide black-hole protection 
 	Section 4.3 of <xref target="RFC8899"></xref>).</t>
 	      
 	<t>DPLPMTUD could also be triggered when the upper layers observe a 
@@ -503,19 +503,19 @@ This rate limit for packets generately solely to carry a RES Option mitigates th
 	<t>The security considerations for using DPLPMTUD are described in <xref
         target="RFC8899"></xref>. On path attackers could maliciously drop 
 	or modify probe packets to seek to decrease the PMTU, or
-        to maliciously modify probe packets in an attempt to blackhole traffic.</t>
+        to maliciously modify probe packets in an attempt to black-hole traffic.</t>
 	    
       <t>The specification recommends that the nonce value in the REQ Option is
       initialised to a randomised value. This is designed to enhance protection from off-path
       attacks. 
-	If subsequent probes use a nonce value that is easily derived from the initial value,
-	(e.g., incrementing the value) then a  misbehaving on-path node could then
-	determine the nonce for subsequent probes from 
-	that sender, even if these probes are not transiting via the misbehaving node. 
+	If a subsequent probe packet uses a token value that is easily derived from the initial value,
+	(e.g., incrementing the value) then a misbehaving on-path observer could then
+	determine the token values used for subsequent probe packets from 
+	that sender, even if these probe pakcets are not transiting via the node. 
 	This would allow probe packets to be forged, with an impact similar to other on-path 
 	attacks against probe packets.
 	This attack could be mitigated by using an unpredictable 
-	nonce value for each probe.</t>
+	token value for each probe packet.</t>
 	      
   	<t>The proposed new method does not change the
       ICMP PTB message validation method described by DPLPMTUD: A UDP Options
@@ -633,7 +633,7 @@ This rate limit for packets generately solely to carry a RES Option mitigates th
           <t>Update to reflect more comments from MED.</t>
           <t>Again more consistent description of DPLPMTUD with UDP Options.</t>
 	       <t>Clarify token/nonce to use "token". </t>
-	  <t>Clarify any use of application data for blackhole detection.</t>
+	  <t>Clarify any use of application data for black-hole detection.</t>
           <t>Minor changes to reflect update to UDP Options base spec.</t>
         </list></t>
       <t>Working group draft-04.</t>
