@@ -212,14 +212,19 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	</t>
 		
 	<t>An upper layer protocol using UDP
-	can implement DPLPMTUD. It then uses probe packets to determine
+	can implement DPLPMTUD. It then uses probe packetsn using REQ and RES Options
+	to determine
 	a safe PLPMTU for the datagrams that it sends. The format and content
 	of these probe packets is determined by the upper layer protocol.</t>
 	</list>
 	</t>
 	
-	<t>When configurable, a design ought to avoid
-	performing discovery at multiple levels.
+	<t>Note:  If DPLPMTUD is active at more than one layer, 
+	then the values of the tokens used in REQ Options need to be coordinated
+	with any values used for other DPLPMTUD probe packets to ensure 
+	that each probe packet can be idnetified by a unique token.
+	When configurable, a design ought to avoid such
+	performing discovery at thde UDP options and upper protocol layers.
 	Section 6.1 of <xref target="RFC8899"></xref> recommends that
 	"An application SHOULD avoid using DPLPMTUD when the
 	underlying transport system provides this capability".</t>
@@ -413,8 +418,6 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	DPLPMTUD can be used to manage the PMTU in just one direction or can be used for both directions.
 	Probe packets that use this format form a part of the end-to-end
 	transport data.</t>
-	<t>Note:  If DPLPMTUD active at more than one layer, then the values of the tokens need to be coordinated
-	with any values used for other DPLPMTUD probe packets to ensure that each probe packet can be idnetified by a unique token.</t>
 </section>
 		
 <section title="Examples with different Receiver Behaviors">
