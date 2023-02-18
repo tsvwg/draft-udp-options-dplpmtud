@@ -422,25 +422,25 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 		
 <section title="Sending Responses to Probe Packets">
 <t>Reception of a REQ Option is a request to provide a response. A UDP Options receiver 
-therefore ought to respond with a RES Option, in a UDP datagram it sends to the same sender.</t>
-<t>Various case could be differentiated:</t>
-<t> A sender supports and uses DPLPMTUD, but the receiver does not return RES Options. The receiver might not process UDP options,
-might not send back packets to the sender, or some other reason. In this case DPLPMTUD is unable to discover the PLPMTU and
-	will return the configured minimum size.</t>
-<t> In a simple design, a receiver implements DPLPMTUD, but only returns a RES Option when it next has a UDP datagram to send to the same sender.
-In this design, the reception of a REQ Option does not force a response. This method mitigates oppoirtunities to avoid using the 
-method as a DoS attack. This design will work well, there is a flow of datagramsin both directions, 
-even when one direction only provides periodic feedback (e.g., one packet per RTT), providing that the PMTU is sufficiently large to allow 
-adding the RES option to the feedback packets.
-However, with less frequent treansmission in the return direction, such a policy could have a negative impact on DPLPMTUD by preventing prompt
-delivery of an acknowledgment to probes, and potentially resulting in a smaller PMTU than suppported by
-the path. </t>
-<t>A more complex design permits a receiver to generate a datagram (e.g. with zero payload data) but including a RES option soley to ensure timely progress of DPLPMTUD. This overcomes
-the limitations of the simple approach. If an endpoint creates and send a Datagram with a RES option solely as respond to received RES Option 
-(i.e. when no other Datagrams are queued for transmission), the endpoint MUST rate limit the responses that it generates (e.g. for each pair of ports to 1 per RTT or 
-1 per second). This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.
-
-A UDP endpoint can then be configured to probe the open UDP ports using DPLPMTUD probe packets, resulting in a some additional traffic overhead. </t>	
+therefore ought to respond with a RES Option in a UDP datagram that it returns to the same sender.</t>
+<t>Various case can be differentiated:</t>
+<t> A sender that supports and uses DPLPMTUD, but a receiver that does not return RES Options. This receiver might not process UDP options,
+might not send back Datagram with a RES Option for some other reason. In this case, DPLPMTUD is unable to discover the PLPMTU and
+will use the configured minimum message size.</t>
+<t> A receiver that implements DPLPMTUD, could be designed to only return a RES Option when it next has a UDP datagram to send to the sender.
+In this design, the reception of a REQ Option does not force a response. This method helps avoid opportunities to use the 
+method as a DoS attack. The design allows DPLPMTUD to operate when there is a flow of datagrams in both directions, 
+even when one direction only provides periodic feedback (e.g., one acknowledgment packet per RTT). It requires the PLPMTU to be sufficiently large to allow 
+adding the RES option to the feedback packets that are sent.
+However, a less frequent transmission rate in the return direction, prevents
+prompt delivery of the RES Option, and can resulting in probes failing to be acknowledged and hence a smaller PLPMTU than actually suppported by
+the path.</t>
+<t>A more complex design would permit a receiver to generate a datagram (e.g. with zero payload data) solely to return a RES Option. 
+This allows a UDP Options endpoint to be configured to probe the open UDP ports using DPLPMTUD probe packets, resulting in a some additional traffic overhead. 
+This can ensure timely progress of DPLPMTUD. However, if an endpoint creates and sends a Datagram with a RES option solely as respond to received RES Option 
+(i.e. when no other Datagrams are queued for transmission), the endpoint MUST rate limit the responses that it generates (e.g. limiting each pair of ports to send 1 per RTT or 
+1 per second) for packets generately solely to carry a RES Option.
+This rate limit for packets generately solely to carry a RES Option mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>	
 </section>
 		
       <section title="Changes in the Path">
@@ -486,7 +486,8 @@ A UDP endpoint can then be configured to probe the open UDP ports using DPLPMTUD
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>Gorry Fairhurst and Tom Jones are supported by funding provided by
-      the University of Aberdeen.</t>
+      the University of Aberdeen. The editors would like to thank Magnus Westerlund 
+      and Mohamed Boucadair for detailed comments and others who contributed to completing this document.</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -635,10 +636,15 @@ A UDP endpoint can then be configured to probe the open UDP ports using DPLPMTUD
 	  <t>Clarify any use of application data for blackhole detection.</t>
           <t>Minor changes to reflect update to UDP Options base spec.</t>
         </list></t>
-      <t>Workgin group draft-04.</t>
+      <t>Working group draft-04.</t>
       <t><list>
       	<t>Update for WG Last Call</t>
         </list></t>
+   <t>Working group draft-05.</t>
+      <t><list>
+      	<t>Update following WG Last Call</t>
+        </list></t>
+
     </section>
   </back>
 
