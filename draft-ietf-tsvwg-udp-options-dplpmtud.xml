@@ -571,8 +571,6 @@ This rate limit mitigates the DoS vector, without significantly impacting the op
       &RFC8201;
 
       &RFC8304;
-
-      &RFC9000;
 	  
     </references>
 
