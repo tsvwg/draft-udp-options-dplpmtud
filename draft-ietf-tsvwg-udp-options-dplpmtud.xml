@@ -156,7 +156,7 @@ An alternate method (rfc include) is described in the references. -->
       describes a method for a Packetization Layer (PL) (such as UDP Options)
       to search for the largest Packetization Layer PMTU (PLPMTU) supported on
       a path. Datagram PLPMTUD (DPLPMTUD) <xref target="RFC8899"></xref>
-      specifies this support for datagram transports.  PLPMTUD and DPLPMTUD
+      specifies this support for datagram transports. PLPMTUD and DPLPMTUD
       gain robustness by using a probing mechanism that does not solely rely on
       ICMP PTB messages and works on paths that drop ICMP PTB messages.</t>
 	    
@@ -172,11 +172,14 @@ An alternate method (rfc include) is described in the references. -->
     </section>
 
     <section title="Terminology">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in BCP 14 <xref
-      target="RFC2119"></xref> <xref target="RFC8174"></xref> when, and only
-      when, they appear in all capitals, as shown here.</t>
+<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14
+   <xref target="RFC2119"/>
+   <xref target="RFC8174"/>
+   when, and only when, they appear in all
+   capitals, as shown here.</t>
 <t>	    
 This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref target="RFC8899"></xref>	    
 	    </t>
@@ -195,12 +198,12 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	<t>
 	A UDP Options sender implementing DPLPMTUD uses the method specified
 	in <xref target="RFC8899"></xref> and the upper layer protocol
-	does not perform PMTU discovery.  In this case, UDP Options processing
+	does not perform PMTU discovery. In this case, UDP Options processing
 	is responsible for sending probe packets to determine a PLPMTU, as described
 	in this document. The discovered PLPMTU can be used by UDP Options to either:
 		 <list style="symbols">
 
-			<t> set the maximum datagram size for the current path.  </t>	
+			<t> set the maximum datagram size for the current path.</t>	
 			<t> set the maximum fragment size when a sender uses the 
 			UDP Fragmentation Option to divide a datagram into 
 			multiple UDP fragments for transmission. Each UDP fragment 
@@ -366,7 +369,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	This validation sends probe packets in the
         DPLPMTUD SEARCH_COMPLETE state to detect black-holing of data
         (see Section 4.2 of <xref target="RFC8899"></xref>, which also
-	defines a black-hole).  
+	defines a black-hole).
 	</t>	
 	      
 	<t>Path validation can be implemented within UDP Options, by generating
@@ -415,7 +418,7 @@ This document uses the terms defined for DPLPMTUD (see Sections 2 and 5 of <xref
 	
 	<t>A receiver that responds to DPLPMTUD needs to processes the REQ Option and
 	include the corresponding RES Option in an upper layer protocol message that it returns to the requester.
-	DPLPMTUD can be used to manage the PMTU in just one direction or can be used for both directions.
+	DPLPMTUD can be used to manage the PL PMTU in just one direction or can be used for both directions.
 	Probe packets that use this format form a part of the end-to-end
 	transport data.</t>
 </section>
@@ -476,7 +479,7 @@ This rate limit mitigates the DoS vector, without significantly impacting the op
 	designed to share the PLPMTU
 	between PLs (such as updating the IP cache PMTU for an
 	interface/destination) to be robust to the wide variety of underlying
-	network forwarding behaviors.  For example, an implementation could avoid
+	network forwarding behaviors. For example, an implementation could avoid
 	sharing PMTU information that could potentially relate to packets sent
 	with the same address over a different interface.</t>
 	</section>
@@ -484,7 +487,7 @@ This rate limit mitigates the DoS vector, without significantly impacting the op
 
       <section title="PTB Message Handling for this Method">
         <t> Support for receiving ICMP PTB messages is
-	OPTIONAL for use with DPLPMTUD. A UDP Options sender 
+	OPTIONAL for use with DPLPMTUD. A UDP Options sender
 	can therefore ignore received ICMP PTB messages.</t>
 
         <t>A UDP Options sender that utilises ICMP PTB messages received 
