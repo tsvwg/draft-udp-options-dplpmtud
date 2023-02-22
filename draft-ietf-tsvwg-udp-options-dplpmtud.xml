@@ -162,7 +162,8 @@ An alternate method (rfc include) is described in the references. -->
 	    
       <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
       functionality that can be used to implement DPLPMTUD within the UDP
-      transport service. This document specifies how DPLPMTUD
+      transport service or by an application or upper layer protocol that uses UDP Options. 
+      This document specifies how DPLPMTUD
       is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
 	Implementing DPLPMTUD using UDP Options avoids the need for
       each upper layer protocol (or application) to implement the DPLPMTUD
@@ -200,7 +201,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	in <xref target="RFC8899"></xref> and the upper layer protocol
 	does not perform PMTU discovery. In this case, UDP Options processing
 	is responsible for sending probe packets to determine a PLPMTU, as described
-	in this document. The discovered PLPMTU can be used by UDP Options to either:
+	in this document. The discovered PLPMTU can be used to either:
 		 <list style="symbols">
 
 			<t> set the maximum datagram size for the current path.</t>	
@@ -222,12 +223,14 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	</list>
 	</t>
 	
-	<t>Note:  If DPLPMTUD is active at more than one layer, 
+	<t>Note: If DPLPMTUD is active at more than one layer, 
 	then the values of the tokens used in REQ Options need to be coordinated
 	with any values used for other DPLPMTUD probe packets to ensure 
 	that each probe packet can be identified by a unique token.
 	When configurable, a design ought to avoid 
-	performing such discovery using UDP Options and also at upper protocol layers.
+	performing such discovery within UDP Options 
+	and also by upper protocol layers
+	(that send and receive probe packets via UDP Options).
 	Section 6.1 of <xref target="RFC8899"></xref> recommends that
 	"An application SHOULD avoid using DPLPMTUD when the
 	underlying transport system provides this capability".</t>
@@ -246,10 +249,10 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	of [I-D.ietf-tsvwg-udp-options]:</t>
         <list style="symbols">
    	  <t>The REQ Option is set by a sending PL to solicit a response from a
-	  remote receiver.  A four-byte token identifies each request.</t>
+	  remote receiver. A four-byte token identifies each request.</t>
 
   	  <t>The RES Option is sent by a UDP Options receiver in response to a
-      	  previously received REQ Option.  Each RES Option echoes a received
+      	  previously received REQ Option. Each RES Option echoes a received
 	  four-byte token.</t>
 
   	  <t>Reception of a RES Option by the sender confirms that a specific
