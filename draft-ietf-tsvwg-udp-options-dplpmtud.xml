@@ -164,8 +164,8 @@ An alternate method (rfc include) is described in the references. -->
       functionality that can be used to implement DPLPMTUD within the UDP
       transport service or by an application or upper layer protocol that uses UDP Options. 
       This document specifies how DPLPMTUD
-      is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
-	Implementing DPLPMTUD using UDP Options avoids the need for
+      is implemented (Section 6.1 of <xref target="RFC8899"></xref>).</t>
+	<t>Implementing DPLPMTUD within UDP Options avoids the need for
       each upper layer protocol (or application) to implement the DPLPMTUD
       method. It provides a standard method for applications to discover the
       current maximum packet size for a path and to detect when this
@@ -231,6 +231,10 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	performing such discovery within UDP Options 
 	and also by upper protocol layers
 	(that send and receive probe packets via UDP Options).
+	It is RECOMMENDED that any implementation of DPLPMTUD
+	within UDP Options provdies an API primitive to 
+	control whether DPLPMTUD processing is enabled for a specfic
+	UDP port.
 	Section 6.1 of <xref target="RFC8899"></xref> recommends that
 	"An application SHOULD avoid using DPLPMTUD when the
 	underlying transport system provides this capability".</t>
