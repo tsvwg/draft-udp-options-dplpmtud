@@ -215,8 +215,39 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 			</t>	
 		</list>
 	</t>
+	
+	<t>The figure below depicts the layering of DPLPMTUD using UDP Options,
+	and illustrates key interactions between the layers.</t>
 		
-	<t>An upper layer protocol using UDP
+	<figure>
+        <artwork align="left">
+<![CDATA[                 
++--------------------------------------+
+| Upper Layer Protocol or Application  |
++---+----------------------------------+
+    |                             | ... Messages (with UDP Options)
+    | receive               send  | ... Primitives for MPS, MIn_PMTU etc.
++---------------------------------+----+
+| DPLPMTUD State-Machine               |
+|    Maximum Packet Size (MPS)         |
+|    PLPMTU, Probed-size, Min_PMTU     |
+|    Token Values & Probes, ... etc    |
++---+----------------------------------+
+    |                             | ... Messages (with UDP Options)
+    |                             | ... Send/receive: Probe Messages with RES Options 
+    | receive               send  | ... Received Events: ICMP, Interface MTU, etc
++---------------------------------+----+
+| UDP Options Transport                |
++---+----------------------------------+
+    |                             | ... Datagrams (with UDP Options)
+    |                             | ... Fragmented Datagrams with UDP Options
+    | receive               send  | ... Network Events:  ICMP, Interface MTU, etc
+
+    
+]]></artwork>
+      </figure>
+	
+	<t>An upper layer protocol using UDP Options
 	can implement DPLPMTUD. 
 	It then sends probe packets using REQ Options and sends responses RES Options
 	to determine
@@ -406,7 +437,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	  In this use, the probe packets do not form a part of the end-to-end
 	  transport data and a receiver does not deliver them to the upper layer protocol.
 	  </t>
- </section>
+ </section> <!--- Without Data --->
 		
 <section title="Probe Packets that include Application Data">
 	  <t>
@@ -434,7 +465,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	DPLPMTUD can be used to manage the PL PMTU in just one direction or can be used for both directions.
 	Probe packets that use this format form a part of the end-to-end
 	transport data.</t>
-</section>
+</section> <!--- With Data --->
 		
 <section title="Examples with different Receiver Behaviors">
 
@@ -468,17 +499,17 @@ This will result in a smaller PLPMTU than is actually suppported by
 the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
 
 
-<t>The design of a receiver could permit it to generate a datagram (e.g., with zero payload data)
-solely to return a RES Option (e.g., when no other Datagrams are queued for transmission). 
-This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
-It results in a some additional traffic overhead, but has the advantage that it
-can ensure timely progress of DPLPMTUD. 
-If a UDP Options endpoint creates and sends a datagram with a RES option solely as respond to received RES Option,
-the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or 
-1 per second).
-This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>	
-</list>
-</section>
+	<t>The design of a receiver could permit it to generate a datagram (e.g., with zero payload data)
+	solely to return a RES Option (e.g., when no other Datagrams are queued for transmission). 
+	This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
+	It results in a some additional traffic overhead, but has the advantage that it
+	can ensure timely progress of DPLPMTUD. 
+	If a UDP Options endpoint creates and sends a datagram with a RES option solely as respond to received RES Option,
+	the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or 
+	1 per second).
+	This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>	
+	</list>
+	</section> <!--- Examples --->
 		
       <section title="Changes in the Path">
 	<t>A change in the path or the loss of a probe packet can result in DPLPMTUD updating
@@ -501,7 +532,8 @@ This rate limit mitigates the DoS vector, without significantly impacting the op
 	network forwarding behaviors. For example, an implementation could avoid
 	sharing PMTU information that could potentially relate to packets sent
 	with the same address over a different interface.</t>
-	</section>
+	</section> <!-- Path Changes -->
+		  
       </section> <!-- DPLPMTUD Chapter -->
 
       <section title="PTB Message Handling for this Method">
@@ -519,7 +551,7 @@ This rate limit mitigates the DoS vector, without significantly impacting the op
         implementation unable to support this validation needs to ignore
         received ICMP PTB messages.</t>
 
-      </section>
+      </section> <!--- PTB --->
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
