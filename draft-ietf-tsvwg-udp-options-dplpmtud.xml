@@ -201,7 +201,9 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	in <xref target="RFC8899"></xref> and the upper layer protocol
 	does not perform PMTU discovery. In this case, UDP Options processing
 	is responsible for sending probe packets to determine a PLPMTU, as described
-	in this document. The discovered PLPMTU can be used to either:
+	in this document. The upper layer protocol is responsible for deciding
+	at what point in a session DPLPMTUD should be enabled.
+	The discovered PLPMTU can be used to either:
 		 <list style="symbols">
 
 			<t> set the maximum datagram size for the current path.</t>	
@@ -560,6 +562,11 @@ This rate limit mitigates the DoS vector, without significantly impacting the op
       combination with the token contained in the UDP
       Option, before processing the packet using the DPLPMTUD method.
       </t>   
+		  
+	<t>Upper layer protocols or applications that employ encryption ought to perform DPLPMTUD
+	at a layer above UDP Options, and not to enable UDP Options support for DPLPMTUD.
+	This allows the application to control when DPLPMTUD and control the additional
+		  traffic that it generates. This also ensures that DPLPMTUD probe packets are encrypted.</t>
 	    
     </section>
   </middle>
