@@ -162,11 +162,11 @@ An alternate method (rfc include) is described in the references. -->
 	    
       <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
       functionality that can be used to implement DPLPMTUD within the UDP
-      transport service or by an application or upper layer protocol that uses UDP Options. 
+      transport service or by an application or Upper Layer protocol that uses UDP Options. 
       This document specifies how DPLPMTUD
       is implemented (Section 6.1 of <xref target="RFC8899"></xref>).</t>
 	<t>Implementing DPLPMTUD within UDP Options avoids the need for
-      each upper layer protocol (or application) to implement the DPLPMTUD
+      each Upper Layer protocol (or application) to implement the DPLPMTUD
       method. It provides a standard method for applications to discover the
       current maximum packet size for a path and to detect when this
 	      changes.</t>
@@ -193,15 +193,15 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	described in this section. 
 	</t>
 	
-	<t>There are two ways an upper layer protocol  (i.e. an application or protocol layered above UDP)
+	<t>There are two ways an Upper Layer protocol  (i.e. an application or protocol layered above UDP)
 	can perform DPLPMTUD:
 	<list style="symbols">	
 	<t>
 	A UDP Options sender implementing DPLPMTUD uses the method specified
-	in <xref target="RFC8899"></xref> and the upper layer protocol
+	in <xref target="RFC8899"></xref> and the Upper Layer protocol
 	does not perform PMTU discovery. In this case, UDP Options processing
 	is responsible for sending probe packets to determine a PLPMTU, as described
-	in this document. The upper layer protocol is responsible for deciding
+	in this document. The Upper Layer protocol is responsible for deciding
 	at what point in a session DPLPMTUD should be enabled.
 	The discovered PLPMTU can be used to either:
 		 <list style="symbols">
@@ -217,7 +217,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	</t>
 	
 	<t>The figure below depicts one example of layering DPLPMTUD above UDP Options,
-	and below an upper layer application,
+	and below an application,
 	and illustrates key interactions between the layers. By default
 	DPLPMTUD does not add REQ Options to datagrams and does not
 	respond when a REQ Option is received.
@@ -279,7 +279,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	then sends probe packets and can include REQ Options with the
 	corresponding responses including a RES Option. 
 	The format and content
-	of these probe packets are determined by the upper layer protocol.</t>
+	of these probe packets are determined by the Upper Layer protocol.</t>
 	</list>
 	</t>
 	
@@ -446,7 +446,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	
 	<t>At the receiver, a received probe packet that does not carry application data
 	does not form a part of the end-to-end
-	transport data and is not delivered to the upper layer protocol 
+	transport data and is not delivered to the Upper Layer protocol 
 	(i.e., application or protocol layered above UDP).</t>
 	</section>
 
@@ -480,7 +480,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	  and avoids having to retransmit
           application data when a probe fails.
 	  In this use, the probe packets do not form a part of the end-to-end
-	  transport data and a receiver does not deliver them to the upper layer protocol.
+	  transport data and a receiver does not deliver them to the Upper Layer protocol.
 	  </t>
  </section> <!--- Without Data --->
 		
@@ -494,19 +494,19 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
           These probe packets are permitted to carry application data. 
 	  (A UDP payload data is permitted because these probe packets perform black-hole detection
 	  and will, therefore, usually have a higher probability of successful 
-	  transmission, similar to other packets sent by the upper layer protocol.)
+	  transmission, similar to other packets sent by the Upper Layer protocol.)
 	   Section 4.1 of <xref target="RFC8899"></xref> provides a discussion of
 	the merits and demerits of including application data. For example, this
 	reduces the need to send additional datagrams. 
 	</t>	  
 	<t>This type of probe MAY utilise
-	a control message format defined by the upper layer protocol provided that the message does not need to
+	a control message format defined by the Upper Layer protocol provided that the message does not need to
 	be delivered reliably. The REQ Option MUST be
-	included when a sending upper layer protocol performs DPLPMTUD. The DPLPMTUD method tracks the transmission 
-	of probe packets (using the RES Option) and reception of the corresponding RES Options to the upper layer protocol.</t>
+	included when a sending Upper Layer protocol performs DPLPMTUD. The DPLPMTUD method tracks the transmission 
+	of probe packets (using the RES Option) and reception of the corresponding RES Options to the Upper Layer protocol.</t>
 	
 	<t>A receiver that responds to DPLPMTUD needs to process the REQ Option and
-	include the corresponding RES Option in an upper layer protocol message that it returns to the requester.
+	include the corresponding RES Option in an Upper Layer protocol message that it returns to the requester.
 	DPLPMTUD can be used to manage the PL PMTU in just one direction or can be used for both directions.
 	Probe packets that use this format form a part of the end-to-end
 	transport data.</t>
@@ -567,9 +567,9 @@ the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
 	trigger path validation to provide black-hole protection 
 	Section 4.3 of <xref target="RFC8899"></xref>).</t>
 	      
-	<t>An upper layer protocol could trigger DPLPMTUD to validate the path
+	<t>An Upper Layer protocol could trigger DPLPMTUD to validate the path
 	when it observes a 
-	high packet loss rate (or a repeated protocol timeout).</t>
+	high packet loss rate (or a repeated protocol timeout) <xref target="RFC8899"></xref>.</t>
 
 	<t>Section 3 of <xref target="RFC8899"></xref> requires any methods 
 	designed to share the PLPMTU
@@ -765,9 +765,10 @@ the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
         </list></t>
  	<t>Working group draft-06.</t>
       <t><list>
-      	<t>Tidy text after WG Last Call, based on reveiw by med.</t>
-        </list></t>
-
+      	<t>Tidy text after WG Last Call, based on review by med.</t>
+        <t>Added text after WG Last Call, based on review by Magnus.</t>
+	<t>Added text after WG Last Call, based on comments by Joe & Mike.</t>
+	</list></t>
     </section>
   </back>
 
