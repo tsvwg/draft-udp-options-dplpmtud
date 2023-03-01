@@ -229,7 +229,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	once an application has established connectivity and is ready
 	to exchange data with the remote Upper Layer.
 	Similarly a receiver SHOULFD NOT resopond to a REQ
-	Option until DPLPMTUD is enabled.<</t>
+	Option until DPLPMTUD is enabled.</t>
 		
 	<figure>
         <artwork align="left">
@@ -280,8 +280,6 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	corresponding responses including a RES Option. 
 	The format and content
 	of these probe packets are determined by the Upper Layer protocol.</t>
-	</list>
-	</t>
 	
 	<t>Note: If DPLPMTUD is active at more than one layer, 
 	then the values of the tokens used in REQ Options need to be coordinated
@@ -342,7 +340,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	  Each probe packet includes the UDP Options area containing 
           a RES Option
 	  and any other required options concluded with an EOL Option
-	  (Section 9.1 of <xref target="[I-D.ietf-tsvwg-udp-options]></xref>)	  
+           (Section 9.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
 	  followed by any padding needed to inflate to the required probe size.</t>
 	   
 	  <t>The UDP Options used in this document are described in Section 5.11 of
