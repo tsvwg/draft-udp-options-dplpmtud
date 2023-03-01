@@ -217,7 +217,12 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	</t>
 	
 	<t>The figure below depicts the layering of DPLPMTUD using UDP Options,
-	and illustrates key interactions between the layers.</t>
+	and illustrates key interactions between the layers. By default
+	DPLPMTUD does not add REQ Options to datagrams and does not
+	respond when a REQ Option is received.
+	MUST be explicitly enabled by the Application, for instance
+	once this application has established connectivity and is ready
+	to exchange data with the remote endpoint. </t>
 		
 	<figure>
         <artwork align="left">
@@ -234,7 +239,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 |    Token Values & Probes, ... etc    |
 +---+----------------------------------+
     |                             | ... Messages (with UDP Options)
-    |                             | ... Send/receive: Probe Messages with RES Options 
+    |                             | ... Send/receive: Probe Messages with \ Options 
     | receive               send  | ... Received Events: ICMP, Interface MTU, etc
 +---------------------------------+----+
 | UDP Options Transport                |
@@ -249,22 +254,22 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	<t>The above figures shows how DPLPMTUD can be layered on top of
 	UDP Options. The DPLPMTUD state machine sends and receives
 	UDP datagrams as probe packets to manage the PLPMTUD. All
-	probe packets carry either the RES or REQ UDP Option.
+	probe packets carry either the REQ or RES UDP Option.
 	 DPLPMTUD can (for specific types of probe packet) add the 
-	 REQ Option or RES Option to a UDP Datagram that was sent by the application.</t>
+	 REQ  or RES UDP Option to a UDP Datagram that was sent by the application.</t>
 	
 	<t>The Upper Layer Protocol or Application above DPLPMTUD
 	can send zero-byte “messages”, and UDP datagrams (with or without
 	UDP Otions,
 	which are delivered across the network and to the application.
 	The only exeption is when DPLPMTUD is permitted to generate zero-byte “messages”, 
-	 that carry the either a REQ Option or RES Option with no UDP payload,
-	 in which case, a zero-byte datagram with either a REQ Option or RES Option is
+	 that carry the either a REQ or RES  UDP Option with no UDP payload,
+	 in which case, a zero-byte datagram with either a REQ or RES UDP Option is
 	 not delivered to the remote application.</t>
 
 	<t>An alternative design could implement UDP Options
 	within an application. This application
-	then sends probe packets using REQ Options and sends responses RES Options
+	then sends probe packets using REQ Options and sends responses with a RES Option
 	to determine
 	a safe PLPMTU for the datagrams that it sends. The format and content
 	of these probe packets are determined by the upper layer protocol.</t>
@@ -310,15 +315,8 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
   	  <t>Reception of a RES Option by the sender confirms that a specific
 	  probe packet has been received by the remote UDP Options receiver.</t>
 	</list>  
-	    
-	 <t>Probe packets consume network capacity and incur endpoint
-          processing (Section 4.1 of <xref target="RFC8899"></xref>).
-          Implementations ought to send a probe packet with a REQ
-          Option only when required by their local DPLPMTUD state machine,
-          i.e., when confirming the base PMTU for the path,
-	  probing to increase the PLPMTU, or to confirm the current
-          PLPMTU.</t>
-
+	 
+           
     <section title="Sending Probe Packets using the Echo Request and Response Options">
     
 	   <t>A UDP Options sender sends the REQ Option and receives
@@ -367,7 +365,34 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	    
 	 <t>Like other UDP options, each of the two option kinds MUST NOT appear more than once in each 
 	UDP datagram.</t>
+	
+	<t>Note 1: Probe packets consume network capacity and incur endpoint
+          processing (Section 4.1 of <xref target="RFC8899"></xref>).
+          Implementations ought to send a probe packet with a REQ
+          Option only when required by their local DPLPMTUD state machine,
+          i.e., when confirming the base PMTU for the path,
+	  probing to increase the PLPMTU, or to confirm the current
+          PLPMTU. Similarly a receiver should not resopond to a REQ
+	  Option until this is enabled.</t>
 
+	 <t>Note 2: A receiver that only responds when a datagram is
+	 queued for transmission by the Upper Layer could potentially
+	 receieve multiple datagrams with a REQ Option before it can
+	 respond. When sent, the RES Option will only acknowledge the 
+	  latest received token value. A sender, would then conclude 
+	  that any earlier REQ Options were not successfully received. 
+	  However, DPLPMTUD does not normally send more than one 
+	  probe packet per timeout interval, and a delay in responding 
+	  will already have been treated as a failed probe attempt. 
+	  Therefore, this does not significantly impact performance, 
+	  although a more prompt response would have resulted in 
+	  DPLPMTUD recording reception of all probe packets.</t>
+
+	 <t>Note 3: An application can be designed to transfer data 
+	 in only in one direction (or predominately in one direction).
+	 In this case waiting could easily result in a probe timeout.
+	 DPLPMTUD could still be used by exchanging zero-byte datagrams.
+	 The use of zero-byte datagrams is discussed in other sections.</t>
     </section> 	<!-- Format Chapter -->	    
     
 	<section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Sender Procedures for UDP Options">
