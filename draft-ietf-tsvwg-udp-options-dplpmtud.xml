@@ -228,7 +228,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
     |                             | ... Messages (with UDP Options)
     | receive               send  | ... Primitives for MPS, MIn_PMTU etc.
 +---------------------------------+----+
-| DPLPMTUD State-Machine               |
+| DPLPMTUD State Machine               |
 |    Maximum Packet Size (MPS)         |
 |    PLPMTU, Probed-size, Min_PMTU     |
 |    Token Values & Probes, ... etc    |
@@ -246,10 +246,25 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
     
 ]]></artwork>
       </figure>
+	<t>The above figures shows how DPLPMTUD can be layered on top of
+	UDP Options. The DPLPMTUD state machine sends and receives
+	UDP datagrams as probe packets to manage the PLPMTUD. All
+	probe packets carry either the RES or REQ UDP Option.
+	 DPLPMTUD can (for specific types of probe packet) add the 
+	 REQ Option or RES Option to a UDP Datagram that was sent by the application.</t>
 	
-	<t>An upper layer protocol using UDP Options
-	can implement DPLPMTUD. 
-	It then sends probe packets using REQ Options and sends responses RES Options
+	<t>The Upper Layer Protocol or Application above DPLPMTUD
+	can send zero-byte “messages”, and UDP datagrams (with or without
+	UDP Otions,
+	which are delivered across the network and to the application.
+	The only exeption is when DPLPMTUD is permitted to generate zero-byte “messages”, 
+	 that carry the either a REQ Option or RES Option with no UDP payload,
+	 in which case, a zero-byte datagram with either a REQ Option or RES Option is
+	 not delivered to the remote application.</t>
+
+	<t>An alternative design could implement UDP Options
+	within an application. This application
+	then sends probe packets using REQ Options and sends responses RES Options
 	to determine
 	a safe PLPMTU for the datagrams that it sends. The format and content
 	of these probe packets are determined by the upper layer protocol.</t>
