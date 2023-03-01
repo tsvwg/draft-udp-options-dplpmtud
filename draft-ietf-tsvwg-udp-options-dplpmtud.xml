@@ -274,7 +274,7 @@ An alternate method (rfc include) is described in the references. -->
                 REQ  or RES UDP Option to a UDP Datagram that was sent by the application.</t>
             
             <t>The Upper Layer Protocol or Application above DPLPMTUD
-                can send zero-byte “messages”, and UDP datagrams (with or without
+                can send UDP datagrams with no payload data (with or without
                 UDP Options). These
                 are delivered across the network to the remote Upper Layer.
                 The only exeption is when DPLPMTUD is permitted to generate datagrams
