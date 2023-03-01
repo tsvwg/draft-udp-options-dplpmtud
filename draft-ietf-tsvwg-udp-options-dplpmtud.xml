@@ -316,7 +316,7 @@ An alternate method (rfc include) is described in the references. -->
                         probe packet has been received by the remote UDP Options receiver.</t>
                 </list>
                 
-                <section title="Sending Probe Packets with the Request and Response Options">
+                <!-- section title="Sending Probe Packets with the Request and Response Options"-->
                     <t>A UDP Options sender sends DPLPMTUD probe packets with the REQ Option and receives
                         UDP Options datagrams with
                         the RES Option. If UDP Options is not supported by the remote receiver,
@@ -373,7 +373,7 @@ An alternate method (rfc include) is described in the references. -->
                         PLPMTU. Similarly a receiver ought not resopond to a REQ
                         Option until this is enabled.</t>
                     
-                    <t>Note 2: A receiver that only responds when a datagram is
+                    <t>Note 2: A receiver that only responds when there is a datagram
                         queued for transmission by the Upper Layer could potentially
                         receieve multiple datagrams with a REQ Option before it can
                         respond. When sent, the RES Option will only acknowledge the
@@ -392,7 +392,7 @@ An alternate method (rfc include) is described in the references. -->
                         returning a RES Option could easily result in a probe timeout.
                         In this case, DPLPMTUD could still be used by exchanging zero-byte datagrams.
                         The use of zero-byte datagrams is discussed in other sections.</t>
-                </section>     <!-- End of REQ and RES-->
+                <!-- /section-- >     <!-- End of REQ and RES-->
             </section><!-- End or Sending UDP-Options Probe Packets -->
         </section> <!-- End of DPLPMTUD for UDP Options -->
         
@@ -574,7 +574,7 @@ An alternate method (rfc include) is described in the references. -->
                 with the same address over a different interface.</t>
         </section> <!-- End of Path Changes -->
         
-        <section title="PTB Message Handling for this Method">
+        <section title="PTB Message Handling">
             <t> Support for receiving ICMP PTB messages is
                 OPTIONAL for use with DPLPMTUD. A UDP Options sender
                 can therefore ignore received ICMP PTB messages.</t>
@@ -602,7 +602,7 @@ An alternate method (rfc include) is described in the references. -->
         
         <section anchor="Security" title="Security Considerations">
             <t>The security considerations for using UDP Options are described in
-                <xref target="I-D.ietf-tsvwg-udp-options"></xref>. The proposed new
+                <xref target="I-D.ietf-tsvwg-udp-options"></xref>. The
                 method does not change the integrity protection offered by the UDP
                 options method.</t>
             
@@ -623,7 +623,7 @@ An alternate method (rfc include) is described in the references. -->
                 This attack could be mitigated by using an unpredictable
                 token value for each probe packet.</t>
             
-            <t>The proposed new method does not change the
+            <t>The method does not change the
                 ICMP PTB message validation method described by DPLPMTUD: A UDP Options
                 sender that utilities ICMP PTB messages received to a probe packet MUST
                 use the quoted packet to validate the UDP port information in
