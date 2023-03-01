@@ -177,12 +177,12 @@ An alternate method (rfc include) is described in the references. -->
                 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
                 "OPTIONAL" in this document are to be interpreted as described in
                 BCP 14
-                <xref target="RFC2119"/>
-                <xref target="RFC8174"/>
+                <xref target="RFC2119"></xref>
+                <xref target="RFC8174"></xref>
                 when, and only when, they appear in all
                 capitals, as shown here.</t>
             <t>
-                This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref target="RFC8899"></xref>
+                This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref target="RFC8899"></xref>).
             </t>
             
         </section> <!-- End of terms -->
@@ -244,25 +244,23 @@ An alternate method (rfc include) is described in the references. -->
                         +--------------------------------------+
                         | Upper Layer Protocol or Application  |
                         +---+----------------------------------+
-                        |                             | ... Messages (with UDP Options)
-                        | receive               send  | ... Primitives for MPS, MIn_PMTU etc.
+                            |                             | ... Messages (with UDP Options)
+                            | receive               send  | ... Primitives for MPS, MIn_PMTU etc.
                         +---------------------------------+----+
                         | DPLPMTUD State Machine               |
                         |    Maximum Packet Size (MPS)         |
                         |    PLPMTU, Probed-size, Min_PMTU     |
                         |    Token Values & Probes, ... etc    |
                         +---+----------------------------------+
-                        |                             | ... Messages (with UDP Options)
-                        |                             | ... Send/Receive: Probes with Options
-                        | receive               send  | ... Received Events: ICMP, Interface MTU, etc
+                            |                             | ... Messages (with UDP Options)
+                            |                             | ... Send/Receive: Probes with Options
+                            | receive               send  | ... Received Events: ICMP, Interface MTU, etc
                         +---------------------------------+----+
                         | UDP Options Transport                |
                         +---+----------------------------------+
-                        |                             | ... Datagrams (with UDP Options)
-                        |                             | ... Fragmented Datagrams with UDP Options
-                        | receive               send  | ... Network Events:  ICMP, Interface MTU, etc
-                        
-                        
+                            |                             | ... Datagrams (with UDP Options)
+                            |                             | ... Fragmented Datagrams with UDP Options
+                            | receive               send  | ... Network Events:  ICMP, Interface MTU, etc
                     ]]></artwork>
             </figure>
             
@@ -396,7 +394,7 @@ An alternate method (rfc include) is described in the references. -->
                         In this case, DPLPMTUD could still be used by exchanging zero-byte datagrams.
                         The use of zero-byte datagrams is discussed in other sections.</t>
                 </section>     <!-- End of REQ and RES-->
-            </section><!-- End or Sending UDP-Options Probe Packets--->
+            </section><!-- End or Sending UDP-Options Probe Packets -->
         </section> <!-- End of DPLPMTUD for UDP Options -->
         
         <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Sender Procedures for UDP Options">
@@ -479,7 +477,7 @@ An alternate method (rfc include) is described in the references. -->
                     In this use, the probe packets do not form a part of the end-to-end
                     transport data and a receiver does not deliver them to the Upper Layer protocol.
                 </t>
-            </section> <!--- End of Procedures for UDP Options: Probe Without Data --->
+            </section> <!-- End of Procedures for UDP Options: Probe Without Data -=-->
             
             <section title="Probe Packets that include Application Data">
                 <t>
@@ -507,8 +505,8 @@ An alternate method (rfc include) is described in the references. -->
                     DPLPMTUD can be used to manage the PL PMTU in just one direction or can be used for both directions.
                     Probe packets that use this format form a part of the end-to-end
                     transport data.</t>
-            </section> <!--- End of Procedures for UDP Options: With App Data --->
-        </section> <!--- End of Procedures for UDP Options --->
+            </section> <!-- End of Procedures for UDP Options: With App Data -->
+        </section> <!-- End of Procedures for UDP Options -->
 	    
         <section title="Examples with different Receiver Behaviors">
             
@@ -552,7 +550,7 @@ An alternate method (rfc include) is described in the references. -->
                 the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or
                 1 per second).
                 This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>
-        </section> <!--- Examples --->
+        </section> <!-- End of examples -->
         
         <section title="Changes in the Path">
             <t>A change in the path or the loss of a probe packet can result in DPLPMTUD updating
@@ -591,13 +589,13 @@ An alternate method (rfc include) is described in the references. -->
                 this validation procedure. An
                 implementation unable to support this validation needs to ignore
                 received ICMP PTB messages.</t>
-        </section> <!--- End of PTB --->
+        </section> <!-- End of PTB -->
         
         <section anchor="Acknowledgements" title="Acknowledgements">
             <t>Gorry Fairhurst and Tom Jones are supported by funding provided by
                 the University of Aberdeen. The editors would like to thank Magnus Westerlund
                 and Mohamed Boucadair for their detailed comments and also other people who contributed to completing this document.</t>
-        </section> <!-- End of Acknowledgments --->
+        </section> <!-- End of Acknowledgments -->
         
         <section anchor="IANA" title="IANA Considerations">
             <t>This memo includes no requests to IANA.</t>
@@ -637,7 +635,7 @@ An alternate method (rfc include) is described in the references. -->
                 at a layer above UDP Options, and not to enable UDP Options support for DPLPMTUD.
                 This allows the application to control when DPLPMTUD and control the additional
                 traffic that it generates. This also ensures that DPLPMTUD probe packets are encrypted.</t>          
-        </section> <!--- End of Sec Consider -->
+        </section> <!-- End of Sec Considerations -->
     </middle>
     
     <back>
