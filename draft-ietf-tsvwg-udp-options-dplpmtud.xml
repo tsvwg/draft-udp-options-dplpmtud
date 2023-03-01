@@ -16,7 +16,7 @@ An alternate method (rfc include) is described in the references. -->
 <!ENTITY RFC8899 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8899.xml">
 <!ENTITY I-D.ietf-tsvwg-udp-options SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-udp-options-19.xml">
 ]>
-<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- ?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?-->
 <!-- For a complete list and description of processing instructions (PIs),
  please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
@@ -104,7 +104,7 @@ An alternate method (rfc include) is described in the references. -->
             </address>
         </author>
         
-        <date day="21" month="February" year="2023" />
+        <date day="01" month="March" year="2023" />
         
         <!-- Meta-data Declarations -->
         
@@ -195,7 +195,6 @@ An alternate method (rfc include) is described in the references. -->
             
             <t>There are two ways an Upper Layer protocol  (i.e. an application or protocol layered above UDP)
                 can perform DPLPMTUD:</t>
-            <list style="symbols">
                 <t>
                     A UDP Options sender implementing DPLPMTUD uses the method specified
                     in <xref target="RFC8899"></xref> and the Upper Layer protocol
@@ -213,7 +212,6 @@ An alternate method (rfc include) is described in the references. -->
                         is then less than the size of the discovered largest IP packet that can
                         be received across the current path.
                     </t>
-                </list>
                 <t>An alternative design could implement UDP Options
                     within the application. The application
                     then sends probe packets and can include REQ Options with the
@@ -241,28 +239,29 @@ An alternate method (rfc include) is described in the references. -->
             <figure>
                 <artwork align="left">
                     <![CDATA[
-                        +--------------------------------------+
-                        | Upper Layer Protocol or Application  |
-                        +---+----------------------------------+
-                            |                             | ... Messages (with UDP Options)
-                            | receive               send  | ... Primitives for MPS, MIn_PMTU etc.
-                        +---------------------------------+----+
-                        | DPLPMTUD State Machine               |
-                        |    Maximum Packet Size (MPS)         |
-                        |    PLPMTU, Probed-size, Min_PMTU     |
-                        |    Token Values & Probes, ... etc    |
-                        +---+----------------------------------+
-                            |                             | ... Messages (with UDP Options)
-                            |                             | ... Send/Receive: Probes with Options
-                            | receive               send  | ... Received Events: ICMP, Interface MTU, etc
-                        +---------------------------------+----+
-                        | UDP Options Transport                |
-                        +---+----------------------------------+
-                            |                             | ... Datagrams (with UDP Options)
-                            |                             | ... Fragmented Datagrams with UDP Options
-                            | receive               send  | ... Network Events:  ICMP, Interface MTU, etc
-                    ]]></artwork>
-            </figure>
++--------------------------------+
+|      Upper Layer Protocol      |
+|         or Application         |
++---+----------------------------+
+    |                       | Messages (with UDP Options)
+    | receive         send  | Primitives for MPS, MIn_PMTU etc.
++---------------------------+----+
+| DPLPMTUD State Machine         |
+|  Maximum Packet Size (MPS)     |
+|  PLPMTU, Probed-Size,M in_PMTU |
+|  Token Values & Probes,    etc |
++---+----------------------------+
+    |                       | Messages (with UDP Options)
+    |                       | Send/Receive: Probes with Options
+    | receive         send  | Events: ICMP, Interface MTU, etc
++---------------------------+----+
+| UDP Options Transport          |
++---+----------------------------+
+    |                       | Datagrams (with UDP Options)
+    |                       | Fragmented Datagrams with UDP Options
+    | receive         send  | vents: ICMP, Interface MTU, etc
+]]></artwork>
+</figure>
             
             <t>This figure shows how DPLPMTUD can be layered on top of
                 UDP Options. The DPLPMTUD state machine sends and receives
@@ -740,7 +739,7 @@ An alternate method (rfc include) is described in the references. -->
             <t><list style="symbols">
                 <t>Update to reflect more comments from MED.</t>
                 <t>Again more consistent description of DPLPMTUD with UDP Options.</t>
-                <t>Clarify token/nonce to use "token". </t>
+                <t>Clarify token/nonce to use token. </t>
                 <t>Clarify any use of application data for black-hole detection.</t>
                 <t>Minor changes to reflect update to UDP Options base spec.</t>
             </list></t>
