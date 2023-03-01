@@ -148,7 +148,7 @@ An alternate method (rfc include) is described in the references. -->
       applications to receive ICMP Packet Too Big (PTB) messages and to
       control the maximum size of datagrams that are sent, but does not offer
       any automated mechanisms for an application to discover the maximum
-      packet size supported by a path. Upper layer protocols (which
+      packet size supported by a path. Upper Layer protocols (which
       includes applications)
       implement mechanisms for Path MTU discovery above the UDP API.</t>
 
@@ -216,13 +216,20 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 		</list>
 	</t>
 	
-	<t>The figure below depicts the layering of DPLPMTUD using UDP Options,
+	<t>The figure below depicts one example of layering DPLPMTUD above UDP Options,
+	and below an upper layer application,
 	and illustrates key interactions between the layers. By default
 	DPLPMTUD does not add REQ Options to datagrams and does not
 	respond when a REQ Option is received.
-	MUST be explicitly enabled by the Application, for instance
-	once this application has established connectivity and is ready
-	to exchange data with the remote endpoint. </t>
+	An implementation of DPLPMTUD
+	as a layer over UDP Options is REQUIRED to provide an API primitive to 
+	control whether DPLPMTUD processing is enabled for a specfic
+	UDP port.
+	Use of DPLPMTUD MUST be explicitly enabled by the Upper Layer, for instance
+	once an application has established connectivity and is ready
+	to exchange data with the remote Upper Layer.
+	Similarly a receiver SHOULFD NOT resopond to a REQ
+	Option until DPLPMTUD is enabled.<</t>
 		
 	<figure>
         <artwork align="left">
@@ -239,7 +246,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 |    Token Values & Probes, ... etc    |
 +---+----------------------------------+
     |                             | ... Messages (with UDP Options)
-    |                             | ... Send/receive: Probe Messages with \ Options 
+    |                             | ... Send/Receive: Probes with Options 
     | receive               send  | ... Received Events: ICMP, Interface MTU, etc
 +---------------------------------+----+
 | UDP Options Transport                |
@@ -260,18 +267,18 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	
 	<t>The Upper Layer Protocol or Application above DPLPMTUD
 	can send zero-byte “messages”, and UDP datagrams (with or without
-	UDP Otions,
-	which are delivered across the network and to the application.
-	The only exeption is when DPLPMTUD is permitted to generate zero-byte “messages”, 
-	 that carry the either a REQ or RES  UDP Option with no UDP payload,
-	 in which case, a zero-byte datagram with either a REQ or RES UDP Option is
+	UDP Options). These 
+	 are delivered across the network to the remote Upper Layer.
+	The only exeption is when DPLPMTUD is permitted to generate datagrams 
+	with no UDP payload and either a REQ or RES UDP Option,
+	in which case, these datagrams are
 	 not delivered to the remote application.</t>
 
 	<t>An alternative design could implement UDP Options
-	within an application. This application
-	then sends probe packets using REQ Options and sends responses with a RES Option
-	to determine
-	a safe PLPMTU for the datagrams that it sends. The format and content
+	within the application. The application
+	then sends probe packets and can include REQ Options with the
+	corresponding responses including a RES Option. 
+	The format and content
 	of these probe packets are determined by the upper layer protocol.</t>
 	</list>
 	</t>
@@ -283,11 +290,8 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 	When configurable, a design ought to avoid 
 	performing such discovery within UDP Options 
 	and also by upper protocol layers
-	(that send and receive probe packets via UDP Options).
-	It is RECOMMENDED that any implementation of DPLPMTUD
-	within UDP Options provdies an API primitive to 
-	control whether DPLPMTUD processing is enabled for a specfic
-	UDP port.
+	(that send and receive probe packets via UDP Options).</t>
+	<t>
 	Section 6.1 of <xref target="RFC8899"></xref> recommends that
 	"An application SHOULD avoid using DPLPMTUD when the
 	underlying transport system provides this capability".</t>
@@ -319,7 +323,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
            
     <section title="Sending Probe Packets using the Echo Request and Response Options">
     
-	   <t>A UDP Options sender sends the REQ Option and receives
+	   <t>A UDP Options sender sends DPLPMTUD probe packets with the REQ Option and receives
 	    UDP Options datagrams with
 	  the RES Option. If UDP Options is not supported by the remote receiver,
 	  DPLPMTUD will be unable to confirm the path or to discover the PLPMTU.
@@ -372,7 +376,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
           Option only when required by their local DPLPMTUD state machine,
           i.e., when confirming the base PMTU for the path,
 	  probing to increase the PLPMTU, or to confirm the current
-          PLPMTU. Similarly a receiver should not resopond to a REQ
+          PLPMTU. Similarly a receiver ought not resopond to a REQ
 	  Option until this is enabled.</t>
 
 	 <t>Note 2: A receiver that only responds when a datagram is
@@ -390,8 +394,9 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 
 	 <t>Note 3: An application can be designed to transfer data 
 	 in only in one direction (or predominately in one direction).
-	 In this case waiting could easily result in a probe timeout.
-	 DPLPMTUD could still be used by exchanging zero-byte datagrams.
+	 In this case the wait for a datagram to be queued before 
+	 returning a RES Option could easily result in a probe timeout.
+	 In this case, DPLPMTUD could still be used by exchanging zero-byte datagrams.
 	 The use of zero-byte datagrams is discussed in other sections.</t>
     </section> 	<!-- Format Chapter -->	    
     
@@ -414,7 +419,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
         sender implementing this specification MUST elicit a positive
         confirmation of connectivity for the path, by sending a probe packet,
 	padded to size BASE_PLPMTU. This confirmation probe MUST
-	include the RES UDP option to elicit a response from the remote endpoint.
+	include the RES UDP option to elicit a response from the remote DPLPMTUD.
 	Reception of a datagram with the corresponding RES Option confirms 
 	the reception of a packet of the probed size has successfully 
 	traversed the path to the receiver.
@@ -424,7 +429,7 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 
 	<section title="Sending Probe Packets to Increase the PLPMTU">
 
-	<t>From time to time, DPLPMTUD enters the SEARCHING state, described ib
+	<t>From time to time, DPLPMTUD enters the SEARCHING state, described in
 	Section 5.2 of <xref target="RFC8899"></xref>, (e.g., after expiry of the PMTU_RAISE_TIMER)
 	to detect whether the current
 	path can support a larger PLPMTU. 
@@ -509,7 +514,8 @@ This document uses the terms defined for DPLPMTUD (Sections 2 and 5 of <xref tar
 		
 <section title="Examples with different Receiver Behaviors">
 
-<t> A receiver that implements UDP Options ought to respond with a UDP datagram with a RES Option when requested by a sender.</t>
+<t> When enabled, a DPLPMTUD endpoint that implements UDP Options responds with a 
+UDP datagram with a RES Option when requested by a sender.</t>
 
 <t>The following examples describe different receiver behaviors:</t>
 		  
@@ -544,7 +550,7 @@ the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
 	This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
 	It results in a some additional traffic overhead, but has the advantage that it
 	can ensure timely progress of DPLPMTUD. 
-	If a UDP Options endpoint creates and sends a datagram with a RES option solely as respond to received RES Option,
+	If a UDP Options endpoint creates and sends a datagram with a RES option solely as response to a received RES Option,
 	the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or 
 	1 per second).
 	This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>	
@@ -635,7 +641,7 @@ the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
       Option, before processing the packet using the DPLPMTUD method.
       </t>   
 		  
-	<t>Upper layer protocols or applications that employ encryption ought to perform DPLPMTUD
+	<t>Upper Layer protocols or applications that employ encryption ought to perform DPLPMTUD
 	at a layer above UDP Options, and not to enable UDP Options support for DPLPMTUD.
 	This allows the application to control when DPLPMTUD and control the additional
 		  traffic that it generates. This also ensures that DPLPMTUD probe packets are encrypted.</t>
