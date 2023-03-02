@@ -761,7 +761,7 @@ An alternate method (rfc include) is described in the references. -->
                 <t>Tidy text after WG Last Call, based on review by Med.</t>
                 <t>Added text after WG Last Call, based on review by Magnus.</t>
                 <t>Added text after WG Last Call, based on comments by Joe and Mike.</t>
-		    <t>Restructured to integrate the WGLC new text.</T>
+		    <t>Restructured to integrate the WGLC new text.</t>
             </list></t>
         </section>
     </back>
