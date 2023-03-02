@@ -229,7 +229,7 @@ An alternate method (rfc include) is described in the references. -->
 		application and are therefore
                 not delivered to the remote application.</t>
 			
-            <t>The figure below depicts implementation of DPLPMTUD within the UDP
+            <t>The figure below shows an implementation of DPLPMTUD within the UDP
                 transport service.
                 It illustrates key interactions between the layers. 
                 This approach REQUIRES an API primitive to allow the application to
@@ -285,18 +285,11 @@ An alternate method (rfc include) is described in the references. -->
             <section title="Packet Formats">
 		    
 		<t> The packet formats and procedures for DPLPMTUD using UDP Options are
-                described in this section. </t>
+                described in this section.</t>
 		    
-                <t>DPLPMTUD relies upon a UDP Options sender sending a probe packet
-                    with a specific size, up to the maximum for the size supported by a local interface.
-                    This MUST NOT be constrained by the maximum PMTU
-                    set by network layer mechanisms (such as discovered by PMTUD <xref
-                        target="RFC1191"></xref><xref target="RFC8201"></xref> or the PMTU size
-                    held in the IP-layer cache),
-                    as noted in bullet 2 of Section 3 in <xref target="RFC8899"></xref>).</t>
-                
                 <t>The UDP Options used in this document are described in Section 5.11
-                    of <xref target="I-D.ietf-tsvwg-udp-options"></xref>:</t>
+                of <xref target="I-D.ietf-tsvwg-udp-options"></xref> and are used
+		in the following way:</t>
                 
                 <list style="symbols">
                     <t>The REQ Option is set by a sending PL to solicit a response from a
@@ -309,34 +302,8 @@ An alternate method (rfc include) is described in the references. -->
                     <t>Reception of a RES Option by the sender confirms that a specific
                         probe packet has been received by the remote UDP Options receiver.</t>
                 </list>
-		    
-		<t>Like other UDP options, each of the two option kinds MUST NOT appear more than once in each
-                        UDP datagram.</t>
-
-		</section>
-                <section title="Sending Probe Packets with the Request and Response Options">
                     
-                    <t> <xref target="RFC8899"></xref> (Section 3, item 2) requires the network interface
-                        below the PL to provide a way to transmit a probe packet
-                        that is larger than the PLPMTU without network layer
-                        endpoint fragmentation. This document adds to this:
-                        UDP datagrams used as DPLPMTUD probe packets, as described in this
-                        document, MUST NOT be fragmented at the UDP layer.
-                    </t>
-                    
-                    <t>The remainder of the section describes a format of a probe packet as a
-                        UDP datagram.
-                        Each probe packet includes the UDP Options area containing
-                        a RES Option
-                        and any other required options concluded with an EOL Option
-                        (Section 9.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
-                        followed by any padding needed to inflate to the required probe size.</t>
-                    
-                    <t>The UDP Options used in this document are described in Section 5.11 of
-                        <xref target="I-D.ietf-tsvwg-udp-options"></xref>:</t>
-                    
-                    <t>
-                        The token allows a UDP Options sender to distinguish
+                    <t>The token allows a UDP Options sender to distinguish
                         between acknowledgements for initial probe packets and
                         acknowledgements confirming receipt of subsequent probe packets
                         (e.g., travelling along alternate paths with a larger round-trip
@@ -353,8 +320,36 @@ An alternate method (rfc include) is described in the references. -->
                     <t>The value of the four-byte token field SHOULD be initialised
                         to a randomised value to enhance protection from off-path attacks,
                         as described in Section 5.1 of <xref target="RFC8085"></xref>.</t>
-                                        
-                    <t>Note 1: Probe packets consume network capacity and incur endpoint
+		</section>
+			
+                <section title="Sending Probe Packets with the Request and Response Options">
+                    
+		   <t>DPLPMTUD relies upon a UDP Options sender sending a probe packet
+                    with a specific size.
+                     Each probe packet includes the UDP Options area containing
+                      a REQ Option
+                      and any other required options concluded with an EOL Option
+                       (Section 9.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
+			   followed by any padding needed to inflate to the required probe size.</t>
+		
+		       
+
+                    <t><xref target="RFC8899"></xref> (Section 3, item 2) requires the network interface
+                        below the PL to provide a way to transmit a probe packet
+                        that is larger than the PLPMTU without causing network layer
+                        endpoint fragmentation. A probe packet can therefore be of size up to the maximum for the size 
+			supported by the local interface.
+			The size of a probe packet MUST NOT be constrained by the maximum PMTU
+                    set by network layer mechanisms (such as discovered by PMTUD <xref
+                        target="RFC1191"></xref><xref target="RFC8201"></xref> or the PMTU size
+                    held in the IP-layer cache),
+                    as noted in bullet 2 of Section 3 in <xref target="RFC8899"></xref>).</t>
+			    
+		     <t>UDP datagrams used as DPLPMTUD probe packets, as described in this
+                        document, MUST NOT be fragmented at the UDP layer.
+                    </t>
+                 
+                    <t>Note: Probe packets consume network capacity and incur endpoint
                         processing (Section 4.1 of <xref target="RFC8899"></xref>).
                         Implementations ought to send a probe packet with a REQ
                         Option only when required by their local DPLPMTUD state machine,
@@ -362,20 +357,26 @@ An alternate method (rfc include) is described in the references. -->
                         probing to increase the PLPMTU, or to confirm the current
                         PLPMTU. Similarly a receiver ought not resopond to a REQ
                         Option until this is enabled.</t>
-                    
-
                 </section>    
 		    
             <section title="Receiving UDP-Options Probe Packets">
 		    
-		       <t>A UDP Options receiver sends DPLPMTUD datagrams with the RES Option when
-			it receives
-                        UDP Options datagrams with
-                        the REQ Option. If UDP Options is not supported by the remote receiver,
+		       <t>When DPLPMTUD is enabled, a UDP Options receiver responds 
+			by sending a UDP datagram the RES Option when
+			it receives a UDP Options datagram with
+                        the REQ Option</>
+			       
+			<t>The operation of DPLPMTUD can depend on the support at
+		        the remote UDP Options endpoint, the way in which DPLPMTUD
+		    	is implemented and in some cases the application data that is 
+		    	exchanged over the UDP transport service. 
+		    	When UDP Options is not supported by the remote receiver,
                         DPLPMTUD will be unable to confirm the path or to discover the PLPMTU.
-                        This will result in the minimum configured PLPMTU (MIN_PLPMTU).</t>
+                        This will result in the minimum configured PLPMTU (MIN_PLPMTU).
+		   	More detail is provided in <xref="examples"></xref>.
+		    </t>
 		    
-		        <t>Note 1: A receiver that only responds when there is a datagram
+			<t>Note: A receiver that only responds when there is a datagram
                         queued for transmission by the Upper Layer could potentially
                         receieve multiple datagrams with a REQ Option before it can
                         respond. When sent, the RES Option will only acknowledge the
@@ -387,13 +388,7 @@ An alternate method (rfc include) is described in the references. -->
                         Therefore, this does not significantly impact performance,
                         although a more prompt response would have resulted in
                         DPLPMTUD recording reception of all probe packets.</t>
-                    
-                    <t>Note 2: An application can be designed to transfer data
-                        in only in one direction (or predominately in one direction).
-                        In this case the wait for a datagram to be queued before
-                        returning a RES Option could easily result in a probe timeout.
-                        In this case, DPLPMTUD could still be used by exchanging zero-byte datagrams.
-                        The use of zero-byte datagrams is discussed in other sections.</t>
+	
 	    </section> <!-- Receiving -->
         </section> <!-- End of DPLPMTUD for UDP Options -->
         
@@ -508,15 +503,16 @@ An alternate method (rfc include) is described in the references. -->
             </section> <!-- End of Procedures for UDP Options: With App Data -->
         </section> <!-- End of Procedures for UDP Options -->
 	    
-        <section title="Examples with different different Receiver Behaviors">
+        <section anchor="examples" title="Examples with different different Receiver Behaviors">
             
-            <t> When enabled, a DPLPMTUD endpoint that implements UDP Options responds with a
+            <t> When enabled, a DPLPMTUD endpoint that implements UDP Options normally responds with a
                 UDP datagram with a RES Option when requested by a sender.</t>
             
-            <t>The following examples describe different receiver behaviors:</t>
-            
-            <t>When a sender supports this specification,
-                but the remote endpoint that does not return a RES Option, the method
+            <t>The following examples describe various possible receiver behaviors:</t>
+            <list>
+            <t>(No DPLPMTUD receiver support) One case is when a sender supports this specification,
+                but the remote endpoint that does not return a RES Option.
+		    In this example, the method
                 is unable to discover the PLPMTU. This will result in using the
                 minimum configured PLPMTU (MIN_PLPMTU).
                 Such a remote endpoint might not process UDP Options, or
@@ -524,24 +520,32 @@ An alternate method (rfc include) is described in the references. -->
                 (due to persisent packet loss, insufficent space
                 to include the option, etc.)</t>
             
-            <t>When the sender and receiver support DPLPMTUD using the specification,
-                and the receiver design only return a RES Option with next has a UDP datagram to send to the requester.
+            <t>(DPLPMTUD Receiver uses application datagrams)  In a second case, both the sender and receiver 
+		    support DPLPMTUD using the specification,
+                and the receiver design only return a RES Option with the next UDP datagram that is sent to the requester.
                 In this design, the reception of a REQ Option does not systematically trigger a response.
                 The design allows DPLPMTUD to operate when there is a flow of datagrams in both directions,
-                even when one direction only provides periodic feedback (e.g., one acknowledgment packet per RTT). Use requires the PLPMTU at the receiver
+                providing there is periodic feedback (e.g., one acknowledgment packet per RTT). 
+		This also requires the PLPMTU at the receiver
                 to be sufficiently large that it allows adding the RES option to the feedback packets that are sent.
-                the path. This simple method helps avoid opportunities to misuse the method as a DoS attack. </t>
-            
-            <t>When the sender and receiver support DPLPMTUD using this specification,
-                a receiver could be designed to only return a RES Option when it next
-                has a UDP datagram to send to the requester, but there is a low
-                rate of transmission (or no datagrams are sent) in the return direction.
-                A lack of transmission opportunities will prevents prompt delivery of the RES Option,
-                and can result in probe packets failing to be acknowledged in time.
-                This will result in a smaller PLPMTU than is actually suppported by
+                the path. This is a simple method that also avoids opportunities to misuse the method as a DoS attack.
+		However, when there is a low
+                rate of transmission (or no datagrams are sent) in the return direction, 
+		this will prevent prompt delivery of the RES Option.
+                At the DFPLPMTUD sender this results in probe packets failing to be acknowledged in time,
+                and will result in a smaller PLPMTU than is actually suppported by
                 the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
             
-            <t>The design of a receiver could permit it to generate a datagram (e.g., with zero payload data)
+		<t>(Uni-directional transfer) Another case is where an application only transfers data
+			in one direction (or predominately in one direction).
+                        In this case the wait at the reciever for a datagram to be queued before
+                        returning a RES Option could easily result in a probe timeout
+			at the DPLPMTUD sender.
+                        In this case, DPLPMTUD could allow exchanging datagrams without
+			a payload (as discussed in earlier sections) to return the RES Option.</t>
+		            
+            <t>(DPLPMTUD Receiver permitted to send responses in UDP datagrams with no payload) 
+		 A final case is a design for a DPLPMTUD receiver that permits it to generate a datagram (e.g., with zero payload data)
                 solely to return a RES Option (e.g., when no other Datagrams are queued for transmission).
                 This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
                 It results in a some additional traffic overhead, but has the advantage that it
@@ -550,6 +554,7 @@ An alternate method (rfc include) is described in the references. -->
                 the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or
                 1 per second).
                 This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>
+		</list>
         </section> <!-- End of examples -->
         
         <section title="Changes in the Path">
