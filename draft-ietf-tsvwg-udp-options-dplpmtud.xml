@@ -501,8 +501,53 @@ An alternate method (rfc include) is described in the references. -->
                     transport data.</t>
             </section> <!-- End of Procedures for UDP Options: With App Data -->
         </section> <!-- End of Procedures for UDP Options -->
+	<section title="Receiving Events from the Network">
+		
+	<t>This specification does not rely upon reception of events from the network, 
+	but an implementation can utilise these events when provided.</t>
+        
+        <section title="Changes in the Path">
+            <t>A change in the path or the loss of a probe packet can result in DPLPMTUD updating
+                the PLPMTU. DPLPMTUD
+                <xref target="RFC8899"></xref> recommends that methods are robust to path changes
+                that could have occurred since the path characteristics were last
+                confirmed and to the possibility of inconsistent path information being
+                received. For example, a notification that a path has changed could
+                trigger path validation to provide black-hole protection
+                Section 4.3 of <xref target="RFC8899"></xref>).</t>
+            
+            <t>An Upper Layer protocol could trigger DPLPMTUD to validate the path
+                when it observes a
+                high packet loss rate (or a repeated protocol timeout) <xref target="RFC8899"></xref>.</t>
+            
+            <t>Section 3 of <xref target="RFC8899"></xref> requires any methods
+                designed to share the PLPMTU
+                between PLs (such as updating the IP cache PMTU for an
+                interface/destination) to be robust to the wide variety of underlying
+                network forwarding behaviors. For example, an implementation could avoid
+                sharing PMTU information that could potentially relate to packets sent
+                with the same address over a different interface.</t>
+        </section> <!-- End of Path Changes -->
+        
+        <section title="PTB Message Handling">
+            <t> Support for receiving ICMP PTB messages is
+                OPTIONAL for use with DPLPMTUD. A UDP Options sender
+                can therefore ignore received ICMP PTB messages.</t>
+            
+            <t>A UDP Options sender that utilises ICMP PTB messages received
+                in response to a
+                probe packet MUST use the ICMP quoted packet to validate the UDP port
+                information in combination with the token
+                contained in the UDP Option, before processing the packet using the
+                DPLPMTUD method. Section 4.6.1 of <xref target="RFC8899"></xref> specifies
+                this validation procedure. An
+                implementation unable to support this validation needs to ignore
+                received ICMP PTB messages.</t>
+        </section> <!-- End of PTB -->
+        
+	</section> <!-- End of Network Events -->	
 	    
-        <section anchor="examples" title="Examples with different different Receiver Behaviors">
+        <section anchor="examples" title="Examples with Different Receiver Behaviors">
             
             <t> When enabled, a DPLPMTUD endpoint that implements UDP Options normally responds with a
                 UDP datagram with a RES Option when requested by a sender.</t>
@@ -555,46 +600,7 @@ An alternate method (rfc include) is described in the references. -->
                 This rate limit mitigates the DoS vector, without significantly impacting the operation of DPLPMTUD.</t>
 		</list>
         </section> <!-- End of examples -->
-        
-        <section title="Changes in the Path">
-            <t>A change in the path or the loss of a probe packet can result in DPLPMTUD updating
-                the PLPMTU. DPLPMTUD
-                <xref target="RFC8899"></xref> recommends that methods are robust to path changes
-                that could have occurred since the path characteristics were last
-                confirmed and to the possibility of inconsistent path information being
-                received. For example, a notification that a path has changed could
-                trigger path validation to provide black-hole protection
-                Section 4.3 of <xref target="RFC8899"></xref>).</t>
-            
-            <t>An Upper Layer protocol could trigger DPLPMTUD to validate the path
-                when it observes a
-                high packet loss rate (or a repeated protocol timeout) <xref target="RFC8899"></xref>.</t>
-            
-            <t>Section 3 of <xref target="RFC8899"></xref> requires any methods
-                designed to share the PLPMTU
-                between PLs (such as updating the IP cache PMTU for an
-                interface/destination) to be robust to the wide variety of underlying
-                network forwarding behaviors. For example, an implementation could avoid
-                sharing PMTU information that could potentially relate to packets sent
-                with the same address over a different interface.</t>
-        </section> <!-- End of Path Changes -->
-        
-        <section title="PTB Message Handling">
-            <t> Support for receiving ICMP PTB messages is
-                OPTIONAL for use with DPLPMTUD. A UDP Options sender
-                can therefore ignore received ICMP PTB messages.</t>
-            
-            <t>A UDP Options sender that utilises ICMP PTB messages received
-                in response to a
-                probe packet MUST use the ICMP quoted packet to validate the UDP port
-                information in combination with the token
-                contained in the UDP Option, before processing the packet using the
-                DPLPMTUD method. Section 4.6.1 of <xref target="RFC8899"></xref> specifies
-                this validation procedure. An
-                implementation unable to support this validation needs to ignore
-                received ICMP PTB messages.</t>
-        </section> <!-- End of PTB -->
-        
+	    
         <section anchor="Acknowledgements" title="Acknowledgements">
             <t>Gorry Fairhurst and Tom Jones are supported by funding provided by
                 the University of Aberdeen. The editors would like to thank Magnus Westerlund
