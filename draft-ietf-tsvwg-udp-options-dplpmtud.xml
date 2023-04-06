@@ -572,8 +572,9 @@ An alternate method (rfc include) is described in the references. -->
                 The design allows DPLPMTUD to operate when there is a flow of datagrams in both directions,
                 providing there is periodic feedback (e.g., one acknowledgment packet per RTT). 
 		This also requires the PLPMTU at the receiver
-                to be sufficiently large that it allows adding the RES option to the feedback packets that are sent.
-                the path. This is a simple method that also avoids opportunities to misuse the method as a DoS attack.
+                to be sufficiently large that it allows adding the RES option to the feedback packets that are sent
+                in the return direction. 
+		This is a simple method that also avoids opportunities to misuse the method as a DoS attack.
 		However, when there is a low
                 rate of transmission (or no datagrams are sent) in the return direction, 
 		this will prevent prompt delivery of the RES Option.
