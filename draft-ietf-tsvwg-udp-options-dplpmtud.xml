@@ -40,7 +40,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-06"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-07"
     ipr="trust200902">
     <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -95,7 +95,7 @@ An alternate method (rfc include) is described in the references. -->
             </address>
         </author>
         
-        <date day="01" month="March" year="2023" />
+        <date day="06" month="April" year="2023" />
         
         <!-- Meta-data Declarations -->
         
@@ -108,7 +108,7 @@ An alternate method (rfc include) is described in the references. -->
          present, the default is "Network Working Group", which is used by the
          RFC Editor as a nod to the history of the IETF. -->
         
-        <keyword>UDP UDP-Options PMTUD PLPMTUD DPLPMTUD</keyword>
+        <keyword>UDP UDP-Options PMTUD PLPMTUD DPLPMTUD Datagram/keyword>
         
         <abstract>
             <t>This document specifies how a UDP Options sender implements Datagram
@@ -154,9 +154,10 @@ An alternate method (rfc include) is described in the references. -->
             <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
                 functionality that can be used to implement DPLPMTUD within the UDP
                 transport service or an Upper Layer protocol (including an application)
-		that uses UDP Options.
+		that uses UDP Options. 
                 This document specifies how DPLPMTUD
-                is implemented (Section 6.1 of <xref target="RFC8899"></xref>).</t>
+                is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
+		</t>
 		
             <t>Implementing DPLPMTUD within the UDP
                 transport service avoids the need for
@@ -184,7 +185,11 @@ An alternate method (rfc include) is described in the references. -->
         <section title="DPLPMTUD for UDP Options">
            
             <t>A UDP Options sender implementing DPLPMTUD uses the method specified
-		    in <xref target="RFC8899"></xref>. </t>
+		in <xref target="RFC8899"></xref>. In this specification, this is 
+		realised using a pair of
+		UDP Options:
+		the Request (REQ) Option and the Response (RES) Option  
+		 <xref target="I-D.ietf-tsvwg-udp-options"></xref>.</t>
 		
 		<t>Use of DPLPMTUD MUST be explicitly enabled by the application, for instance
                 once an application has established connectivity and is ready
@@ -591,7 +596,7 @@ An alternate method (rfc include) is described in the references. -->
 			a payload (as discussed in earlier sections) to return the RES Option.</t>
 		            
             <t>(DPLPMTUD Receiver permitted to send responses in UDP datagrams with no payload) 
-		 A DPLPMTUD receiver can generate a datagram (e.g., with zero payload data)
+		A DPLPMTUD receiver can generate a datagram (e.g., with zero payload data)
                 solely to return a RES Option (e.g., when no other Datagrams are queued for transmission).
                 This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
                 It results in a some additional traffic overhead, but has the advantage that it
@@ -770,6 +775,11 @@ An alternate method (rfc include) is described in the references. -->
                 <t>Added text after WG Last Call, based on review by Magnus.</t>
                 <t>Added text after WG Last Call, based on comments by Joe and Mike.</t>
 		    <t>Restructured to integrate the WGLC new text.</t>
+            </list></t>
+	   <t>Working group draft-07.</t>
+            <t><list>
+                <t>Mention of UDP-Options in Intro, from a review by Med.</t>
+                <t>Resolve typo, from review by Magnus.</t>
             </list></t>
         </section>
     </back>
