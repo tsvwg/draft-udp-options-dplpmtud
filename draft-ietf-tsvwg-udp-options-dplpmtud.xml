@@ -194,7 +194,7 @@ An alternate method (rfc include) is described in the references. -->
         <t>Use of DPLPMTUD MUST be explicitly enabled by the application, for instance
                 once an application has established connectivity and is ready
                 to exchange data with the remote Upper Layer protocol.
-                Similarly, a receiver SHOULD NOT to respond to a REQ
+                Similarly, a receiver SHOULD NOT respond to a REQ
                 Option until DPLPMTUD has been enabled.</t>
                 
         <t>Probe packets consume network capacity and incur endpoint
