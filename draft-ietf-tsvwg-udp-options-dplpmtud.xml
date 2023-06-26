@@ -40,7 +40,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-07"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-08"
     ipr="trust200902">
     <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -95,7 +95,7 @@ An alternate method (rfc include) is described in the references. -->
             </address>
         </author>
         
-        <date day="06" month="April" year="2023" />
+        <date day="26" month="June" year="2023" />
         
         <!-- Meta-data Declarations -->
         
@@ -137,10 +137,10 @@ An alternate method (rfc include) is described in the references. -->
             
             <t>The UDP API <xref target="RFC8304"></xref> offers calls for
                 applications to receive ICMP Packet Too Big (PTB) messages and to
-                control the maximum size of datagrams that are sent, but does not offer
+                control the maximum size of datagrams that are sent, but it does not offer
                 any automated mechanisms for an application to discover the maximum
-                packet size supported by a path. Upper Layer protocols (which
-                includes applications)
+                packet size supported by a path. Upper Layer protocols, which
+                includes applications, can
                 implement mechanisms for Path MTU discovery above the UDP API.</t>
             
             <t>Packetization Layer Path MTU Discovery (PLPMTUD) <xref target="RFC4821"></xref>
@@ -193,8 +193,8 @@ An alternate method (rfc include) is described in the references. -->
         
         <t>Use of DPLPMTUD MUST be explicitly enabled by the application, for instance
                 once an application has established connectivity and is ready
-                to exchange data with the remote Upper Layer.
-                Similarly a receiver SHOULD NOT respond to a REQ
+                to exchange data with the remote Upper Layer protocol.
+                Similarly, a receiver SHOULD NOT respond to a REQ
                 Option until DPLPMTUD has been enabled.</t>
                 
         <t>Probe packets consume network capacity and incur endpoint
@@ -217,8 +217,8 @@ An alternate method (rfc include) is described in the references. -->
                 is responsible for sending probe packets to determine a PLPMTU, as described
         in this document. The Upper Layer protocol is responsible for deciding
         at what point in a session DPLPMTUD should be enabled.
-        Similarly a DPLPMTUD receiver ought not resopond to a REQ
-                Option until this is enabled. </t>
+        Similarly a DPLPMTUD receiver ought to not respond to a REQ
+                Option until this option is enabled. </t>
 
         <t>The discovered PLPMTU can be used to either:</t>
         
@@ -238,7 +238,7 @@ An alternate method (rfc include) is described in the references. -->
                 It illustrates key interactions between the layers.
                 This design REQUIRES an API primitive to allow the application to
                 control whether DPLPMTUD processing is enabled for a specific
-        UDP port. By default this API MUST disable DPLPMTUD processing.</t>
+        UDP port. By default, this API MUST disable DPLPMTUD processing.</t>
 
             
             <figure>
@@ -249,12 +249,12 @@ An alternate method (rfc include) is described in the references. -->
 |         or Application         |
 +---+----------------------------+
     |                       | Messages (with UDP Options)
-    | receive         send  | Primitives for MPS, MIn_PMTU etc.
+    | receive         send  | Primitives for MPS, Min_PMTU etc.
 +---------------------------+----+
 | DPLPMTUD State Machine         |
 |  Maximum Packet Size (MPS)     |
-|  PLPMTU, Probed-Size,M in_PMTU |
-|  Token Values & Probes,    etc |
+|  PLPMTU, Probed-Size,Min_PMTU  |
+|  Token Values & Probes, etc    |
 +---+----------------------------+
     |                       | Messages (with UDP Options)
     |                       | Send/Receive: Probes with Options
@@ -383,7 +383,7 @@ An alternate method (rfc include) is described in the references. -->
                         queued for transmission by the Upper Layer could potentially
                         receive multiple datagrams with a REQ Option before it can
                         respond. When sent, the RES Option will only acknowledge the
-                        latest received token value. A sender, would then conclude
+                        latest received token value. A sender would then conclude
                         that any earlier REQ Options were not successfully received.
                         However, DPLPMTUD does not normally send more than one
                         probe packet per timeout interval, and a delay in responding
@@ -414,7 +414,7 @@ An alternate method (rfc include) is described in the references. -->
                     sender implementing this specification MUST elicit a positive
                     confirmation of connectivity for the path, by sending a probe packet,
                     padded to size BASE_PLPMTU. This confirmation probe MUST
-                    include the RES UDP option to elicit a response from the remote DPLPMTUD.
+                    include the REQ UDP option to elicit a response from the remote DPLPMTUD.
                     Reception of a datagram with the corresponding RES Option confirms
                     the reception of a packet of the probed size has successfully
                     traversed the path to the receiver.
@@ -454,13 +454,15 @@ An alternate method (rfc include) is described in the references. -->
                     (Section 5.2 of <xref target="RFC8899"></xref>, Section 4.2 of <xref target="RFC8899"></xref>
                     defines a DPLPMTUD black-hole).</t>
                 
-                <t>Path validation can be implemented within UDP Options, by generating
+                <t>Path validation can be implemented within UDP Options by generating
                     a probe packet of size PLPMTU, which MUST include a REQ Option to elicit a
                     positive confirmation that the path has delivered this probe packet.
                     A probe packet used to validate the path MAY use either "Probing using padding data" or "Probing using
                     application data and padding data" (Section 4.1 of <xref
                         target="RFC8899"></xref>) or can construct a probe packet that does not carry any
-                    application data, as described in a previous section.</t>
+                    application data, as described in a previous section.
+                    (The API does not indicate receipt of such a zero-length probe packet, see Section 4.4).
+                 </t>
             </section> <!-- End of Procedures for UDP Options: Validate -->
             
             <section anchor="no-app-data" title="Probe Packets that do not include Application Data">
@@ -469,7 +471,7 @@ An alternate method (rfc include) is described in the references. -->
                     to only use probe packets in a UDP datagram that includes no
                     application data. The size of each probe packet is padded to the required
                     probe size including the REQ Option. This implements
-                    "Probing using padding data" (Section 4.1 of <xref target="RFC8899"></xref>),
+                    "Probing using padding data" (Section 4.1 of <xref target="RFC8899"></xref>)
                     and avoids having to retransmit
                     application data when a probe fails.
                     In this use, the probe packets do not form a part of the end-to-end
@@ -583,13 +585,13 @@ An alternate method (rfc include) is described in the references. -->
         However, when there is a low
                 rate of transmission (or no datagrams are sent) in the return direction,
         this will prevent prompt delivery of the RES Option.
-                At the DFPLPMTUD sender this results in probe packets failing to be acknowledged in time,
-                and will result in a smaller PLPMTU than is actually suppported by
+                At the DPLPMTUD sender this results in probe packets failing to be acknowledged in time,
+                and will result in a smaller PLPMTU than is actually supported by
                 the path, or in using the minimum configured PLPMTU (MIN_PLPMTU).</t>
             
         <t>(Uni-directional transfer) Another case is where an application only transfers data
             in one direction (or predominately in one direction).
-                        In this case the wait at the reciever for a datagram to be queued before
+                        In this case the wait at the receiver for a datagram to be queued before
                         returning a RES Option could easily result in a probe timeout
             at the DPLPMTUD sender.
                         In this case, DPLPMTUD could allow exchanging datagrams without
@@ -599,7 +601,7 @@ An alternate method (rfc include) is described in the references. -->
         A DPLPMTUD receiver can generate a datagram (e.g., with zero payload data)
                 solely to return a RES Option (e.g., when no other Datagrams are queued for transmission).
                 This design allows a UDP Options endpoint to probe the set of open UDP ports using DPLPMTUD probe packets.
-                It results in a some additional traffic overhead, but has the advantage that it
+                It results in some additional traffic overhead but has the advantage that it
                 can ensure timely progress of DPLPMTUD.
                 If a UDP Options  endpoint creates and sends a datagram with a RES option solely as response to a received RES Option,
                 the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or
@@ -633,7 +635,7 @@ An alternate method (rfc include) is described in the references. -->
                 initialised to a randomised value. This is designed to enhance protection from off-path
                 attacks.
                 If a subsequent probe packet uses a token value that is easily derived from the initial value,
-                (e.g., incrementing the value) then a misbehaving on-path observer could then
+                (e.g., incrementing the value) a misbehaving on-path observer could then
                 determine the token values used for subsequent probe packets from
                 that sender, even if these probe packets are not transiting via the observer.
                 This would allow probe packets to be forged, with an impact similar to other on-path
@@ -650,8 +652,8 @@ An alternate method (rfc include) is described in the references. -->
             
             <t>Upper Layer protocols or applications that employ encryption ought to perform DPLPMTUD
                 at a layer above UDP Options, and not to enable UDP Options support for DPLPMTUD.
-                This allows the application to control when DPLPMTUD and control the additional
-                traffic that it generates. This also ensures that DPLPMTUD probe packets are encrypted.</t>
+                This allows the application to control when DPLPMTUD is used to control the additional
+                traffic that this generates. This also ensures that DPLPMTUD probe packets are encrypted.</t>
         </section> <!-- End of Sec Considerations -->
     </middle>
     
@@ -780,6 +782,10 @@ An alternate method (rfc include) is described in the references. -->
             <t><list>
                 <t>Mention of UDP-Options in Intro, from a review by Med.</t>
                 <t>Resolve typo, from review by Magnus.</t>
+            </list></t>
+        <t>Working group draft-08.</t>
+            <t><list>
+                <t>Corrections following a review by Mike Heard.</t>
             </list></t>
         </section>
     </back>
