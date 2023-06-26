@@ -461,7 +461,7 @@ An alternate method (rfc include) is described in the references. -->
                     application data and padding data" (Section 4.1 of <xref
                         target="RFC8899"></xref>) or can construct a probe packet that does not carry any
                     application data, as described in a previous section.
-                    (There is no zero-length packet indication for receipt of such a probe packet, see Section 4.4).
+                    (The API does not indicate receipt of such a zero-length probe packet, see Section 4.4).
                  </t>
             </section> <!-- End of Procedures for UDP Options: Validate -->
             
