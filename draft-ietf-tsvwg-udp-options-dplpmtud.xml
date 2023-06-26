@@ -140,7 +140,7 @@ An alternate method (rfc include) is described in the references. -->
                 control the maximum size of datagrams that are sent, but it does not offer
                 any automated mechanisms for an application to discover the maximum
                 packet size supported by a path. Upper Layer protocols, which
-                includes applications,
+                includes applications, can
                 implement mechanisms for Path MTU discovery above the UDP API.</t>
             
             <t>Packetization Layer Path MTU Discovery (PLPMTUD) <xref target="RFC4821"></xref>
