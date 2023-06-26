@@ -218,7 +218,7 @@ An alternate method (rfc include) is described in the references. -->
         in this document. The Upper Layer protocol is responsible for deciding
         at what point in a session DPLPMTUD should be enabled.
         Similarly a DPLPMTUD receiver ought to not respond to a REQ
-                Option until this is enabled. </t>
+                Option until this option is enabled. </t>
 
         <t>The discovered PLPMTU can be used to either:</t>
         
