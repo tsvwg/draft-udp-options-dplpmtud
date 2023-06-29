@@ -474,6 +474,9 @@ An alternate method (rfc include) is described in the references. -->
                     "Probing using padding data" (Section 4.1 of <xref target="RFC8899"></xref>)
                     and avoids having to retransmit
                     application data when a probe fails.
+                    This could be achieved by setting
+                    a minimum datagram length, such that the options list
+                    ends in EOL and additional space is zero-filled as needed (Section 13 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>).
                     In this use, the probe packets do not form a part of the end-to-end
                     transport data and a receiver does not deliver them to the Upper Layer protocol.
                 </t>
