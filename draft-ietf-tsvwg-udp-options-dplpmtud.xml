@@ -463,10 +463,9 @@ An alternate method (rfc include) is described in the references. -->
                     a probe packet of size PLPMTU, which MUST include a REQ Option to elicit a
                     positive confirmation that the path has delivered this probe packet.
                     A probe packet used to validate the path MAY use either "Probing using padding data" 
-                    (to construct a probe packet that does not carry any
-                    application data, as described in a previous section) or "Probing using
-                    application data and padding data" 
-                    (Section 4.1 of <xref target="RFC8899"></xref>). 
+                    to construct a probe packet that does not carry any
+                    application data, as described in a previous section, or "Probing using
+                    application data and padding data", see Section 4.1 of <xref target="RFC8899"></xref>. 
                     When using "Probing using padding data", the API does not indicate receipt of the
                     zero-length probe packet, see Section 4.4.
                  </t>
