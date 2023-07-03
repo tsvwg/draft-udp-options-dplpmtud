@@ -159,8 +159,8 @@ An alternate method (rfc include) is described in the references. -->
                 is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
         </t>
         
-            <t>Implementing DPLPMTUD above UDP Options, but within the
-                transport service avoids the need for
+            <t>Implementing DPLPMTUD within the
+                transport service above UDP Options avoids the need for
                 each Upper Layer protocol to implement the DPLPMTUD
                 method. It provides a standard method for applications to discover the
                 current maximum packet size for a path and to detect when this
