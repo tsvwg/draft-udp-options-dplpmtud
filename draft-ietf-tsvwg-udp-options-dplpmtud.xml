@@ -456,7 +456,7 @@ An alternate method (rfc include) is described in the references. -->
                     (Section 6.1.4 of <xref target="RFC8899"></xref>).
                     This validation sends probe packets in the
                     DPLPMTUD SEARCH_COMPLETE state to detect black-holing of data
-                    (Section 5.2 of <xref target="RFC8899"></xref>, Section 4.2 of <xref target="RFC8899"></xref>
+                    (Section 5.2 of <xref target="RFC8899"></xref>, Section 4.3 of <xref target="RFC8899"></xref>
                     defines a DPLPMTUD black-hole).</t>
                 
                 <t>Path validation can be implemented within UDP Options by generating
@@ -531,7 +531,7 @@ An alternate method (rfc include) is described in the references. -->
                 confirmed and to the possibility of inconsistent path information being
                 received. For example, a notification that a path has changed could
                 trigger path validation to provide black-hole protection
-                (Section 4.2 of <xref target="RFC8899"></xref>).</t>
+                (Section 4.3 of <xref target="RFC8899"></xref>).</t>
             
                 <t>An Upper Layer protocol could trigger DPLPMTUD to validate the path
                 when it observes a
