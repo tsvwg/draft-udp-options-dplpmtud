@@ -95,7 +95,7 @@ An alternate method (rfc include) is described in the references. -->
             </address>
         </author>
         
-        <date day="30" month="June" year="2023" />
+        <date day="3" month="July" year="2023" />
         
         <!-- Meta-data Declarations -->
         
@@ -152,15 +152,15 @@ An alternate method (rfc include) is described in the references. -->
                 ICMP PTB messages and works on paths that drop ICMP PTB messages.</t>
             
             <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
-                functionality that can be used to implement DPLPMTUD within the UDP
-                transport service or an Upper Layer protocol (including an application)
-        that uses UDP Options.
-                This document specifies how DPLPMTUD
+                functionality that can be used to implement DPLPMTUD within the
+                transport service or in an Upper Layer protocol (including an application)
+                that uses UDP Options.
+                This document specifies how DPLPMTUD using UDP Options
                 is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
         </t>
         
-            <t>Implementing DPLPMTUD within the UDP
-                transport service avoids the need for
+            <t>Implementing DPLPMTUD within the
+                transport service above UDP Options avoids the need for
                 each Upper Layer protocol to implement the DPLPMTUD
                 method. It provides a standard method for applications to discover the
                 current maximum packet size for a path and to detect when this
@@ -189,7 +189,9 @@ An alternate method (rfc include) is described in the references. -->
         realised using a pair of
         UDP Options:
         the Request (REQ) Option and the Response (RES) Option
-         <xref target="I-D.ietf-tsvwg-udp-options"></xref>.</t>
+         <xref target="I-D.ietf-tsvwg-udp-options"></xref>.
+         The method also uses the the End of Options List (EOL) Option <xref target="I-D.ietf-tsvwg-udp-options"></xref> to 
+         introduce padding to set the size of a probe packet.</t>
         
         <t>Use of DPLPMTUD MUST be explicitly enabled by the application, for instance
                 once an application has established connectivity and is ready
@@ -213,7 +215,7 @@ An alternate method (rfc include) is described in the references. -->
         </list>
         
         <t>When DPLPMTUD is within the UDP
-                transport service, the UDP Options processing
+                transport service, the DPLPMTUD state machine
                 is responsible for sending probe packets to determine a PLPMTU, as described
         in this document. The Upper Layer protocol is responsible for deciding
         at what point in a session DPLPMTUD should be enabled.
@@ -237,7 +239,7 @@ An alternate method (rfc include) is described in the references. -->
                 transport service.
                 It illustrates key interactions between the layers.
                 This design REQUIRES an API primitive to allow the application to
-                control whether DPLPMTUD processing is enabled for a specific
+                control whether the DPLPMTUD state machine is enabled for a specific
         UDP port. By default, this API MUST disable DPLPMTUD processing.</t>
 
             
@@ -300,17 +302,20 @@ An alternate method (rfc include) is described in the references. -->
             
             <section title="Packet Formats">
                         
-                <t>The UDP Options used in this document are described in Section 9.7
-                of <xref target="I-D.ietf-tsvwg-udp-options"></xref> and are used
+                <t>The UDP Options used in this document are described in 
+                 <xref target="I-D.ietf-tsvwg-udp-options"></xref> and are used
         in the following way:</t>
                 
                 <list style="symbols">
                     <t>The REQ Option is set by a sending PL to solicit a response from a
                         remote receiver. A four-byte token identifies each request.</t>
-                    
+
+                     <t>A sending PL can use the EOL option together with a minimum 
+                       datagram length to pad probe packets.</t>
                     <t>The RES Option is sent by a UDP Options receiver in response to a
                         previously received REQ Option. Each RES Option echoes the last received
-                four-byte token.</t><t>
+                four-byte token.</t>
+                 <t>
             Reception of a RES Option by the sender confirms that a specific
                         probe packet has been received by the remote UDP Options receiver.</t>
                 </list>
@@ -451,17 +456,18 @@ An alternate method (rfc include) is described in the references. -->
                     (Section 6.1.4 of <xref target="RFC8899"></xref>).
                     This validation sends probe packets in the
                     DPLPMTUD SEARCH_COMPLETE state to detect black-holing of data
-                    (Section 5.2 of <xref target="RFC8899"></xref>, Section 4.2 of <xref target="RFC8899"></xref>
+                    (Section 5.2 of <xref target="RFC8899"></xref>, Section 4.3 of <xref target="RFC8899"></xref>
                     defines a DPLPMTUD black-hole).</t>
                 
                 <t>Path validation can be implemented within UDP Options by generating
                     a probe packet of size PLPMTU, which MUST include a REQ Option to elicit a
                     positive confirmation that the path has delivered this probe packet.
-                    A probe packet used to validate the path MAY use either "Probing using padding data" or "Probing using
-                    application data and padding data" (Section 4.1 of <xref
-                        target="RFC8899"></xref>) or can construct a probe packet that does not carry any
-                    application data, as described in a previous section.
-                    (The API does not indicate receipt of such a zero-length probe packet, see Section 4.4).
+                    A probe packet used to validate the path MAY use either "Probing using padding data" 
+                    to construct a probe packet that does not carry any
+                    application data, as described in a previous section, or "Probing using
+                    application data and padding data", see Section 4.1 of <xref target="RFC8899"></xref>. 
+                    When using "Probing using padding data", the API does not indicate receipt of the
+                    zero-length probe packet, see Section 4.4.
                  </t>
             </section> <!-- End of Procedures for UDP Options: Validate -->
             
@@ -792,8 +798,13 @@ An alternate method (rfc include) is described in the references. -->
             </list></t>
          <t>Working group draft-09.</t>
             <t><list>
-                <t>Corrections following a review by Erik Auerswald and PR .</t>
+                <t>Corrections following a review by Erik Auerswald and others.</t>
             </list></t>
+          <t>Working group draft-10.</t>
+            <t><list>
+                <t>Corrections following a review by Erik Auerswald.</t>
+            </list></t>
+
         </section>
     </back>
 </rfc>
