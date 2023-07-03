@@ -152,14 +152,14 @@ An alternate method (rfc include) is described in the references. -->
                 ICMP PTB messages and works on paths that drop ICMP PTB messages.</t>
             
             <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
-                functionality that can be used to implement DPLPMTUD within the UDP
-                transport service or an Upper Layer protocol (including an application)
-        that uses UDP Options.
-                This document specifies how DPLPMTUD
+                functionality that can be used to implement DPLPMTUD within the
+                transport service or in an Upper Layer protocol (including an application)
+                that uses UDP Options.
+                This document specifies how DPLPMTUD using UDP Options
                 is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
         </t>
         
-            <t>Implementing DPLPMTUD within the UDP
+            <t>Implementing DPLPMTUD above UDP Options, but within the
                 transport service avoids the need for
                 each Upper Layer protocol to implement the DPLPMTUD
                 method. It provides a standard method for applications to discover the
@@ -215,7 +215,7 @@ An alternate method (rfc include) is described in the references. -->
         </list>
         
         <t>When DPLPMTUD is within the UDP
-                transport service, the UDP Options processing
+                transport service, the DPLPMTUD State Machine
                 is responsible for sending probe packets to determine a PLPMTU, as described
         in this document. The Upper Layer protocol is responsible for deciding
         at what point in a session DPLPMTUD should be enabled.
@@ -239,7 +239,7 @@ An alternate method (rfc include) is described in the references. -->
                 transport service.
                 It illustrates key interactions between the layers.
                 This design REQUIRES an API primitive to allow the application to
-                control whether DPLPMTUD processing is enabled for a specific
+                control whether the DPLPMTUD state machine is enabled for a specific
         UDP port. By default, this API MUST disable DPLPMTUD processing.</t>
 
             
