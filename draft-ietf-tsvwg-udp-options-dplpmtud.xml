@@ -190,7 +190,7 @@ An alternate method (rfc include) is described in the references. -->
         UDP Options:
         the Request (REQ) Option and the Response (RES) Option
          <xref target="I-D.ietf-tsvwg-udp-options"></xref>.
-         The method also uses the the End of Options List (EOL) Option <xref target="I-D.ietf-tsvwg-udp-options"></xref>. to 
+         The method also uses the the End of Options List (EOL) Option <xref target="I-D.ietf-tsvwg-udp-options"></xref> to 
          introduce padding to set the size of a probe packet.</t>
         
         <t>Use of DPLPMTUD MUST be explicitly enabled by the application, for instance
