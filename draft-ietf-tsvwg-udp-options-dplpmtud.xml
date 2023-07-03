@@ -215,7 +215,7 @@ An alternate method (rfc include) is described in the references. -->
         </list>
         
         <t>When DPLPMTUD is within the UDP
-                transport service, the DPLPMTUD State Machine
+                transport service, the DPLPMTUD state machine
                 is responsible for sending probe packets to determine a PLPMTU, as described
         in this document. The Upper Layer protocol is responsible for deciding
         at what point in a session DPLPMTUD should be enabled.
