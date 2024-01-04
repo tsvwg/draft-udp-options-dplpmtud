@@ -40,7 +40,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-09"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-11"
     ipr="trust200902">
     <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -95,7 +95,7 @@ An alternate method (rfc include) is described in the references. -->
             </address>
         </author>
         
-        <date day="3" month="July" year="2023" />
+        <date day="4" month="January" year="2024" />
         
         <!-- Meta-data Declarations -->
         
@@ -812,4 +812,3 @@ An alternate method (rfc include) is described in the references. -->
         </section>
     </back>
 </rfc>
-
