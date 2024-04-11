@@ -189,8 +189,8 @@ An alternate method (rfc include) is described in the references. -->
         realised using a pair of
         UDP Options:
         the Request (REQ) Option and the Response (RES) Option
-         <xref target="I-D.ietf-tsvwg-udp-options"></xref>.
-         The method also uses the the End of Options List (EOL) Option <xref target="I-D.ietf-tsvwg-udp-options"></xref> to 
+         (Section 11.7 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>).
+         The method also uses the End of Options List (EOL) Option (Section 11.1 of  <xref target="I-D.ietf-tsvwg-udp-options"></xref>) to 
          introduce padding to set the size of a probe packet.</t>
         
         <t>Use of DPLPMTUD MUST be explicitly enabled by the application, for instance
@@ -347,7 +347,7 @@ An alternate method (rfc include) is described in the references. -->
                      Each probe packet includes the UDP Options area containing
                       a REQ Option
                       and any other required options concluded with an EOL Option
-                       (Section 9.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
+                       (Section 11.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
                followed by any padding needed to inflate to the required probe size.</t>
     
                     <t>A probe packet can therefore be of size up to the maximum for the size
@@ -464,7 +464,7 @@ An alternate method (rfc include) is described in the references. -->
                     positive confirmation that the path has delivered this probe packet.
                     A probe packet used to validate the path MAY use either "Probing using padding data" 
                     to construct a probe packet that does not carry any
-                    application data, as described in a previous section, or "Probing using
+                    application data (Section 4.1 of <xref target="RFC8899"></xref>) or "Probing using
                     application data and padding data", see Section 4.1 of <xref target="RFC8899"></xref>. 
                     When using "Probing using padding data", the API does not indicate receipt of the
                     zero-length probe packet, see Section 4.4.
@@ -482,7 +482,7 @@ An alternate method (rfc include) is described in the references. -->
                     application data when a probe fails.
                     This could be achieved by setting
                     a minimum datagram length, such that the options list
-                    ends in EOL and additional space is zero-filled as needed (Section 13 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>).
+                    ends in EOL and additional space is zero-filled as needed (Section 15 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>).
                     In this use, the probe packets do not form a part of the end-to-end
                     transport data and a receiver does not deliver them to the Upper Layer protocol.
                 </t>
