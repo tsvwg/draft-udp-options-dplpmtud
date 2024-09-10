@@ -14,7 +14,7 @@ An alternate method (rfc include) is described in the references. -->
 <!ENTITY RFC8201 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8201.xml">
 <!ENTITY RFC8304 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8304.xml">
 <!ENTITY RFC8899 SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8899.xml">
-<!ENTITY I-D.ietf-tsvwg-udp-options SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-udp-options-32.xml">
+<!ENTITY I-D.ietf-tsvwg-udp-options SYSTEM "http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-tsvwg-udp-options-33.xml">
 ]>
 <!-- ?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?-->
 <!-- For a complete list and description of processing instructions (PIs),
@@ -95,7 +95,7 @@ An alternate method (rfc include) is described in the references. -->
             </address>
         </author>
         
-        <date day="9" month="May" year="2024" />
+        <date day="10" month="September" year="2024" />
         
         <!-- Meta-data Declarations -->
         
@@ -231,7 +231,7 @@ An alternate method (rfc include) is described in the references. -->
                     <t> set the maximum fragment size when a sender uses the
                         UDP Fragmentation Option to divide a datagram into
                         multiple UDP fragments for transmission. The size of each UDP fragment
-                        is then less than of eqaul to the size of the discovered largest IP packet that can
+                        is then less than of equal to the size of the discovered largest IP packet that can
                         be received across the current path.
                     </t>
         </list>
