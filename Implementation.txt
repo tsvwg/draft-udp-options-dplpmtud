@@ -1,0 +1,15 @@
+DPLPMTUD for UDP Options
+
+This is a profile for implementing DPLPMTUD with a datagram transport. The base specification is RFC 8899, itself published as a PS.
+
+Implementation Experience with DPLPMTUD and UDP Options
+=======================================================
+
+UDP for DPLPMTUD Options is a product of the IETF TSVWG working group. This is one profile for implementing DPLPMTUD with a datagram transport. The base specification is RFC 8899, published as PS. 
+
+The I-D describes for two messages - RES and REQ, which are used to provide path probes for this algorithm. 
+
+* Tom Jones reported an implementation in a fork of FreeBSD as the spec was being developed in TSVWG, at IETF 101, London with prototype support for FreeBSD, using RES/REQ exchanges, which at the time were proposed within UDP options. The wire format has not changed since. 
+https://datatracker.ietf.org/meeting/101/materials/slides-101-tsvwg-sessa-53-tom-jones-udp-options-implementation-02
+It was also implemented in a scape-based tool.
+(Reported in TSVWG Interim 2021 09 03.)
