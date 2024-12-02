@@ -12,5 +12,6 @@ The I-D describes for two messages - RES and REQ, which are used to provide path
 * Tom Jones reported an implementation in a fork of FreeBSD as the spec was being developed in TSVWG, at IETF 101, London with prototype support for FreeBSD, using RES/REQ exchanges, which at the time were proposed within UDP options. The wire format has not changed since. 
 https://datatracker.ietf.org/meeting/101/materials/slides-101-tsvwg-sessa-53-tom-jones-udp-options-implementation-02
 It was also implemented in a scapy, which was used as a test suite during development (https://github.com/adventureloop/network-tests/tree/master/udpoptions).
+Reported in TSVWG Interim 2021 09 03.
 
-(Reported in TSVWG Interim 2021 09 03.)
+Last updated 2nd Dec 2024.
