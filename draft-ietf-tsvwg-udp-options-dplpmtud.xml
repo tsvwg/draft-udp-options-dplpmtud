@@ -626,8 +626,10 @@ An alternate method (rfc include) is described in the references. -->
             <t>(DPLPMTUD Receiver permitted to send responses in UDP datagrams with no payload)
         A DPLPMTUD receiver can generate a datagram (e.g., with zero payload data)
                 solely to return a RES Option (e.g., when no other datagrams are queued for transmission).
-                This UDP Options endpoint is allowed to probe the set of open UDP ports using DPLPMTUD probe packets.
-                This results in some additional traffic overhead, but has the advantage that it
+                This allows an endpoint to probe the set of UDP ports that have
+                been configured with support for this specification
+                using a DPLPMTUD probe packet. Although this results in some additional traffic overhead,
+                it has the advantage that it
                 can ensure timely progress of DPLPMTUD.
                 Section <xref target="formats"></xref> specifies: "If a UDP Options  endpoint creates and sends a datagram with a RES option solely as response to a received REQ Option,
                 the responder MUST limit the rate of these responses (e.g., limiting each pair of ports to send 1 per RTT or
