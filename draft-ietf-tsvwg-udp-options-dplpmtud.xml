@@ -199,7 +199,7 @@ An alternate method (rfc include) is described in the references. -->
                 to exchange data with the remote Upper Layer protocol.
                 Similarly, a DPLPMTUD receiver MUST NOT respond to a UDP REQ
                 Option until DPLPMTUD has been enabled. This is to help
-                protect from mis-use of the mechanism to perform other purposes.</t>
+                protect from mis-use of the mechanism for other forms of probing.</t>
                 
         <t>Probe packets consume network capacity and incur endpoint
                 processing (Section 4.1 of <xref target="RFC8899"></xref>).
