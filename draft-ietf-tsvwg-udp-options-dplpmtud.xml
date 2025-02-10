@@ -465,7 +465,7 @@ An alternate method (rfc include) is described in the references. -->
             </section> <!-- End of Procedures for UDP Options: Increase -->
             
             <section title="Validating the Path with UDP Options">
-                <t>A PL using DPLPMTUD MUST to validate that a path continues to support the
+                <t>A PL using DPLPMTUD MUST validate that a path continues to support the
                     PLPMTU discovered in a previous search for a suitable PLPMTU value,
                     as defined in Section 6.1.4 of <xref target="RFC8899"></xref>.
                     This validation sends probe packets in the
