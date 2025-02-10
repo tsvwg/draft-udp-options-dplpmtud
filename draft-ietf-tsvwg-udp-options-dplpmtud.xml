@@ -209,8 +209,8 @@ An alternate method (rfc include) is described in the references. -->
                 probing to increase the PLPMTU, or to confirm the current
                 PLPMTU.</t>
         
-        <t>There are two designs in which DPLPMTUD can be used
-                over UDP Options:</t>
+        <t>DPLPMTUD can be implemented
+                over UDP Options in two ways:</t>
          <list style="symbols">
              <t>Implementation within the UDP transport service;</t>
              <t>Implementation in an Upper Layer protocol (or application) that uses UDP Options.</t>
