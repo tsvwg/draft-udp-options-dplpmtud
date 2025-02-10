@@ -292,10 +292,10 @@ An alternate method (rfc include) is described in the references. -->
                 then the values of the tokens used in REQ Options need to be coordinated
                 with any values used for other DPLPMTUD probe packets to ensure
                 that each probe packet can be identified by a unique token.
-                When configurable, the configuration avoid
+                When configurable, a configuration ought to avoid
                 performing such discovery both within UDP Options
                 and also by an upper protocol layer
-                (that sends and receives probe packets via UDP Options).
+                that sends and receives probe packets via UDP Options.
                 Section 6.1 of <xref target="RFC8899"></xref> recommends that:
                 "An application SHOULD avoid using DPLPMTUD when the underlying
                 transport system provides this capability."</t>
