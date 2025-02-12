@@ -1,6 +1,6 @@
 # DPLPMTUD for UDP Options
 
-## draft-fairhurst-udp-options-dplpmtud
+## draft-ietf-udp-options-dplpmtud
 This repositiory contains an IETF work in progress document that covers the
 implementation of RFC8899 (DPLPMTUD) for UDP Options.
 
