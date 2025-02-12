@@ -371,24 +371,31 @@ An alternate method (rfc include) is described in the references. -->
                 and any other required options concluded with an EOL Option
                 (Section 11.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
                 followed by any padding needed to inflate to the required probe size.</t>
-
-                <t>A probe packet can therefore be of size up to the maximum size
+                
+                <t>A probe packet can be of size up to the maximum size
                 supported by the local interface (i.e., the Interface MTU).
                 <xref target="RFC8899"></xref> (Section 3, item 2) requires the network interface
                 below DPLPMTUD to provide a way to transmit a probe packet
-                that is larger than the current PLPMTU.
-                The size of this probe packet MUST NOT be constrained by the maximum PMTU
-                set by network layer mechanisms (such as discovered by PMTUD <xref
-                    target="RFC1191"></xref><xref target="RFC8201"></xref> or the PMTU size
-                held in the IP-layer cache),
-                as noted in bullet 2 of Section 3 in <xref target="RFC8899"></xref>).</t>
+                that is larger than the current PLPMTU.</t>
 
-                <t>UDP datagrams used as DPLPMTUD probe packets, as described in this
-                document, MUST NOT be fragmented at the UDP or IP layer.
-                Section 3 of <xref target="RFC8899"></xref>
-                therefore requires: "In IPv4, a probe packet MUST be sent with the
-                Don't Fragment (DF) bit set in the IP header and without network layer
-                endpoint fragmentation."</t>
+                <section title="The Interaction with Lower Layers">
+                    <t>UDP datagrams used as DPLPMTUD probe packets, as described in this
+                        document, MUST NOT be fragmented at the UDP or IP layer.
+                        That is, the size of a probe packet must not be constrained by the maximum PMTU
+                    set by network layer mechanisms (such as discovered by PMTUD <xref
+                        target="RFC1191"></xref><xref target="RFC8201"></xref> or the PMTU size
+                    held in the IP-layer cache),
+                    as noted in bullet 2 of Section 3 in <xref target="RFC8899"></xref>).</t>
+                
+                 <t>Section 4.5 of <xref target="RFC8899"></xref>
+                      requires:"A PL implementing this specification MUST suspend network layer processing of outgoing packets that enforces a PMTU [RFC1191][RFC8201] for each flow utilizing DPLPMTUD and instead use DPLPMTUD to control the size of packets that are sent by a flow."</t>
+
+                     <t>
+                     Section 3 of <xref target="RFC8899"></xref>
+                     also requires: "In IPv4, a probe packet MUST be sent with the
+                     Don't Fragment (DF) bit set in the IP header and without network layer
+                     endpoint fragmentation."</t>
+                </section>
                  
              </section>    <!-- End of DPLPMTUD for UDP Options:sending -->
             
@@ -501,21 +508,16 @@ An alternate method (rfc include) is described in the references. -->
             
             <section anchor="no-app-data" title="Probe Packets that do not include Application Data">
                 <t>
-                A simple implementation of the method might be designed
-                to only use probe packets in a UDP datagram that includes no
-                application data. The size of each probe packet is padded to the required
-                probe size including the REQ Option. This implements
-                "Probing using padding data" (Section 4.1 of <xref target="RFC8899"></xref>)
-                and avoids having to retransmit
-                application data when a probe fails.
-                This could be achieved by setting
-                a minimum datagram length, such that the options list
-                ends in EOL (Section 11.1 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>)
-                with any additional space is zero-filled as needed
-                (see Section 15 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>).
-                In this use, the probe packets do not form a part of the end-to-end
-                transport data and a receiver does not deliver them to the Upper Layer protocol.
-                </t>
+                A simple implementation of the method only uses probe packets in a UDP datagram
+                that includes no application data. The size of each probe packet MUST be padded
+                to the required probe size including the REQ Option. This implements "Probing
+                using padding data" (Section 4.1 of [RFC8899]) and avoids having to retransmit
+                application data when a probe fails. This is achieved by setting a minimum
+                datagram length, such that the options list ends in EOL (Section 11.1 of
+                [I-D.ietf-tsvwg-udp-options]) and any additional space MUST be zero-filled (see
+                Section 15 of [I-D.ietf-tsvwg-udp-options]). These probe packets do not form a
+                part of the end-to-end application data and a receiver MUST NOT deliver them to
+                the Upper Layer protocol.</t>
             </section> <!-- End of Procedures for UDP Options: Probe Without Data -=-->
             
             <section title="Probe Packets that include Application Data">
