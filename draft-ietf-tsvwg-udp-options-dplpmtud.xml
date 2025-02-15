@@ -258,17 +258,17 @@ An alternate method (rfc include) is described in the references. -->
 | DPLPMTUD State Machine         |
 |   Maximum Packet Size (MPS)    |
 |   PLPMTU, Probed-Size,Min_PMTU |
-|   Token Values & Probes, etc   |
+|   Token Values & Probes, etc.  |
 +---------------------------+----+
     ^                       | Messages (with UDP Options)
     |                       |   Send/Receive: Probes with Options
-    | receive         send  |   Events: ICMP, Interface MTU, etc
+    | receive         send  |   Events: ICMP, Interface MTU, etc.
 +--------------------------------+
 | UDP Options Transport          |
 +---------------------------+----+
     ^                       | Datagrams (with UDP Options)
     |                       | Fragmented Datagrams with UDP Options
-    | receive         send  | Events: ICMP, Interface MTU, etc
+    | receive         send  | Events: ICMP, Interface MTU, etc.
 
 ]]></artwork>
 </figure>
@@ -458,7 +458,7 @@ An alternate method (rfc include) is described in the references. -->
                 ("Probing using padding data" in Section 4.1 of <xref target="RFC8899"></xref>),
                 since they will be lost whenever their size exceeds the actual PMTU.
                 <xref target="RFC8899"></xref> requires a probe packet
-                to elicit a positive acknowledgment that the path has
+                to elicit a positive acknowledgement that the path has
                 delivered a datagram of the specific probed size and, therefore,
                 when using <xref target="I-D.ietf-tsvwg-udp-options"></xref> a probe packet
                 MUST include the REQ Option.</t>
@@ -617,7 +617,7 @@ An alternate method (rfc include) is described in the references. -->
             that is sent to the requester.
             Therefore, reception of a REQ Option does not systematically trigger a response.
             This allows DPLPMTUD to operate when there is a flow of datagrams in both directions,
-            providing there is periodic feedback (e.g., one acknowledgment packet per RTT).
+            providing there is periodic feedback (e.g., one acknowledgement packet per RTT).
             It requires the PLPMTU at the receiver
             to be sufficiently large that the RES option can be included in the feedback packets
             that are sent in the return direction.
@@ -662,7 +662,7 @@ An alternate method (rfc include) is described in the references. -->
             the University of Aberdeen. The editors would like to thank Magnus Westerlund
             and Mohamed Boucadair for their detailed comments and also other people
             who contributed to completing this document.</t>
-        </section> <!-- End of Acknowledgments -->
+        </section> <!-- End of acknowledgements -->
         
         <section anchor="IANA" title="IANA Considerations">
             <t>This memo includes no requests to IANA.</t>
