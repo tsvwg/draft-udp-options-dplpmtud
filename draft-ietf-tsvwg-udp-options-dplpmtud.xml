@@ -233,7 +233,7 @@ An alternate method (rfc include) is described in the references. -->
                 <t> set the maximum fragment size when a sender uses the
                     UDP Fragmentation Option to divide a datagram into
                     multiple UDP fragments for transmission. The size of each UDP fragment
-                    is then less than of equal to the size of the discovered largest IP packet that can
+                    is then less than or equal to the size of the discovered largest IP packet that can
                     be received across the current path.
                 </t>
             </list>
@@ -327,7 +327,7 @@ An alternate method (rfc include) is described in the references. -->
                     An example in Section <xref target="examples"></xref>
                     describes a case where this might be used.</t>
                     <t>
-                    Reception of a RES Option by the sender confirms that a specific
+                    Reception of a RES Option by the REQ sender confirms that a specific
                     probe packet has been received by the remote UDP Options receiver.</t>
             </list>
 
@@ -466,7 +466,8 @@ An alternate method (rfc include) is described in the references. -->
                 <t>At the receiver, a received probe packet that does not carry application data
                 does not form a part of the end-to-end
                 transport data and is not delivered to the Upper Layer protocol
-                (i.e., application or protocol layered above UDP).</t>
+                (i.e., application or protocol layered above UDP). A zero-length payload 
+                notification could sill be delivered to the application, see Section 5 of <xref target="I-D.RFC8085"></xref>.</t>
             </section> <!-- End of Procedures for UDP Options: Increase -->
             
             <section title="Validating the Path with UDP Options">
