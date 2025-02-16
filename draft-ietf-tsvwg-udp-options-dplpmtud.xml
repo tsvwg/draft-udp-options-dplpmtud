@@ -413,9 +413,9 @@ An alternate method (rfc include) is described in the references. -->
             DPLPMTUD recording reception of all probe packets.</t>
     
         </section> <!-- End of DPLPMTUD for UDP Options:Receiving -->
-        </section> <!-- End of DPLPMTUD for UDP Options -->
+    </section> <!-- End of DPLPMTUD for UDP Options -->
         
-        <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Sender Procedures for UDP Options">
+    <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Sender Procedures for UDP Options">
             <t> DPLPMTUD utilises three types of probe. These are described in the following sections:</t>
             <list style="symbols">
                 <t>Probes to confirm the path can support the BASE_PLPMTU (Section 5.1.4 of <xref
