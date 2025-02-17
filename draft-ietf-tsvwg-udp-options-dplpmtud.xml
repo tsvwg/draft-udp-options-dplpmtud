@@ -467,7 +467,10 @@ An alternate method (rfc include) is described in the references. -->
                 does not form a part of the end-to-end
                 transport data and is not delivered to the Upper Layer protocol
                 (i.e., application or protocol layered above UDP). A zero-length payload 
-                notification could sill be delivered to the application, see Section 5 of <xref target="I-D.RFC8085"></xref>.</t>
+                notification could still be delivered to the application, 
+                see Section 5 of <xref target="RFC8085"></xref>, although
+                Section 18 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>
+                discusses the implications when using UDP Options.</t>
             </section> <!-- End of Procedures for UDP Options: Increase -->
             
             <section title="Validating the Path with UDP Options">
