@@ -144,19 +144,20 @@ An alternate method (rfc include) is described in the references. -->
             implement mechanisms for Path MTU discovery above the UDP API.</t>
 
             <t>Packetization Layer Path MTU Discovery (PLPMTUD) <xref target="RFC4821"></xref>
-            describes a method for a Packetization Layer (PL)
+            describes a method for a bi-directional Packetization Layer (PL)
             to search for the largest Packetization Layer PMTU (PLPMTU) supported on
             a path. Datagram PLPMTUD (DPLPMTUD) <xref target="RFC8899"></xref>
             specifies this support for datagram transports. PLPMTUD and DPLPMTUD
             gain robustness by using a probing mechanism that does not solely rely on
             ICMP PTB messages and works on paths that drop ICMP PTB messages.</t>
-
+         
             <t>UDP Options <xref target="I-D.ietf-tsvwg-udp-options"></xref> supplies
             functionality that can be used to implement DPLPMTUD within the
             transport service or in an Upper Layer protocol (including an application)
-            that uses UDP Options.
+            that uses UDP Options. 
             This document specifies how DPLPMTUD using UDP Options
-            is implemented (Section 6.1 of <xref target="RFC8899"></xref>).
+            is implemented (Section 6.1 of <xref target="RFC8899"></xref>),
+            and requires support to be enabled at both the sender and receiver.
             </t>
         
             <t>Implementing DPLPMTUD within the
@@ -164,7 +165,15 @@ An alternate method (rfc include) is described in the references. -->
             each Upper Layer protocol to implement the DPLPMTUD
             method. It provides a standard method for applications to discover the
             current maximum packet size for a path and to detect when this
-            changes.</t>
+            changes. It can be used with Equal-Cost Multipath (ECMP) routing
+           and/or multihoming. If multipath or multihoming is supported,
+           a state machine is needed for each path.</t>
+         
+           <t>DPLPMTUD is not specified for multicast. The method requires
+           explicit acknowledgment of probe packets provided by UDP Options,
+           which is primarily intended for unicast use (see Section  23 of
+           <xref target="I-D.ietf-tsvwg-udp-options"></xref>).</t>
+
         </section><!-- End of Intro -->
         
         <section title="Terminology">
@@ -309,7 +318,7 @@ An alternate method (rfc include) is described in the references. -->
                 
                 <list style="symbols">
                     <t>The REQ Option is set by a sending PL to solicit a response from a
-                    remote receiver. A four-byte token identifies each request.</t>
+                    remote receiver. A four-byte (four octet) token identifies each request.</t>
 
                     <t>A sending PL can use the EOL option together with a minimum
                     datagram length to pad probe packets.</t>
@@ -321,7 +330,7 @@ An alternate method (rfc include) is described in the references. -->
                     <t> If a UDP Options  endpoint creates and sends a datagram
                     with a RES option solely as response to a received REQ Option,
                     the responder MUST limit the rate of these responses
-                    (e.g., limiting each pair of ports to send 1 per RTT or
+                    (e.g., limiting each pair of ports to send 1 per measured RTT or
                     1 per second). This rate limit is to mitigate the DoS vector,
                     without significantly impacting the operation of DPLPMTUD.
                     An example in Section <xref target="examples"></xref>
@@ -405,7 +414,7 @@ An alternate method (rfc include) is described in the references. -->
             respond. When sent, the RES Option will only acknowledge the
             latest received token value. A sender would then conclude
             that any earlier REQ Options were not successfully received.
-            However, DPLPMTUD does not normally send more than one
+            However, DPLPMTUD does not usually result in sending more than one
             probe packet per timeout interval, and a delay in responding
             will already have been treated as a failed probe attempt.
             Therefore, this does not significantly impact performance,
@@ -534,13 +543,14 @@ An alternate method (rfc include) is described in the references. -->
                 a control message format defined by the Upper Layer protocol,
                 provided that the message does not need to
                 be delivered reliably. The REQ Option MUST be
-                included when a sending Upper Layer protocol performs DPLPMTUD.
+                included when the sending Upper Layer protocol performs DPLPMTUD.
                 The DPLPMTUD method tracks the transmission
                 of probe packets (using the REQ Option token).</t>
 
                 <t>A receiver that responds to DPLPMTUD MUST process the REQ Option and
-                include the corresponding RES Option in an Upper Layer protocol message
-                that it returns to the requester.</t>
+                include the corresponding RES Option with an Upper Layer protocol message
+                that it returns to the requester (examples of receiver processing are
+                provided in Section <xref> target="examples"></xref>).</t>
                 
                 <t>Probe packets that use this format form a part of the end-to-end
                 transport data and can be used to manage the PLPMTU in just
@@ -577,18 +587,30 @@ An alternate method (rfc include) is described in the references. -->
             with the same address over a different interface.</t>
        </section> <!-- End of Path Changes -->
         
-       <section title="PTB Message Handling">
+       <section title="Validation of PTB Messages">
             <t> Support for receiving ICMP PTB messages is
             OPTIONAL for DPLPMTUD. A UDP Options sender
             can therefore ignore received ICMP PTB messages.</t>
         
-            <t>When DPLPMTUD utilises ICMP PTB messages that are received
-            in response to a
-            probe packet, it MUST use the ICMP quoted packet to validate the UDP port
-            information in combination with the token
-            contained in the UDP Option, before processing the packet using the
-            DPLPMTUD method. Section 4.6.1 of <xref target="RFC8899"></xref> specifies
-            this validation procedure. An
+            <t>Before processing an ICMP PTB message the
+            DPLPMTUD method needs to perform two checks
+            that the messgage was received
+            in response to a sent probe packet:</t>
+            <list style="symbols">
+              <t>DPLPMTUD first utilises the quoted information in each PTB message.
+              The receiver MUST validate the protocol information in the quoted packet
+              carried in an ICMP PTB message payload to validate the message
+              originated from the sending node (see Section 4.6.1 of
+              <xref target="RFC8899"></xref>).</t>
+              <t>The receiver SHOULD utilize information that is not simple for an
+              off-path attacker to determine (see Section 4.6.1 of
+              <xref target="RFC8899"></xref>).
+              Specifically, a UDP options receiver SHOULD confirm that
+              the token contained in the UDP REQ Option of the quoted packet
+              has a value that corresponds to a probe packet that was recently
+              sent by the current endpoint.</t>
+            </list>
+            <t>An
             implementation unable to support this validation MUST ignore
             received ICMP PTB messages.</t>
         </section> <!-- End of PTB -->
