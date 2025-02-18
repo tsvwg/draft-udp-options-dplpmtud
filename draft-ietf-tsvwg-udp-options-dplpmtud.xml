@@ -233,7 +233,7 @@ An alternate method (rfc include) is described in the references. -->
                 <t> set the maximum fragment size when a sender uses the
                     UDP Fragmentation Option to divide a datagram into
                     multiple UDP fragments for transmission. The size of each UDP fragment
-                    is then less than of equal to the size of the discovered largest IP packet that can
+                    is then less than or equal to the size of the discovered largest IP packet that can
                     be received across the current path.
                 </t>
             </list>
@@ -258,17 +258,17 @@ An alternate method (rfc include) is described in the references. -->
 | DPLPMTUD State Machine         |
 |   Maximum Packet Size (MPS)    |
 |   PLPMTU, Probed-Size,Min_PMTU |
-|   Token Values & Probes, etc   |
+|   Token Values & Probes, etc.  |
 +---------------------------+----+
     ^                       | Messages (with UDP Options)
     |                       |   Send/Receive: Probes with Options
-    | receive         send  |   Events: ICMP, Interface MTU, etc
+    | receive         send  |   Events: ICMP, Interface MTU, etc.
 +--------------------------------+
 | UDP Options Transport          |
 +---------------------------+----+
     ^                       | Datagrams (with UDP Options)
     |                       | Fragmented Datagrams with UDP Options
-    | receive         send  | Events: ICMP, Interface MTU, etc
+    | receive         send  | Events: ICMP, Interface MTU, etc.
 
 ]]></artwork>
 </figure>
@@ -327,7 +327,7 @@ An alternate method (rfc include) is described in the references. -->
                     An example in Section <xref target="examples"></xref>
                     describes a case where this might be used.</t>
                     <t>
-                    Reception of a RES Option by the sender confirms that a specific
+                    Reception of a RES Option by the REQ sender confirms that a specific
                     probe packet has been received by the remote UDP Options receiver.</t>
             </list>
 
@@ -413,9 +413,9 @@ An alternate method (rfc include) is described in the references. -->
             DPLPMTUD recording reception of all probe packets.</t>
     
         </section> <!-- End of DPLPMTUD for UDP Options:Receiving -->
-        </section> <!-- End of DPLPMTUD for UDP Options -->
+    </section> <!-- End of DPLPMTUD for UDP Options -->
         
-        <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Sender Procedures for UDP Options">
+    <section anchor="UDPOPT-PLPMTUD" title="DPLPMTUD Sender Procedures for UDP Options">
             <t> DPLPMTUD utilises three types of probe. These are described in the following sections:</t>
             <list style="symbols">
                 <t>Probes to confirm the path can support the BASE_PLPMTU (Section 5.1.4 of <xref
@@ -458,7 +458,7 @@ An alternate method (rfc include) is described in the references. -->
                 ("Probing using padding data" in Section 4.1 of <xref target="RFC8899"></xref>),
                 since they will be lost whenever their size exceeds the actual PMTU.
                 <xref target="RFC8899"></xref> requires a probe packet
-                to elicit a positive acknowledgment that the path has
+                to elicit a positive acknowledgement that the path has
                 delivered a datagram of the specific probed size and, therefore,
                 when using <xref target="I-D.ietf-tsvwg-udp-options"></xref> a probe packet
                 MUST include the REQ Option.</t>
@@ -466,7 +466,11 @@ An alternate method (rfc include) is described in the references. -->
                 <t>At the receiver, a received probe packet that does not carry application data
                 does not form a part of the end-to-end
                 transport data and is not delivered to the Upper Layer protocol
-                (i.e., application or protocol layered above UDP).</t>
+                (i.e., application or protocol layered above UDP). A zero-length payload 
+                notification could still be delivered to the application, 
+                see Section 5 of <xref target="RFC8085"></xref>, although
+                Section 18 of <xref target="I-D.ietf-tsvwg-udp-options"></xref>
+                discusses the implications when using UDP Options.</t>
             </section> <!-- End of Procedures for UDP Options: Increase -->
             
             <section title="Validating the Path with UDP Options">
@@ -617,7 +621,7 @@ An alternate method (rfc include) is described in the references. -->
             that is sent to the requester.
             Therefore, reception of a REQ Option does not systematically trigger a response.
             This allows DPLPMTUD to operate when there is a flow of datagrams in both directions,
-            providing there is periodic feedback (e.g., one acknowledgment packet per RTT).
+            providing there is periodic feedback (e.g., one acknowledgement packet per RTT).
             It requires the PLPMTU at the receiver
             to be sufficiently large that the RES option can be included in the feedback packets
             that are sent in the return direction.
@@ -662,7 +666,7 @@ An alternate method (rfc include) is described in the references. -->
             the University of Aberdeen. The editors would like to thank Magnus Westerlund
             and Mohamed Boucadair for their detailed comments and also other people
             who contributed to completing this document.</t>
-        </section> <!-- End of Acknowledgments -->
+        </section> <!-- End of acknowledgements -->
         
         <section anchor="IANA" title="IANA Considerations">
             <t>This memo includes no requests to IANA.</t>
