@@ -40,7 +40,7 @@ An alternate method (rfc include) is described in the references. -->
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-14"
+<rfc category="std" docName="draft-ietf-tsvwg-udp-options-dplpmtud-15"
     ipr="trust200902">
     <!-- category values: std, bcp, info, exp, and historic
      ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902,
@@ -443,7 +443,7 @@ An alternate method (rfc include) is described in the references. -->
                     sender implementing this specification MUST elicit a positive
                     confirmation of connectivity for the path, by sending a probe packet,
                     padded to size BASE_PLPMTU. This confirmation probe MUST
-                    include the REQ UDP option to elicit a response from the remote DPLPMTUD.
+                    include the REQ UDP Option to elicit a response from the remote DPLPMTUD.
                     Reception of a datagram with the corresponding RES Option confirms
                     the reception of a packet of the probed size that has successfully
                     traversed the path to the receiver.
@@ -550,7 +550,7 @@ An alternate method (rfc include) is described in the references. -->
                 <t>A receiver that responds to DPLPMTUD MUST process the REQ Option and
                 include the corresponding RES Option with an Upper Layer protocol message
                 that it returns to the requester (examples of receiver processing are
-                provided in Section <xref> target="examples"></xref>).</t>
+                provided in Section <xref target="examples"></xref>).</t>
                 
                 <t>Probe packets that use this format form a part of the end-to-end
                 transport data and can be used to manage the PLPMTU in just
@@ -605,7 +605,7 @@ An alternate method (rfc include) is described in the references. -->
               <t>The receiver SHOULD utilize information that is not simple for an
               off-path attacker to determine (see Section 4.6.1 of
               <xref target="RFC8899"></xref>).
-              Specifically, a UDP options receiver SHOULD confirm that
+              Specifically, a UDP Options receiver SHOULD confirm that
               the token contained in the UDP REQ Option of the quoted packet
               has a value that corresponds to a probe packet that was recently
               sent by the current endpoint.</t>
@@ -885,6 +885,10 @@ An alternate method (rfc include) is described in the references. -->
             <t>Working group draft -14.</t>
             <t><list>
                <t>Updated after INT and SEC reviews.</t>
+            </list></t>
+            <t>Working group draft -15.</t>
+            <t><list>
+               <t>Updated after INT AD comments.</t>
             </list></t>
 
         </section>
