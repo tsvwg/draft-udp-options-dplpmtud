@@ -262,7 +262,7 @@ An alternate method (rfc include) is described in the references. -->
 |         or Application         |
 +---------------------------+----+
     ^                       | Messages (with UDP Options)
-    | receive         send  | Primitives for MPS, Min_PMTU etc.
+    | receive         send  v Primitives for MPS, Min_PMTU etc.
 +---+----------------------------+
 | DPLPMTUD State Machine         |
 |   Maximum Packet Size (MPS)    |
@@ -271,13 +271,13 @@ An alternate method (rfc include) is described in the references. -->
 +---------------------------+----+
     ^                       | Messages (with UDP Options)
     |                       |   Send/Receive: Probes with Options
-    | receive         send  |   Events: ICMP, Interface MTU, etc.
+    | receive         send  v   Events: ICMP, Interface MTU, etc.
 +--------------------------------+
 | UDP Options Transport          |
 +---------------------------+----+
     ^                       | Datagrams (with UDP Options)
     |                       | Fragmented Datagrams with UDP Options
-    | receive         send  | Events: ICMP, Interface MTU, etc.
+    | receive         send  v Events: ICMP, Interface MTU, etc.
 
 ]]></artwork>
 </figure>
