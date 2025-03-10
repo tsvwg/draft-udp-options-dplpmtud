@@ -170,7 +170,7 @@ An alternate method (rfc include) is described in the references. -->
            a state machine is needed for each path.</t>
          
            <t>DPLPMTUD is not specified for multicast. The method requires
-           explicit acknowledgment of probe packets provided by UDP Options,
+           explicit acknowledgement of probe packets provided by UDP Options,
            which is primarily intended for unicast use (see Section  23 of
            <xref target="I-D.ietf-tsvwg-udp-options"></xref>).</t>
 
