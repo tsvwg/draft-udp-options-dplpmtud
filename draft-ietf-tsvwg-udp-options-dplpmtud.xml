@@ -728,7 +728,7 @@ An alternate method (rfc include) is described in the references. -->
           <t>Packet payload compression, such as IPCOMP, could result in a probe packet being 
            compressed because the padding added by UDP Options is likely compressible. 
            This would result in a compressed probe packet size that was less than the 
-           MTU and hence, DPLPMTUD would be unable to probe the part of the path. 
+           MTU and hence, DPLPMTUD would be unable to probe the part of the path employing compresssion. 
            The compression policy could be updated to avoid compression of probe packets.</t>
 
             <t>The method does not change the
