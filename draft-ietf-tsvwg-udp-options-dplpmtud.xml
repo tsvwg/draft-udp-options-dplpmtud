@@ -718,6 +718,19 @@ An alternate method (rfc include) is described in the references. -->
             This attack could be mitigated by using an unpredictable
             token value for each probe packet.</t>
 
+           <t>When a link or part of a path uses IPCOMP [RFC3173], then DPLPMTUD detects the 
+           MTU size configured at the node performing IPCOMP. This ought to be configured so 
+           that all routers support at least this MTU on the part of the path using IPCOMP. 
+           A probe packet that is larger than this MTU size would be discarded before the 
+           IPCOMP sender processing (see section 2 of [RFC3173]) and hence DPLPMTUD would correctly 
+           detect the value of the interface MTU.</t>
+
+          <t>Packet payload compression, such as IPCOMP, could result in a probe packet being 
+           compressed because the padding added by UDP Options is likely compressible. 
+           This would result in a compressed probe packet size that was less than the 
+           MTU and hence, DPLPMTUD would be unable to probe the part of the path employing compresssion. 
+           The compression policy could be updated to avoid compression of probe packets.</t>
+
             <t>The method does not change the
             ICMP PTB message validation method described by DPLPMTUD: A UDP Options
             sender that utilises ICMP PTB messages received to a probe packet MUST
